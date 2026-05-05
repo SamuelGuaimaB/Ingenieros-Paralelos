@@ -1,4 +1,4 @@
-Engineering materials
+Engineering materials // Ingenieros-en-Paralelo
 ====
 
 Proyecto Competencia de Robotica WRO
