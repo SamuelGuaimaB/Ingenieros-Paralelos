@@ -56,11 +56,6 @@ void loop() {
     long dI = 100;//leer(sI);
     long dD = 100;//leer(sD);
 
-    Serial.print("S:"); 
-    Serial.print(dI);
-    Serial.print(",");
-    Serial.println(dD); 
-
     int vel = 0;
     int ang = 90;
 
