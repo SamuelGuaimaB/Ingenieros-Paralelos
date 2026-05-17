@@ -36,15 +36,18 @@ except:
         print("AVISO: Arduino no detectado. Modo simulación.")
         ser = None
 
-# --- CALIBRACIÓN DE COLORES HSV ---
-ROJO = [(0, 120, 70), (10, 255, 255)]
-VERDE = [(40, 70, 70), (80, 255, 255)]
-MAGENTA = [(140, 70, 70), (170, 255, 255)]
-NARANJA = [(5, 150, 150), (25, 255, 255)]
-AZUL_SUELO = [(100, 150, 50), (130, 255, 255)]
+# --- CONFIGURACIÓN EN ESPACIO LAB ---
+# Formato: [L_min, A_min, B_min], [L_max, A_max, B_max]
+# Nota: Dejamos el canal L amplio (40-255) para que no le afecte la luz
+ROJO = [(40, 145, 130), (255, 255, 255)]     # 'A' alta = Rojo
+VERDE = [(40, 0, 135), (255, 110, 255)]      # 'A' baja = Verde, 'B' alta = Amarillo/Verde
+MAGENTA = [(40, 150, 40), (255, 255, 120)]   # 'A' alta = Magenta, 'B' baja = Azulado/Meta
+NARANJA = [(40, 135, 145), (255, 180, 255)]  # 'A' moderada, 'B' alta = Naranja
+AZUL_SUELO = [(40, 110, 0), (255, 140, 115)] # 'B' baja = Azul suelo
 
-def detectar_color(hsv, rango):
-    mask = cv2.inRange(hsv, np.array(rango[0]), np.array(rango[1]))
+def detectar_color(lab_frame, rango):
+    # Genera la máscara usando el espacio LAB
+    mask = cv2.inRange(lab_frame, np.array(rango[0]), np.array(rango[1]))
     area = cv2.countNonZero(mask)
     if area > 1200:
         M = cv2.moments(mask)
@@ -52,10 +55,10 @@ def detectar_color(hsv, rango):
         return True, cx
     return False, 160
 
-dist_F = 100.0
-dist_A = 100.0
-dist_I = 100.0
-dist_D = 100.0
+dist_F = 100
+dist_A = 100
+dist_I = 100
+dist_D = 100
 
 def actualizar_sensores():
     global dist_F, dist_A, dist_I, dist_D
@@ -77,13 +80,16 @@ def actualizar_sensores():
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320); cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
+contador_esquinas = 0
+en_esquina_actual = False
+
 print(">>> SISTEMA INTEGRADO INICIADO")
 
 try:
     print("Calibrando entorno... No mueva el robot.")
     for _ in range(20): # Intentar leer durante 2 segundos (20 * 0.1s)
-    actualizar_sensores()
-    time.sleep(0.1)
+        actualizar_sensores()
+        time.sleep(0.1)
 
     # Simulamos que leemos el puerto para capturar la posición inicial
     # dist_F, dist_A, dist_I, dist_D deben venir de la lectura serial
@@ -96,6 +102,7 @@ try:
     # DETECCIÓN: Si ambas paredes laterales están a menos de 40cm, estamos encajonados (Modo 2)
     if pared_frente < 40 and pared_atras < 40:
         MODO_COMPETENCIA = "OBSTACULOS_ESTACIONADO"
+        SENTIDO_CIRCUITO = "INDETERMINADO"
         VELOCIDAD_CRUCERO = "M"  # Más controlado para esquivar pilares
         vueltas_totales = 0      # Empezamos estacionados (Vuelta 0)
         print(">>> MODO DETECTADO: 2 - Obstáculos (Salida desde Cajón Magenta)")
@@ -109,7 +116,7 @@ try:
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret: break
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        lab = cv2.cvtColor(frame, cv2.COLOR_BGR2Lab)
         t_actual = round(time.time() - inicio_vuelta, 1)
         
         actualizar_sensores() 
@@ -149,52 +156,165 @@ try:
         
         # 1. LÓGICA DE VUELTAS Y META (MAGENTA) o (NARANJA o AZUL)
         # SISTEMA INTELIGENTE DE CONTEO DE VUELTAS SEGÚN EL MODO
-        hay_meta, _ = detectar_color(hsv, MAGENTA)
+        hay_meta, _ = detectar_color(lab, MAGENTA)
         # MODO 2: Competencia de Obstáculos (Meta = Muros Magenta)
         if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO":
             if hay_meta:
-                if not en_meta and (time.time() - tiempo_ultima_vuelta > 5):
+                if not en_meta and (time.time() - tiempo_ultima_vuelta > 6):
                     vueltas_totales += 1
                     tiempo_ultima_vuelta = time.time()
                     inicio_vuelta = time.time() # REINICIO CRUCIAL PARA LA MEMORIA
                     en_meta = True
                     print(f"Vuelta {vueltas_totales} completada (Meta Magenta)")
-                if vueltas_totales >= 4:
-                    if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO":
-                        comando = 'S' # Activa la sub-rutina de centrado y retroceso en el Arduino
-                        potencia = 'L'
-                        print("ESTACIONANDO")
-                    else:
-                        comando = 'S' # Frenado en seco inmediato en la línea
-                        potencia = 'L'
-                        print("DETENIDO")
             else:
                 en_meta = False
                 
+            if vueltas_totales == 1:    
+                # MODO APRENDIZAJE: Navegación y reglas
+                es_naranja, _ = detectar_color(lab, NARANJA)
+                es_azul, _ = detectar_color(lab, AZUL_SUELO)
+                es_rojo, cx_r = detectar_color(lab, ROJO)
+                es_verde, cx_v = detectar_color(lab, VERDE)
+                    
+                if es_naranja:
+                    if SENTIDO_CIRCUITO == "INDETERMINADO":
+                        comando = 'D'
+                        SENTIDO_CIRCUITO = "HORARIO"
+                        print(">>> Sentido HORARIO")
+                    elif SENTIDO_CIRCUITO == "HORARIO":
+                        print("-> Giro HORARIO NARANJA")
+                        comando = 'D'
+                                
+                    if not en_esquina_actual:
+                        en_esquina_actual = True    
+                    
+                        # 2. Detectar Esquina Azul (Giro Izquierda)
+                elif es_azul:
+                    if SENTIDO_CIRCUITO == "INDETERMINADO":
+                        comando = 'I'
+                        SENTIDO_CIRCUITO = "ANTIHORARIO"
+                        print(">>> Sentido ANTIHORARIO")
+                    elif SENTIDO_CIRCUITO == "ANTIHORARIO":
+                        print("-> Giro ANTIHORARIO AZUL")
+                        comando = 'I'
+                            
+                    if not en_esquina_actual:
+                        en_esquina_actual = True
+                    
+                elif es_rojo:
+                    if centro_objeto_x is not None:
+                        # Si el objeto está a la izquierda (x < 0.4), giro leve
+                        if centro_objeto_x < 0.4:
+                            comando = '1'
+                            print("-> Giro LEVE ROJO(1)")
+                        else:
+                            'I'
+                            print("-> Giro AGRESIVO ROJO (I)")
+                    else:
+                        comando = 'I'# Seguridad
+                        print("-> Giro AGRESIVO ROJO CV (I)")
+                    potencia = 'L'
+                    print("potencia L")
+                        
+                elif es_verde:
+                    if centro_objeto_x is not None:
+                        if dist_I > dist_D:
+                            # Hay más espacio a la izquierda
+                            if centro_objeto_x < 0.4:
+                                comando = '1'
+                                print("-> Giro LEVE VERDE (1)")
+                            else:
+                                'I'
+                                print("-> Giro AGRESIVO VERDE IA (I)")
+                        else:
+                            # Hay más espacio a la derecha (o igual)
+                            if centro_objeto_x > 0.6:
+                                comando = '2'
+                                print("-> Giro LEVE VERDE (2)")
+                            else:
+                                'D'
+                                print("-> Giro AGRESIVO VERDE IA (D)")
+                    else:
+                        comando = 'D'
+                        print("-> Giro AGRESIVO VERDE CV (D)")
+                    potencia = 'L'
+                    print("potencia L")
+                else:
+                    comando, potencia = 'F', 'M'
+                    print("potencia M")
+                
+                # Guardar en memoria
+                memoria_pista[t_actual] = (comando, potencia)
+                    
+            if vueltas_totales > 1:
+                comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
+                
         # MODO 1: Carrera Abierta (Meta = Línea del suelo según el sentido de giro)
+        # MODO APRENDIZAJE
         elif MODO_COMPETENCIA == "CARRERA_ABIERTA":
-            # Si el circuito gira a la derecha, la línea Naranja es nuestra meta
-            if SENTIDO_CIRCUITO == "HORARIO" and detectar_color(hsv, NARANJA):
-                if not en_meta and (time.time() - tiempo_ultima_vuelta > 8):
-                    vueltas_totales += 1
-                    tiempo_ultima_vuelta = time.time()
-                    inicio_vuelta = time.time()  # Reinicio del reloj para la memoria
-                    en_meta = True
-                    print(f"Vuelta {vueltas_totales} completada (Meta Naranja)")
+            es_naranja, _ = detectar_color(lab, NARANJA)
+            es_azul, _ = detectar_color(lab, AZUL_SUELO)
             
-            # Si el circuito gira a la izquierda, la línea Azul es nuestra meta
-            elif SENTIDO_CIRCUITO == "ANTIHORARIO" and detectar_color(hsv, AZUL_SUELO):
-                if not en_meta and (time.time() - tiempo_ultima_vuelta > 8):
-                    vueltas_totales += 1
-                    tiempo_ultima_vuelta = time.time()
-                    inicio_vuelta = time.time()  # Reinicio del reloj para la memoria
-                    en_meta = True
-                    print(f"Vuelta {vueltas_totales} completada (Meta Azul)")
+            if vueltas_totales == 1:
+                comando = 'F'
+                potencia = 'M' # Velocidad crucero segura para la vuelta de mapeo
+            
+                # 1. Detectar Esquina Naranja (Giro Derecha)
+                if es_naranja:
+                    if SENTIDO_CIRCUITO == "INDETERMINADO":
+                        comando = 'D'
+                        SENTIDO_CIRCUITO = "HORARIO"
+                        inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
+                        t_actual = 0.0
+                        contador_esquinas = 0
+                        print(">>> Sentido HORARIO. Iniciando cronómetro de aprendizaje.")
+                    elif SENTIDO_CIRCUITO == "HORARIO":
+                        print("-> Giro HORARIO NARANJA")
+                        comando = 'D'
+                        
+                    if not en_esquina_actual:
+                        en_esquina_actual = True    
+            
+                 # 2. Detectar Esquina Azul (Giro Izquierda)
+                elif es_azul:
+                    if SENTIDO_CIRCUITO == "INDETERMINADO":
+                        comando = 'I'
+                        SENTIDO_CIRCUITO = "ANTIHORARIO"
+                        inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
+                        t_actual = 0.0
+                        contador_esquinas = 0
+                        print(">>> Sentido ANTIHORARIO. Iniciando cronómetro de aprendizaje.")
+                    elif SENTIDO_CIRCUITO == "ANTIHORARIO":
+                        print("-> Giro ANTIHORARIO AZUL")
+                        comando = 'I'
+                    
+                    if not en_esquina_actual:
+                        en_esquina_actual = True
+                        
+                # 3. Tramo Recto (Liberar el estado al salir de la línea de color)
+                else:
+                    if en_esquina_actual:
+                        contador_esquinas += 1
+                        en_esquina_actual = False
+                        print(f"-> Esquina {contador_esquinas} superada.")
+                        
+                        # Cierre de Aprendizaje: Al superar la 4ta esquina, la Vuelta 1 ha terminado
+                        if contador_esquinas >= 4:
+                            vueltas_totales = 2 # Cambia automáticamente al Modo Carrera (Vuelta 2)
+                            inicio_vuelta = time.time() # REINICIO DEL RELOJ PARA LA MEJORA PERFECTA
+                            t_actual = 0.0
+                            print(">>> ¡4 Esquinas completadas! Vuelta 1 cerrada. Iniciando Modo Carrera.")
+            
+                # GUARDAR EN MEMORIA (Solo graba si ya se definió el sentido del circuito)
+                if SENTIDO_CIRCUITO != "INDETERMINADO":
+                    memoria_pista[t_actual] = (comando, potencia)
             
             # Evitamos falsos positivos mientras el auto está sobre la línea
-            elif not (detectar_color(hsv, NARANJA) or detectar_color(hsv, AZUL_SUELO)):
+            elif not es_azul or es_naranja:
                 en_meta = False
                 
+            if vueltas_totales > 1:
+                    comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
 
         # 2. LÓGICA DE APRENDIZAJE vs CARRERA
         if vueltas_totales > 1 and comando != 'S':
@@ -215,74 +335,15 @@ try:
                 # Aplica la misma reducción controlada para entrar rápido pero firme a la izquierda
                 potencia = 'M'
                 
-        elif comando != 'S':
-            # MODO APRENDIZAJE: Navegación y reglas
-            es_rojo, cx_r = detectar_color(hsv, ROJO)
-            es_verde, cx_v = detectar_color(hsv, VERDE)
-            es_naranja, _ = detectar_color(hsv, NARANJA)
-            es_azul, _ = detectar_color(hsv, AZUL_SUELO)
-            
-            if es_naranja:
-                comando = 'D' # Giro agresivo derecha en esquina
-                potencia = 'M'
-                if SENTIDO_CIRCUITO == "INDETERMINADO":
-                    SENTIDO_CIRCUITO = "HORARIO"
-                    print(">>> ¡Sentido detectado: HORARIO! Optimizando giros a la Derecha.")
-
-            elif es_azul:
-                comando = 'I' # Giro agresivo izquierda en esquina
-                potencia = 'M'
-                if SENTIDO_CIRCUITO == "INDETERMINADO":
-                    SENTIDO_CIRCUITO = "ANTIHORARIO"
-                    print(">>> ¡Sentido detectado: ANTIHORARIO! Optimizando giros a la Izquierda.")
-            
-            elif es_rojo:
-                if centro_objeto_x is not None:
-                    # Si el objeto está a la izquierda (x < 0.4), giro leve
-                    if centro_objeto_x < 0.4:
-                        comando = '1'
-                        print("-> Giro LEVE ROJO(1)")
-                    else:
-                        'I'
-                        print("-> Giro AGRESIVO ROJO (I)")
-                else:
-                    comando = 'I'# Seguridad
-                    print("-> Giro AGRESIVO ROJO CV (I)")
+        if vueltas_totales >= 4:
+            if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO":
+                comando = 'S' # Activa la sub-rutina de centrado y retroceso en el Arduino
                 potencia = 'L'
-                print("potencia L")
-            elif es_verde:
-                if centro_objeto_x is not None:
-                    if dist_I > dist_D:
-                        # Hay más espacio a la izquierda
-                        if centro_objeto_x < 0.4:
-                            comando = '1'
-                            print("-> Giro LEVE VERDE (1)")
-                        else:
-                            'I'
-                            print("-> Giro AGRESIVO VERDE IA (I)")
-                    else:
-                        # Hay más espacio a la derecha (o igual)
-                        if centro_objeto_x > 0.6:
-                            comando = '2'
-                            print("-> Giro LEVE VERDE (2)")
-                        else:
-                            'D'
-                            print("-> Giro AGRESIVO VERDE IA (D)")
-                else:
-                    comando = 'D'
-                    print("-> Giro AGRESIVO VERDE CV (D)")
-                potencia = 'L'
-                print("potencia L")
+                print("ESTACIONANDO")
             else:
-                comando, potencia = 'F', 'M'
-                print("potencia M")
-            
-            # Guardar en memoria
-            if vueltas_totales == 1:
-                memoria_pista[t_actual] = (comando, potencia)
-                
-            if vueltas_totales > 1:
-                comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
+                comando = 'S' # Frenado en seco inmediato en la línea
+                potencia = 'L'
+                print("DETENIDO")
 
         # 3. COMUNICACIÓN Y LOG
         if ser:
