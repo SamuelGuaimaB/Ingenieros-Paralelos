@@ -120,9 +120,6 @@ try:
         t_actual = round(time.time() - inicio_vuelta, 1)
         
         actualizar_sensores() 
-        
-        comando = 'F'
-        potencia = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
 
         # Si estamos en el Modo Obstáculos, aplicamos la rutina de salida estacionada en la Vuelta 0
         if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO" and vueltas_totales == 0:
@@ -175,11 +172,17 @@ try:
                 es_azul, _ = detectar_color(lab, AZUL_SUELO)
                 es_rojo, cx_r = detectar_color(lab, ROJO)
                 es_verde, cx_v = detectar_color(lab, VERDE)
+                
+                comando = 'F'
+                potencia = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
                     
                 if es_naranja:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
                         comando = 'D'
                         SENTIDO_CIRCUITO = "HORARIO"
+                        inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
+                        t_actual = 0.0
+                        contador_esquinas = 0
                         print(">>> Sentido HORARIO")
                     elif SENTIDO_CIRCUITO == "HORARIO":
                         print("-> Giro HORARIO NARANJA")
@@ -193,6 +196,9 @@ try:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
                         comando = 'I'
                         SENTIDO_CIRCUITO = "ANTIHORARIO"
+                        inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
+                        t_actual = 0.0
+                        contador_esquinas = 0
                         print(">>> Sentido ANTIHORARIO")
                     elif SENTIDO_CIRCUITO == "ANTIHORARIO":
                         print("-> Giro ANTIHORARIO AZUL")
@@ -256,9 +262,10 @@ try:
             es_azul, _ = detectar_color(lab, AZUL_SUELO)
             
             if vueltas_totales == 1:
+                
                 comando = 'F'
-                potencia = 'M' # Velocidad crucero segura para la vuelta de mapeo
-            
+                potencia = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
+                
                 # 1. Detectar Esquina Naranja (Giro Derecha)
                 if es_naranja:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
@@ -300,10 +307,12 @@ try:
                         
                         # Cierre de Aprendizaje: Al superar la 4ta esquina, la Vuelta 1 ha terminado
                         if contador_esquinas >= 4:
-                            vueltas_totales = 2 # Cambia automáticamente al Modo Carrera (Vuelta 2)
+                            vueltas_totales += 1 # Cambia automáticamente al Modo Carrera (Vuelta 2)
+                            tiempo_ultima_vuelta = time.time()
                             inicio_vuelta = time.time() # REINICIO DEL RELOJ PARA LA MEJORA PERFECTA
                             t_actual = 0.0
                             print(">>> ¡4 Esquinas completadas! Vuelta 1 cerrada. Iniciando Modo Carrera.")
+                            print(f"Vuelta {vueltas_totales} completada")
             
                 # GUARDAR EN MEMORIA (Solo graba si ya se definió el sentido del circuito)
                 if SENTIDO_CIRCUITO != "INDETERMINADO":
@@ -312,28 +321,37 @@ try:
             # Evitamos falsos positivos mientras el auto está sobre la línea
             elif not es_azul or es_naranja:
                 en_meta = False
-                
+            
+            #MODO CARRERA
+            if es_naranja and SENTIDO_CIRCUITO == "HORARIO":
+                if not en_esquina_actual:
+                    en_esquina_actual = True    
+            
+            elif es_azul and SENTIDO_CIRCUITO == "ANTIHORARIO":
+                if not en_esquina_actual:
+                    en_esquina_actual = True
+            else:
+                if en_esquina_actual:
+                    contador_esquinas += 1
+                    en_esquina_actual = False
+                    print(f"-> Esquina {contador_esquinas} superada.")
+                        
+                    if contador_esquinas >= 4:
+                        vueltas_totales += 1
+                        tiempo_ultima_vuelta = time.time()
+                        inicio_vuelta = time.time()
+                        t_actual = 0.0
+                        print(">>> ¡4 Esquinas completadas!")
+                        print(f"Vuelta {vueltas_totales} completada")
+            
             if vueltas_totales > 1:
-                    comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
+                comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
 
         # 2. LÓGICA DE APRENDIZAJE vs CARRERA
         if vueltas_totales > 1 and comando != 'S':
             # MODO CARRERA: Usar memoria
             comando_rec, potencia_rec = memoria_pista.get(t_actual, ('F', 'H'))
             comando, potencia = comando_rec, 'H' # Boost en la mejora
-            
-            # ANTICIPACIÓN ULTRA-AGRESIVA:
-            # Si la memoria dice que toca girar, pero el sentido dominante nos permite 
-            # abrirnos en la pista para tomar la curva más rápido:
-            # Caso 1: Circuito hacia la Derecha (Horario)
-            if SENTIDO_CIRCUITO == "HORARIO" and comando == 'D':
-                # Optimizamos el ángulo de entrada en el Arduino si es necesario
-                # Reduce de 'H' a 'M' en el milisegundo exacto antes del giro para no derrapar
-                potencia = 'M' # Velocidad óptima de paso por curva calculada
-            # Caso 2: Circuito hacia la Izquierda (Antihorario)
-            elif SENTIDO_CIRCUITO == "ANTIHORARIO" and comando == 'I':
-                # Aplica la misma reducción controlada para entrar rápido pero firme a la izquierda
-                potencia = 'M'
                 
         if vueltas_totales >= 4:
             if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO":
