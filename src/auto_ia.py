@@ -4,17 +4,45 @@ import time
 import csv
 import numpy as np
 
-# --- INTENTO DE CARGA DE MEDIAPIPE (Seguro) ---
+centro_objeto_x = None  # Almacena la posición calculada por la IA asíncrona
+
+# --- 2. CALLBACK ASÍNCRONO PARA MEDIAPIPE ---
+def callback_resultado_ia(resultado, imagen_salida, timestamp_ms):
+    global centro_objeto_x
+    if resultado.detections:
+        # Tomamos la detección con mayor índice de confianza
+        deteccion = resultado.detections[0]
+        bbox = deteccion.bounding_box
+        ancho_real = imagen_salida.width
+        # Calculamos el centro horizontal normalizado (0.0 a 1.0)
+        centro_objeto_x = (bbox.origin_x + (bbox.width / 2)) / ancho_real
+        try:
+            cv2.rectangle(frame, (int(bbox.origin_x), int(bbox.origin_y)), 
+                          (int(bbox.origin_x + bbox.width), int(bbox.origin_y + bbox.height)), 
+                          (0, 255, 0), 2)
+        except:
+            pass
+    else:
+        centro_objeto_x = None
+
+# --- INICIALIZACIÓN DE MEDIAPIPE ---
 try:
     import mediapipe as mp
     from mediapipe.tasks import python
     from mediapipe.tasks.python import vision
+    
     base_options = python.BaseOptions(model_asset_path='efficientdet_lite0.tflite')
-    options = vision.ObjectDetectorOptions(base_options=base_options,score_threshold=0.4)
+    options = vision.ObjectDetectorOptions(
+        base_options=base_options,
+        score_threshold=0.35,
+        running_mode=vision.RunningMode.LIVE_STREAM, # NO congela el código principal
+        result_callback=callback_resultado_ia
+    )
     detector = vision.ObjectDetector.create_from_options(options)
     USAR_IA = True
+    print(">>> IA Activada en Modo Cooperativo Asíncrono")
 except Exception as e:
-    print(f"Aviso: MediaPipe no disponible ({e}). Usando solo Vision de Colores.")
+    print(f"Error crítico al cargar IA: {e}. Entrando en modo solo OpenCV.")
     USAR_IA = False
 
 # --- CONFIGURACIÓN DE PISTA ---
@@ -25,13 +53,17 @@ tiempo_ultima_vuelta = 0
 memoria_pista = {}  # Formato: {tiempo: (comando, potencia)}
 inicio_vuelta = time.time()
 
+# --- CONSTANTES DE DIRECCIÓN GRADUAL ---
+ANGULO_CENTRO = 90  # Servo apuntando al frente en grados
+MAX_GIRO = 30        # Máximo desvío del servo (60° a 120°)
+
 # --- CONEXIÓN SERIAL (Protegida) ---
 try:
     # Intenta Raspberry (Linux) o Windows
-    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0.05)
+    ser = serial.Serial('/dev/ttyACM0', 115200, timeout=0.02)
 except:
     try:
-        ser = serial.Serial('COM3', 9600, timeout=0.05)
+        ser = serial.Serial('COM4', 115200, timeout=0.02)
     except:
         print("AVISO: Arduino no detectado. Modo simulación.")
         ser = None
@@ -45,24 +77,68 @@ MAGENTA = [(40, 150, 40), (255, 255, 120)]   # 'A' alta = Magenta, 'B' baja = Az
 NARANJA = [(40, 135, 145), (255, 180, 255)]  # 'A' moderada, 'B' alta = Naranja
 AZUL_SUELO = [(40, 110, 0), (255, 140, 115)] # 'B' baja = Azul suelo
 
-def detectar_color(lab_frame, rango):
-    # Genera la máscara usando el espacio LAB
-    mask = cv2.inRange(lab_frame, np.array(rango[0]), np.array(rango[1]))
-    area = cv2.countNonZero(mask)
-    if area > 1200:
-        M = cv2.moments(mask)
-        cx = int(M["m10"] / M["m00"]) if M["m00"] > 0 else 160
-        return True, cx
-    return False, 160
+# --- FUNCIONES DE FILTRADO GEOMÉTRICO INYECTADAS ---
+def _clean_mask(mask: np.ndarray, kernel_size: int = 5) -> np.ndarray:
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+    mask = cv2.GaussianBlur(mask, (kernel_size, kernel_size), 0)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    return mask
 
-dist_F = 100
-dist_A = 100
-dist_I = 100
-dist_D = 100
+def _is_valid_obstacle(area: float, w: int, h: int, img_w: int, es_pilar: bool) -> bool:
+    if not es_pilar:
+        return area > 1200  
+        
+    min_area = 1200
+    min_ratio = 1.0          
+    min_fill = 0.40          
+    max_width_ratio = 0.50   
+    
+    ratio = h / max(w, 1)
+    fill = area / max(w * h, 1)
+    
+    if area < min_area: return False
+    if ratio < min_ratio: return False
+    if fill < min_fill: return False
+    if w > img_w * max_width_ratio: return False
+    return True
+
+def detectar_color(lab_frame, rango, es_pilar=False):
+    # Genera la máscara usando el espacio LAB
+    img_h, img_w = lab_frame.shape[:2]
+    mask = cv2.inRange(lab_frame, np.array(rango[0]), np.array(rango[1]))
+    mask = _clean_mask(mask, kernel_size=5)
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    best_cx = 160
+    valid_detection = False
+    max_score = -1
+    
+    for contour in contours:
+        area = cv2.contourArea(contour)
+        x, y, w, h = cv2.boundingRect(contour)
+        
+        # Validar si el candidato cumple las reglas geométricas del pilar
+        if _is_valid_obstacle(area, w, h, img_w, es_pilar):
+            # Calculamos score (Prioriza áreas grandes y verticales)
+            fill_ratio = area / max(w * h, 1)
+            vertical_ratio = h / max(w, 1)
+            score = area * fill_ratio * vertical_ratio
+            
+            # Conservamos el pilar más confiable
+            if score > max_score:
+                max_score = score
+                best_cx = int(x + w / 2)
+                valid_detection = True
+                
+                # Dibujar caja de depuración (Opcional)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)
+                
+    return valid_detection, best_cx
 
 def actualizar_sensores():
     global dist_F, dist_A, dist_I, dist_D
-    if ser and ser.in_waiting > 0:
+    if ser:
         try:
             linea = ser.readline().decode('utf-8', errors='ignore').strip()
             if linea.startswith("D:"):
@@ -73,8 +149,13 @@ def actualizar_sensores():
                     dist_A = float(datos[1])
                     dist_I = float(datos[2])
                     dist_D = float(datos[3])
+                    # Para confirmar que ya se actualizan
+                    print(f"Sensores OK -> F:{dist_F} | A:{dist_A} | I:{dist_I} | D:{dist_D}")
         except Exception as e:
+            print(f"no se leyeron los sensores")
             pass # Si hay un error de lectura, mantiene el último valor seguro
+    else:
+        print(f"No se detectaron sensores, activando simulacion de sensores")
 
 # --- BUCLE PRINCIPAL ---
 cap = cv2.VideoCapture(0)
@@ -87,9 +168,8 @@ print(">>> SISTEMA INTEGRADO INICIADO")
 
 try:
     print("Calibrando entorno... No mueva el robot.")
-    for _ in range(20): # Intentar leer durante 2 segundos (20 * 0.1s)
-        actualizar_sensores()
-        time.sleep(0.1)
+    
+    actualizar_sensores()
 
     # Simulamos que leemos el puerto para capturar la posición inicial
     # dist_F, dist_A, dist_I, dist_D deben venir de la lectura serial
@@ -119,13 +199,17 @@ try:
         lab = cv2.cvtColor(frame, cv2.COLOR_BGR2Lab)
         t_actual = round(time.time() - inicio_vuelta, 1)
         
-        actualizar_sensores() 
-
+        if ser:
+            actualizar_sensores() # Tu función que imprime "Sensores OK" 
+        
+        angulo_servo = ANGULO_CENTRO
+        potencia_motor = "M"
+        
         # Si estamos en el Modo Obstáculos, aplicamos la rutina de salida estacionada en la Vuelta 0
         if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO" and vueltas_totales == 0:
             # El robot arranca suave para salir del cajón de paredes
-            comando = 'F'
-            potencia = 'L'
+            angulo_servo = ANGULO_CENTRO
+            potencia_motor = 'L'
             # Una vez que el sensor trasero detecte que salimos del cajón (ej. > 30cm) 
             # pasamos a la carrera real
             if float(dist_A) > 30: 
@@ -135,21 +219,9 @@ try:
         
         if USAR_IA:
             # Convertir frame para MediaPipe
+            timestamp_ia_ms = int(time.time_ns() / 1000000)
             img_mp = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
-            resultado_ia = detector.detect(img_mp)
-            centro_objeto_x = None
-            ancho_real = frame.shape[1]
-
-            if resultado_ia.detections:
-                for detection in resultado_ia.detections:
-                    bbox = detection.bounding_box 
-                    # Calculamos el centro X del objeto (0.0 a 1.0)
-                    centro_objeto_x = (bbox.origin_x + (bbox.width / 2)) / ancho_real 
-            
-                    # Dibujar en pantalla (Debug)
-                    cv2.rectangle(frame, (int(bbox.origin_x), int(bbox.origin_y)), 
-                                  (int(bbox.origin_x + bbox.width), int(bbox.origin_y + bbox.height)), 
-                                  (0, 255, 0), 2)
+            resultado_ia = detector.detect_async(img_mp, timestamp_ia_ms)
         
         # 1. LÓGICA DE VUELTAS Y META (MAGENTA) o (NARANJA o AZUL)
         # SISTEMA INTELIGENTE DE CONTEO DE VUELTAS SEGÚN EL MODO
@@ -168,108 +240,101 @@ try:
                 
             if vueltas_totales == 1:    
                 # MODO APRENDIZAJE: Navegación y reglas
-                es_naranja, _ = detectar_color(lab, NARANJA)
-                es_azul, _ = detectar_color(lab, AZUL_SUELO)
-                es_rojo, cx_r = detectar_color(lab, ROJO)
-                es_verde, cx_v = detectar_color(lab, VERDE)
+                es_naranja, _ = detectar_color(lab, NARANJA, es_pilar=False)
+                es_azul, _ = detectar_color(lab, AZUL_SUELO, es_pilar=False)
+                es_rojo, cx_r = detectar_color(lab, ROJO, es_pilar=True)
+                es_verde, cx_v = detectar_color(lab, VERDE, es_pilar=True)
+                               
+                if USAR_IA and centro_objeto_x is None:
+                    if es_rojo: centro_objeto_x = cx_r / frame.shape[1]
+                    elif es_verde: centro_objeto_x = cx_v / frame.shape[1]
                 
-                comando = 'F'
-                potencia = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
-                    
+                angulo_servo = ANGULO_CENTRO
+                potencia_motor = VELOCIDAD_CRUCERO
+                
                 if es_naranja:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
-                        comando = 'D'
+                        angulo_servo = ANGULO_CENTRO + MAX_GIRO # Giro procedural derecho completo
                         SENTIDO_CIRCUITO = "HORARIO"
                         inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
                         t_actual = 0.0
                         contador_esquinas = 0
-                        print(">>> Sentido HORARIO")
+                        memoria_pista.clear()
+                        print(">>> Sentido HORARIO, Iniciando grabación procedural desde la Curva 1")
                     elif SENTIDO_CIRCUITO == "HORARIO":
                         print("-> Giro HORARIO NARANJA")
-                        comando = 'D'
-                                
+                        angulo_servo = ANGULO_CENTRO + MAX_GIRO         
                     if not en_esquina_actual:
                         en_esquina_actual = True    
                     
                         # 2. Detectar Esquina Azul (Giro Izquierda)
                 elif es_azul:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
-                        comando = 'I'
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO # Giro procedural izquierdo completo
                         SENTIDO_CIRCUITO = "ANTIHORARIO"
                         inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
                         t_actual = 0.0
                         contador_esquinas = 0
+                        memoria_pista.clear()
                         print(">>> Sentido ANTIHORARIO")
                     elif SENTIDO_CIRCUITO == "ANTIHORARIO":
                         print("-> Giro ANTIHORARIO AZUL")
-                        comando = 'I'
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO
                             
                     if not en_esquina_actual:
                         en_esquina_actual = True
                     
                 elif es_rojo:
                     if centro_objeto_x is not None:
-                        # Si el objeto está a la izquierda (x < 0.4), giro leve
-                        if centro_objeto_x < 0.4:
-                            comando = '1'
-                            print("-> Giro LEVE ROJO(1)")
-                        else:
-                            'I'
-                            print("-> Giro AGRESIVO ROJO (I)")
+                        # Calculamos la desviación del pilar rojo (0.0 Izquierda, 1.0 Derecha)
+                        # Buscamos proyectar una trayectoria de escape proporcional hacia la derecha
+                        error_gradual = 0.5 - centro_objeto_x
+                        ajuste = int(error_gradual * MAX_GIRO)
+                        # Obligamos a corregir hacia la izquierda para evadir el pilar derecho o viceversa
+                        angulo_servo = ANGULO_CENTRO - ajuste 
+                        print(f"-> Procedural Rojo. Ajustando ángulo servo a: {angulo_servo}°")
                     else:
-                        comando = 'I'# Seguridad
-                        print("-> Giro AGRESIVO ROJO CV (I)")
-                    potencia = 'L'
-                    print("potencia L")
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO
+                    potencia_motor = 'L'
                         
                 elif es_verde:
                     if centro_objeto_x is not None:
-                        if dist_I > dist_D:
-                            # Hay más espacio a la izquierda
-                            if centro_objeto_x < 0.4:
-                                comando = '1'
-                                print("-> Giro LEVE VERDE (1)")
-                            else:
-                                'I'
-                                print("-> Giro AGRESIVO VERDE IA (I)")
-                        else:
-                            # Hay más espacio a la derecha (o igual)
-                            if centro_objeto_x > 0.6:
-                                comando = '2'
-                                print("-> Giro LEVE VERDE (2)")
-                            else:
-                                'D'
-                                print("-> Giro AGRESIVO VERDE IA (D)")
+                        # Mapeamos la distancia del pilar verde al centro de la pantalla
+                        # Si el pilar está muy a la derecha (ej. centro_objeto_x = 0.7), el error es bajo (0.2)
+                        # Si el pilar está en el centro (centro_objeto_x = 0.5), el error es alto (0.4) lo que obliga a girar más
+                        distancia_al_borde_izq = centro_objeto_x - 0.1
+                        ajuste_gradual = int(distancia_al_borde_izq * MAX_GIRO)
+                        
+                        # Restamos para obligar a que el servo apunte SIEMPRE a la izquierda (menor a 90 grados)
+                        angulo_servo = ANGULO_CENTRO - abs(ajuste_gradual)
+                        print(f"-> Procedural Verde (Fijo Izquierda). Ángulo servo: {angulo_servo}°")
                     else:
-                        comando = 'D'
-                        print("-> Giro AGRESIVO VERDE CV (D)")
-                    potencia = 'L'
-                    print("potencia L")
+                        # Fallback seguro: Giro máximo a la izquierda si se pierde el centro matemático
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO
+                    potencia_motor = 'L'
                 else:
-                    comando, potencia = 'F', 'M'
-                    print("potencia M")
+                    angulo_servo, potencia_motor = ANGULO_CENTRO, 'M'
                 
                 # Guardar en memoria
-                memoria_pista[t_actual] = (comando, potencia)
+                memoria_pista[t_actual] = (angulo_servo, potencia_motor)
                     
             if vueltas_totales > 1:
-                comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
+                comando, potencia = memoria_pista.get(t_actual, (ANGULO_CENTRO, 'H'))
                 
         # MODO 1: Carrera Abierta (Meta = Línea del suelo según el sentido de giro)
         # MODO APRENDIZAJE
         elif MODO_COMPETENCIA == "CARRERA_ABIERTA":
-            es_naranja, _ = detectar_color(lab, NARANJA)
-            es_azul, _ = detectar_color(lab, AZUL_SUELO)
+            es_naranja, _ = detectar_color(lab, NARANJA, es_pilar=False)
+            es_azul, _ = detectar_color(lab, AZUL_SUELO, es_pilar=False)
+            
+            angulo_servo = ANGULO_CENTRO
+            potencia_motor = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
             
             if vueltas_totales == 1:
-                
-                comando = 'F'
-                potencia = VELOCIDAD_CRUCERO # Se adapta automáticamente según la calibración inicial
-                
                 # 1. Detectar Esquina Naranja (Giro Derecha)
                 if es_naranja:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
-                        comando = 'D'
+                        angulo_servo = ANGULO_CENTRO + MAX_GIRO
                         SENTIDO_CIRCUITO = "HORARIO"
                         inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
                         t_actual = 0.0
@@ -277,7 +342,7 @@ try:
                         print(">>> Sentido HORARIO. Iniciando cronómetro de aprendizaje.")
                     elif SENTIDO_CIRCUITO == "HORARIO":
                         print("-> Giro HORARIO NARANJA")
-                        comando = 'D'
+                        angulo_servo = ANGULO_CENTRO + MAX_GIRO
                         
                     if not en_esquina_actual:
                         en_esquina_actual = True    
@@ -285,7 +350,7 @@ try:
                  # 2. Detectar Esquina Azul (Giro Izquierda)
                 elif es_azul:
                     if SENTIDO_CIRCUITO == "INDETERMINADO":
-                        comando = 'I'
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO
                         SENTIDO_CIRCUITO = "ANTIHORARIO"
                         inicio_vuelta = time.time() # Sincroniza el tiempo 0.0 en la primera esquina
                         t_actual = 0.0
@@ -293,7 +358,7 @@ try:
                         print(">>> Sentido ANTIHORARIO. Iniciando cronómetro de aprendizaje.")
                     elif SENTIDO_CIRCUITO == "ANTIHORARIO":
                         print("-> Giro ANTIHORARIO AZUL")
-                        comando = 'I'
+                        angulo_servo = ANGULO_CENTRO - MAX_GIRO
                     
                     if not en_esquina_actual:
                         en_esquina_actual = True
@@ -311,12 +376,17 @@ try:
                             tiempo_ultima_vuelta = time.time()
                             inicio_vuelta = time.time() # REINICIO DEL RELOJ PARA LA MEJORA PERFECTA
                             t_actual = 0.0
+                            contador_esquinas = 0
                             print(">>> ¡4 Esquinas completadas! Vuelta 1 cerrada. Iniciando Modo Carrera.")
                             print(f"Vuelta {vueltas_totales} completada")
+                            
+                    # Si no hay líneas, mantenemos el avance recto firme
+                    angulo_servo = ANGULO_CENTRO
+                    potencia_motor = VELOCIDAD_CRUCERO # Fuerza 'H' continua en recta limpia
             
                 # GUARDAR EN MEMORIA (Solo graba si ya se definió el sentido del circuito)
                 if SENTIDO_CIRCUITO != "INDETERMINADO":
-                    memoria_pista[t_actual] = (comando, potencia)
+                    memoria_pista[t_actual] = (angulo_servo, potencia_motor)
             
             # Evitamos falsos positivos mientras el auto está sobre la línea
             elif not es_azul or es_naranja:
@@ -341,40 +411,43 @@ try:
                         tiempo_ultima_vuelta = time.time()
                         inicio_vuelta = time.time()
                         t_actual = 0.0
+                        contador_esquinas = 0
                         print(">>> ¡4 Esquinas completadas!")
                         print(f"Vuelta {vueltas_totales} completada")
             
             if vueltas_totales > 1:
-                comando, potencia = memoria_pista.get(t_actual, ('F', 'H'))
+                comando, potencia = memoria_pista.get(t_actual, (ANGULO_CENTRO, 'H'))
 
         # 2. LÓGICA DE APRENDIZAJE vs CARRERA
         if vueltas_totales > 1 and comando != 'S':
             # MODO CARRERA: Usar memoria
-            comando_rec, potencia_rec = memoria_pista.get(t_actual, ('F', 'H'))
-            comando, potencia = comando_rec, 'H' # Boost en la mejora
+            angulo_servo_rec, potencia_rec = memoria_pista.get(t_actual, (ANGULO_CENTRO, 'H'))
+            angulo_servo, potencia_motor = angulo_servo_rec, 'H' # Boost en la mejora
                 
         if vueltas_totales >= 4:
             if MODO_COMPETENCIA == "OBSTACULOS_ESTACIONADO":
-                comando = 'S' # Activa la sub-rutina de centrado y retroceso en el Arduino
-                potencia = 'L'
-                print("ESTACIONANDO")
+                angulo_servo = ANGULO_CENTRO # Activa la sub-rutina de centrado y retroceso en el Arduino
+                potencia_motor = 'P'
+                print("ESTACIONANDO >>> MODO 2: Iniciando Estacionamiento en Paralelo Asistido")
             else:
-                comando = 'S' # Frenado en seco inmediato en la línea
-                potencia = 'L'
-                print("DETENIDO")
+                angulo_servo = ANGULO_CENTRO
+                potencia_motor = 'S' # Frenado en seco inmediato en la línea
+                print("DETENIDO >>> MODO 1: DETENIDO TOTAL DE CARRERA")
 
         # 3. COMUNICACIÓN Y LOG
         if ser:
-            ser.write(f"{comando}{potencia}".encode())
+            # Transmite de forma limpia una cadena con el ángulo entero exacto y el caracter de potencia original
+            # Formato: "A090PL\n", "A125PH\n", "A055PS\n"
+            ser.write(f"A{int(angulo_servo):03d}P{potencia_motor}\n".encode())
             linea = ser.readline().decode('utf-8', errors='ignore').strip()
         else:
-            linea = "D:0,0,0,0" # Simulación
+            linea = "D:0,0,0,0"
 
         # Guardar CSV
         with open(archivo_log, mode='a', newline='') as f:
-            csv.writer(f).writerow([time.time(), vueltas_totales, comando, potencia, linea])
-
-        if comando == 'S' and vueltas_totales >= 4: break
+            csv.writer(f).writerow([time.time(), vueltas_totales, angulo_servo, potencia_motor, linea])
+        
+        if potencia_motor == 'S' and vueltas_totales >= 4: break
         
         #COMANDO PARA ESTACIONAMIENTO(IR AQUI)
 
@@ -382,6 +455,6 @@ try:
         if cv2.waitKey(1) & 0xFF == ord('q'): break
 
 finally:
-    if ser: ser.write(b'SS')
+    if ser: ser.write(b'A090PS\n')
     cap.release()
     cv2.destroyAllWindows()
