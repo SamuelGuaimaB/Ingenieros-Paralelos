@@ -1,11 +1,17 @@
-Engineering materials // Ingenieros-Paralelo
-===
+# Engineering materials // Ingenieros-Paralelo
 
 Proyecto Competencia de Robotica WRO
 
 Una descripción breve en inglés (no menor a 5,000 caracteres) de la solución desarrollada
 
 This repository contains engineering materials of a self-driven vehicle's model participating in the WRO Future Engineers competition in the season 2026
+
+## Acerca de nosotros
+
+>Miembros del equipo
+- Samuel Guaimacuto
+- Andrés Villareal
+- David Xu
 
 ## Content
 
@@ -16,8 +22,6 @@ This repository contains engineering materials of a self-driven vehicle's model 
 * `src` contains code of control software for all components which were programmed to participate in the competition
 * `models` is for the files for models used by 3D printers, laser cutting machines and CNC machines to produce the vehicle elements. If there is nothing to add to this location, the directory can be removed.
 * `other` is for other files which can be used to understand how to prepare the vehicle for the competition. It may include documentation how to connect to a SBC/SBM and upload files there, datasets, hardware specifications, communication protocols descriptions etc. If there is nothing to add to this location, the directory can be removed.
-
-===
 
 ## Introduction
 
