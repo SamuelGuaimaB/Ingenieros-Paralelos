@@ -50,7 +50,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ### Descripcion y funcionalidades
 
-- `Raspberry Pi 4: 
+- `Raspberry Pi 4`: 
 - `Driver L298N`: 
 - `Arduino Uno`: 
 - `Protoboard`: 
@@ -58,5 +58,8 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ## Software / Tecnologías 🖥️
 
->`C++`:
->`Python`: 
+>C++:
+
+>Python: 
+- `Mediapipe`:
+- `OpenCV`: 
