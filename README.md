@@ -6,12 +6,19 @@ Una descripción breve en inglés (no menor a 5,000 caracteres) de la solución 
 
 This repository contains engineering materials of a self-driven vehicle's model participating in the WRO Future Engineers competition in the season 2026
 
-## Acerca de nosotros
+## Acerca de nosotros 👥
 
 >Miembros del equipo
 - Samuel Guaimacuto
 - Andrés Villareal
 - David Xu
+
+Somos un equipo conformado por estudiantes de Ingeniería Informática de la Universidad Gran Mariscal de Ayacucho (UGMA) del núcleo Barcelona.
+
+>Propósito del equipo
+Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competencia en la categoría Futuros Ingenieros.
+- 1. Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
+- 2. Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 
 ## Content
 
