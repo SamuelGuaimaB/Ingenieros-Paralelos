@@ -37,7 +37,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - 1. Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
 
 - 2. Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
-<img src="pistaObstaculos" alt="Pista con Obstaculos" width="500" height="300">
+<img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
  
 ## Componentes y Hardware ⚙️
@@ -50,7 +50,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **Sensores de Ultrasonido**          | 4        | **4.05**          | **4.05**    |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 | **Kit Fischertechnik Maker Kit Car** | 1        | **8.50**          | **8.50**    |
-| **Logitech C922**                    | 1        | **8.50**          | **8.50**    |
+| **Cámara Logitech C922**             | 1        | **8.50**          | **8.50**    |
 
 ### Descripcion y funcionalidades
 
