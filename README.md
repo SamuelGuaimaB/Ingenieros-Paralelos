@@ -39,12 +39,6 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
  
 ## Componentes y Hardware ⚙️
 
-- `Raspberry Pi 4`
-- `Driver L298N`
-- `Arduino Uno`
-- `Protoboard`
-- `Kit Fischertechnik Maker Kit Car`
-
 | Componentes                          | Quantity | Unit Price ($) | Total ($)   |
 |--------------------------------------|----------|----------------|-------------|
 | **Raspberry Pi 4**                   | 1        | **21.42**      | **21.42**   |
@@ -54,8 +48,15 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **Protoboard**                       | 1        | **80.00**      | **80.00**   |
 | **Kit Fischertechnik Maker Kit Car** | 1        | **8.50**       | **8.50**    |
 
+### Descripcion y funcionalidades
+
+- `Raspberry Pi 4: 
+- `Driver L298N`: 
+- `Arduino Uno`: 
+- `Protoboard`: 
+- `Kit Fischertechnik Maker Kit Car`: 
 
 ## Software / Tecnologías 🖥️
 
-- `C++`:
-- `Python`: 
+>`C++`:
+>`Python`: 
