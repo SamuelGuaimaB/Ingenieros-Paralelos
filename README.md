@@ -48,8 +48,9 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **Driver L298N**                     | 1        | **22.45**         | **22.45**   |
 | **Arduino Uno**                      | 1        | **19.92**         | **19.92**   |
 | **Sensores de Ultrasonido**          | 4        | **4.05**          | **4.05**    |
-| **Protoboard**                       | 1        | **80.00**         | **80.00**   |
+| **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 | **Kit Fischertechnik Maker Kit Car** | 1        | **8.50**          | **8.50**    |
+| **Logitech C922**                    | 1        | **8.50**          | **8.50**    |
 
 ### Descripcion y funcionalidades
 
