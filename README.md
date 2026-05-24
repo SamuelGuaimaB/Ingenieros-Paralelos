@@ -42,14 +42,14 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
  
 ## Componentes y Hardware ⚙️
 
-| Componentes                          | Quantity | Unit Price ($) | Total ($)   |
-|--------------------------------------|----------|----------------|-------------|
-| **Raspberry Pi 4**                   | 1        | **21.42**      | **21.42**   |
-| **Driver L298N**                     | 1        | **22.45**      | **22.45**   |
-| **Arduino Uno**                      | 1        | **19.92**      | **19.92**   |
-| **Sensores de Ultrasonido**          | 4        | **4.05**       | **4.05**    |
-| **Protoboard**                       | 1        | **80.00**      | **80.00**   |
-| **Kit Fischertechnik Maker Kit Car** | 1        | **8.50**       | **8.50**    |
+| Componentes                          | Cantidad | Precio/Unidad ($) | Total ($)   |
+|--------------------------------------|----------|-------------------|-------------|
+| **Raspberry Pi 4**                   | 1        | **21.42**         | **21.42**   |
+| **Driver L298N**                     | 1        | **22.45**         | **22.45**   |
+| **Arduino Uno**                      | 1        | **19.92**         | **19.92**   |
+| **Sensores de Ultrasonido**          | 4        | **4.05**          | **4.05**    |
+| **Protoboard**                       | 1        | **80.00**         | **80.00**   |
+| **Kit Fischertechnik Maker Kit Car** | 1        | **8.50**          | **8.50**    |
 
 ### Descripcion y funcionalidades
 
