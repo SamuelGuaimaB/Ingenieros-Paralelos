@@ -1,4 +1,4 @@
-# WRO2025 Future Engineers – Ingenieros Paralelos
+# WRO2026 Future Engineers – Ingenieros Paralelos
 
 ## Engineering materials // Ingenieros-Paralelo
 
