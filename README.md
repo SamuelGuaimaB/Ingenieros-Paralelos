@@ -35,9 +35,9 @@ _Somos un equipo conformado por estudiantes de Ingeniería Informática de la Un
 
 Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
 
-- 1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
+1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
 
-- 2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
+2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 <img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
  
@@ -62,7 +62,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
 - Alimentación: Se alimenta a través de un puerto USB-C. 
 
-3) `Driver L298N`: Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
+2) `Driver L298N`: Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
 - Voltaje de motor (potencia): Desde 5V hasta 35V DC.
 - Corriente de salida: Hasta 2A por canal (con picos máximos de hasta 3A a 4A).
 - Voltaje lógico: Funciona a 5V para la comunicación con el microcontrolador.
@@ -70,7 +70,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - Potencia máxima: 25W.
 - Protección: Incorpora protección térmica para evitar que se queme por sobrecalentamiento y disipador de calor. 
 
-4) `Arduino Uno`: Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
+3) `Arduino Uno`: Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
 - Microcontrolador: ATmega328P de 8 bits.
 - Voltaje de Operación: 5V.
 - Voltaje de Entrada Recomendado: 7V a 12V (límite de 6V a 20V).
@@ -81,10 +81,10 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - Memoria SRAM: 2KB.
 - Memoria EEPROM: 1KB. 
 
-5) `Protoboard`: 
+4) `Protoboard`: 
 
 
-6) `Kit Fischertechnik Maker Kit Car`: 
+5) `Kit Fischertechnik Maker Kit Car`: 
 
 
 ## Software / Tecnologías 🖥️
