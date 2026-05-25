@@ -55,11 +55,37 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ### Descripción y funcionalidades
 
-- `Raspberry Pi 4`: 
-- `Driver L298N`: 
-- `Arduino Uno`: 
-- `Protoboard`: 
-- `Kit Fischertechnik Maker Kit Car`: 
+1) `Raspberry Pi 4`:
+- Procesador: Broadcom BCM2711, ARM Cortex-A72 de cuatro núcleos.
+- Memoria RAM: Disponible en diferentes capacidades (desde 1 GB hasta 8 GB).
+- Conectividad: Puertos USB 3.0, Gigabit Ethernet, Wi-Fi de doble banda y Bluetooth.
+- Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
+- Alimentación: Se alimenta a través de un puerto USB-C. 
+
+3) `Driver L298N`: Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
+- Voltaje de motor (potencia): Desde 5V hasta 35V DC.
+- Corriente de salida: Hasta 2A por canal (con picos máximos de hasta 3A a 4A).
+- Voltaje lógico: Funciona a 5V para la comunicación con el microcontrolador.
+- Consumo de corriente (lógica): Entre 0 y 36mA.
+- Potencia máxima: 25W.
+- Protección: Incorpora protección térmica para evitar que se queme por sobrecalentamiento y disipador de calor. 
+
+4) `Arduino Uno`: Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
+- Microcontrolador: ATmega328P de 8 bits.
+- Voltaje de Operación: 5V.
+- Voltaje de Entrada Recomendado: 7V a 12V (límite de 6V a 20V).
+- Pines de E/S Digitales: 14 pines, 6 de ellos ofrecen salida PWM.
+- Pines de Entradas Analógicas: 6 pines.
+- Velocidad de Reloj: 16MHz.
+- Memoria Flash: 32KB, de los cuales 0.5KB son utilizados por el gestor de arranque.
+- Memoria SRAM: 2KB.
+- Memoria EEPROM: 1KB. 
+
+5) `Protoboard`: 
+
+
+6) `Kit Fischertechnik Maker Kit Car`: 
+
 
 ## Software / Tecnologías 🖥️
 
@@ -73,6 +99,12 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 3) Magenta: Estacionamiento.
 4) Naranja: Indica giro a la derecha.
 5) Azul: Indica giro a la izquierda.
+
+El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino:
+
+- Dirección: F(recto), I(izq), D(der), 1(giro leve izq), 2(giro leve der), S(parar).
+- Potencia: H(alta/255), M(media/195), L(baja/115).
+
 
 >Arduino (C++):
 
