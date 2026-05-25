@@ -64,8 +64,12 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 >Python: 
 - `Mediapipe`: Es un marco de código abierto desarrollado por Google que permite construir soluciones de inteligencia artificial y aprendizaje automático, principalmente enfocado en el análisis y procesamiento de visión artificial en tiempo real (vídeo, imágenes y audio). Con la implementación de este framework con la finalidad de detección de obstáculos, la cámara logra detectar objetos en tiempo real usando el modelo clasificador_pista.tflite.
-- `OpenCV (Open Source Computer Vision Library)`: Es una librería de código abierto especializada en visión por computadora, procesamiento de imágenes y aprendizaje automático. Permite que las computadoras tengan visión e interpreten información visual a partir de fotografías o videos en tiempo real. Permite configurar rangos específicos de color para aislar un tono con máxima precisión. Para lograrlo, no se usa el formato de color común (RGB), sino el espacio de color HSV (Tono, Saturación, Valor). Este formato separa el color puro de la iluminación, lo que evita que las sombras o los brillos confundan al sistema. Esta librería se tomó en cuenta para nuestro proyecto con la finalidad de la identificación de colores para realizar acciones específicas:
---Rojo: Esquivar obstáculo por la derecha.
+- `OpenCV (Open Source Computer Vision Library)`: Es una librería de código abierto especializada en visión por computadora, procesamiento de imágenes y aprendizaje automático. Permite que las computadoras tengan visión e interpreten información visual a partir de fotografías o videos en tiempo real. Esta librería se tomó en cuenta para nuestro proyecto con la finalidad de la identificación de colores para realizar acciones específicas:
+1) Rojo: Esquivar obstáculo por la derecha.
+2) Verde: Esquivar obstáculo por la izquierda.
+3) Magenta: Estacionamiento.
+4) Naranja: Indica giro a la derecha.
+5) Azul: Indica giro a la izquierda.
 
 >C++:
 
