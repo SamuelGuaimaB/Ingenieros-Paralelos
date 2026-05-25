@@ -102,7 +102,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino:
 
-- Dirección: F(recto), I(izq), D(der), 1(giro leve izq), 2(giro leve der), S(parar).
+- Dirección: F(recto), I(izquierda), D(derecha), 1(giro leve izquierda), 2(giro leve dereche), S(parar).
 - Potencia: H(alta/255), M(media/195), L(baja/115).
 
 
