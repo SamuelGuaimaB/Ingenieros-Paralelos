@@ -90,17 +90,17 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 ## Software / Tecnologías 🖥️
 
 >Python: 
-- `Mediapipe`: Es un marco de código abierto desarrollado por Google que permite construir soluciones de inteligencia artificial y aprendizaje automático, principalmente enfocado en el análisis y procesamiento de visión artificial en tiempo real (vídeo, imágenes y audio). Con la implementación de este framework con la finalidad de detección de obstáculos, la cámara logra detectar objetos en tiempo real usando el modelo clasificador_pista.tflite.
+- `Mediapipe`: Es un marco de código abierto desarrollado por Google que permite construir soluciones de inteligencia artificial y aprendizaje automático, principalmente enfocado en el análisis y procesamiento de visión artificial en tiempo real (vídeo, imágenes y audio). Con la implementación de este framework con la finalidad de detección de obstáculos, la cámara logra detectar objetos en tiempo real gracias al dataset clasificador_pista.tflite.
 
-- `OpenCV (Open Source Computer Vision Library)`: Es una librería de código abierto especializada en visión por computadora, procesamiento de imágenes y aprendizaje automático. Permite que las computadoras tengan visión e interpreten información visual a partir de fotografías o videos en tiempo real. Esta librería se tomó en cuenta para nuestro proyecto con la finalidad de la identificación de colores para realizar acciones específicas:
+- `OpenCV (Open Source Computer Vision Library)`: Es una librería de código abierto especializada en visión por computadora, procesamiento de imágenes y aprendizaje automático. Permite que las computadoras tengan visión e interpreten información visual a partir de fotografías o videos en tiempo real. Esta librería se tomó en cuenta para nuestro proyecto con el fin de la identificación de colores para realizar acciones específicas:
 
 1) Rojo: Esquivar obstáculo por la derecha.
 2) Verde: Esquivar obstáculo por la izquierda.
 3) Magenta: Estacionamiento.
-4) Naranja: Indica giro a la derecha.
-5) Azul: Indica giro a la izquierda.
+4) Naranja: Indicar giro a la derecha.
+5) Azul: Indicar giro a la izquierda.
 
-El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino:
+El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino, pudiendo estas cadenas variar dependiendo de lo detectado en la cámara y el gestionamiento de dicha información por Mediapipe junto a OpenCV:
 
 - Dirección: F(recto), I(izquierda), D(derecha), 1(giro leve izquierda), 2(giro leve dereche), S(parar).
 - Potencia: H(alta/255), M(media/195), L(baja/115).
@@ -108,4 +108,6 @@ El código escrito en el lenguaje Python envía strings conformados por dos cara
 
 >Arduino (C++):
 
-- `servo.h`: Esta librería es el archivo de código estándar incluido en el entorno de desarrollo de Arduino que facilita el control preciso de servomotores. Su función es generar las señales eléctricas necesarias (modulación por ancho de pulsos o PWM) para mover el eje del motor a un ángulo exacto. 
+- `servo.h`: Esta librería es el archivo de código estándar incluido en el entorno de desarrollo de Arduino que facilita el control preciso de servomotores. Su función es generar las señales eléctricas necesarias (modulación por ancho de pulsos o PWM) para mover el eje del motor a un ángulo exacto.
+
+En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de dos caracteres enviada por la Raspberry Pi 4, se procede a procesarla. El código de Arduino escrito en C++, contiene una serie de funciones, ciclos y condicionales necesarias para el procesamiento y ejecución de la instrucción correspondiente, para que la placa Arduino posteriormente posea la capacidad de enviar pequeñas señales de corriente al driver, indicándole a éste la manera en la que va a alimentar con corriente el servo motor, pudiendo así ejecutar de manera eficaz la indicación solicitada.
