@@ -52,6 +52,8 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 | **Fischertechnik Maker Kit Car**     | 1        | **8.50**          | **8.50**    |
 | **Cámara Logitech C922**             | 1        | **8.50**          | **8.50**    |
+| **UPS ----           .**             | 1        | **8.50**          | **8.50**    |
+
 
 ### Descripción y funcionalidades
 
@@ -62,7 +64,10 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - [x] Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
 - [x] Alimentación: Se alimenta a través de un puerto USB-C. 
 
-- `Driver L298N`: Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
+- `Driver L298N`
+
+Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
+
 - [x] Voltaje de motor (potencia): Desde 5V hasta 35V DC.
 - [x] Corriente de salida: Hasta 2A por canal (con picos máximos de hasta 3A a 4A).
 - [x] Voltaje lógico: Funciona a 5V para la comunicación con el microcontrolador.
@@ -70,7 +75,10 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - [x] Potencia máxima: 25W.
 - [x] Protección: Incorpora protección térmica para evitar que se queme por sobrecalentamiento y disipador de calor. 
 
-- `Arduino Uno`: Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
+- `Arduino Uno`
+
+Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
+
 - [x] Microcontrolador: ATmega328P de 8 bits.
 - [x] Voltaje de Operación: 5V.
 - [x] Voltaje de Entrada Recomendado: 7V a 12V (límite de 6V a 20V).
@@ -81,11 +89,23 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 - [x] Memoria SRAM: 2KB.
 - [x] Memoria EEPROM: 1KB. 
 
-4) `Micro Protoboard`: 
+- `Micro Protoboard`: 
 
 
-5) `Kit Fischertechnik Maker Kit Car`: 
+- `Fischertechnik Maker Kit Car`:
 
+El Fischertechnik Maker Kit Car (modelo 571900) es un chasis robótico móvil básico. Funciona como una plataforma abierta y altamente extensible para construir coches robóticos personalizados. El kit proporciona la base mecánica y de tracción del vehículo:
+
+- [x] Motor codificador: Para un control preciso del movimiento y la velocidad.
+- [x] Engranaje diferencial: Permite que las ruedas giren a diferentes velocidades en las curvas.
+- [x] Mecanismo de dirección: Equipado con un servomotor para un guiado exacto del eje delantero.
+
+A diferencia de otros kits tradicionales de la marca, la línea Maker está pensada para integrarse con tecnologías externas, siendo este factor muy óptimo para nuestro proyecto: 
+
+- [x] Sin controlador incluido: El kit no trae un cerebro electrónico, ya que está diseñado para la implementación de una placa.
+- [x] Compatibilidad de hardware: Se adapta de forma ideal a controladores populares como Arduino Uno, Arduino Mega o Raspberry Pi (modelos 3, 4 y 5).
+- [x] Soportes en impresión 3D: Fischertechnik proporciona de forma gratuita los archivos y datos 3D para imprimir los soportes específicos de estas placas de desarrollo.
+- [x] Diseño Digital: El chasis se puede ampliar con sensores y actuadores adicionales, los cuales se pueden diseñar de forma previa en el software Fischertechnik Design Studio.
 
 ## Software / Tecnologías 🖥️
 
