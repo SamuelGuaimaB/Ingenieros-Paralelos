@@ -58,11 +58,14 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 ### Descripción y funcionalidades
 
 - `Raspberry Pi 4`:
-- [x] Procesador: Broadcom BCM2711, ARM Cortex-A72 de cuatro núcleos.
-- [x] Memoria RAM: Disponible en diferentes capacidades (desde 1 GB hasta 8 GB). /
-- [x] Conectividad: Puertos USB 3.0, Gigabit Ethernet, Wi-Fi de doble banda y Bluetooth.
-- [x] Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
-- [x] Alimentación: Se alimenta a través de un puerto USB-C. 
+
+> [!IMPORTANT]
+> Specifications
+>- Procesador: Broadcom BCM2711, ARM Cortex-A72 de cuatro núcleos.
+>- Memoria RAM: Disponible en diferentes capacidades (desde 1 GB hasta 8 GB). /
+>- Conectividad: Puertos USB 3.0, Gigabit Ethernet, Wi-Fi de doble banda y Bluetooth.
+>- Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
+>- Alimentación: Se alimenta a través de un puerto USB-C.
 
 - `Driver L298N`
 
