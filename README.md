@@ -40,10 +40,38 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 <img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
-## Vision and Mobility Management
+## Hardware and Software employed to Vision Management
 
+- **Logitech C922**: 
 
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/Logitech C922.png " alt="Logitech C922 Webcam" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li>Max resolution: 1080p at 30fps (Full HD) or 720p at 60fps (HD) </li>
+        <li>Field of View (FoV): 78° diagonal </li>
+        <li>Focus Type: Autofocus </li>
+        <li>Lens Technology: Full HD glass lens with automatic light correction</li>
+        <li>Audio: Dual omnidirectional stereo microphones </li>
+        <li>Connectivity: Wired USB 2.0 (includes a 5-foot / 1.5m cable)</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
+The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
+
+> <h3> Mediapipe </h3>
+
+<hr>
+
+_Is an open-source, cross-platform framework developed by Google that allows developers to build high-performance machine learning (ML) pipelines for processing "streaming" media like video and audio. It is specifically optimized for real-time performance on edge devices such as mobile phones (Android, iOS), web browsers, and embedded systems like Raspberry Pi. With the implementation of this framework with the purpose of obstacles detection, the camera is able to detect objets in real time supported by the dataset clasificador_pista.tflite._
+
+> OpenCV
 
 ## Componentes y Hardware ⚙️
 
