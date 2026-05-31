@@ -73,6 +73,12 @@ _Is an open-source, cross-platform framework developed by Google that allows dev
 
 > OpenCV
 
+_OpenCV (Open Source Computer Vision Library) is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it._
+
+## Mobility Management
+
+
+
 ## Componentes y Hardware ⚙️
 
 | Componentes                          | Cantidad | Precio/Unidad ($) | Total ($)   |
