@@ -42,7 +42,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ## Hardware and Software employed to Vision Management
 
-- **Logitech C922**: 
+- **Logitech C922**:
 
 <table>
   <tr>
@@ -64,6 +64,29 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 </table>
 
 The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
+
+- **Raspberry Pi 4**:
+
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/Raspberry Pi 4.png " alt="Raspberry Pi 4" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li>Processor: Quad-Core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5–1.8 GHz </li>
+        <li>Memory: 1GB, 2GB, 4GB, or 8GB LPDDR4-3200 SDRAM </li>
+        <li>Video: Dual micro-HDMI ports supporting 4K @ 60fps </li>
+        <li>Connectivity: Gigabit Ethernet, 2.4/5.0 GHz Wi-Fi, and Bluetooth 5.0 </li>
+        <li>USB: 2x USB 3.0, 2x USB 2.0 ports </li>
+        <li>Power: USB-C (5V/3A) or Power over Ethernet (PoE) supported </li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It functions as a fully operational, low-cost computer capable of desktop computing, media streaming, home automation, and robotics, while using only a fraction of the power of a standard desktop. 
 
 > <h3> Mediapipe </h3>
 
