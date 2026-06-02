@@ -31,14 +31,6 @@ _This part must be filled by participants with the technical clarifications abou
 
 _Somos un equipo conformado por estudiantes de Ingeniería Informática de la Universidad Gran Mariscal de Ayacucho (UGMA) del núcleo Barcelona, siendo nuestra primera participación en una competición WRO, compitiendo en la categoría Futuros Ingenieros. Lo que nos inspiró a formar parte de este torneo fueron las ganas de aprender acerca del mundo de la robótica, queriendo enfrentarnos a este desafío para lograrlo. Estamos muy agradecidos por todos aquellos familiares, profesores y compañeros que nos apoyaron en el desarrollo del proceso de nuestro proyecto, ya que sin su apoyo no hubiese sido posible lograr lo que nos propusimos._
 
->Propósito del equipo
-
-Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
-
-1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
-
-2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
-<img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
 ## Vision Management 🖥️
 
@@ -92,13 +84,14 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
 
 <h2> Software implemented in the Raspberry </h2>
 
-<h3> Mediapipe </h3>
+<img src="./resources/GoogleMediapipe.png " alt="Mediapipe Logo" height="70" >
 
 _Is an open-source, cross-platform framework developed by Google that allows developers to build high-performance machine learning (ML) pipelines for processing "streaming" media like video and audio. It is specifically optimized for real-time performance on edge devices such as mobile phones (Android, iOS), web browsers, and embedded systems like Raspberry Pi. With the implementation of this framework with the purpose of obstacles detection, the camera is able to detect objets in real time supported by the dataset clasificador_pista.tflite._
 
-<img src="./resources/OpenCV_Logo.png " alt="OpenCV Logo" height="200" width="200">
 
-_OpenCV (Open Source Computer Vision Library) is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it._
+<img src="./resources/OpenCV_Logo.png " alt="OpenCV Logo" height="100" width="200">
+
+_Open Source Computer Vision Library is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it._
 
 <hr>
 
@@ -112,7 +105,16 @@ _OpenCV (Open Source Computer Vision Library) is a massive, free, and open-sourc
 
 ## Obstacle Management
 
+// Explain the function of every component in the challenges
 
+>Propósito del equipo
+
+Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
+
+1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
+
+2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
+<img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
 ## Componentes y Hardware ⚙️
 
