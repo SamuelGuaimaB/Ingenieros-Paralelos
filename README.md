@@ -34,7 +34,7 @@ _Somos un equipo conformado por estudiantes de Ingeniería Informática de la Un
 
 ## Vision Management 🖥️
 
-- **Logitech C922**:
+- **Logitech C922**
 
 <table>
   <tr>
@@ -57,7 +57,7 @@ _Somos un equipo conformado por estudiantes de Ingeniería Informática de la Un
 
 The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
 
-- **Raspberry Pi 4**:
+- **Raspberry Pi 4**
 
 <table>
   <tr>
@@ -97,9 +97,55 @@ _Open Source Computer Vision Library is a massive, free, and open-source softwar
 
 ## Mobility Management ⚙️
 
+- **Arduino Uno**
+
+
+
+<hr>
+
+<h3> Arduino Code (C++) </h3>
+
+
+
+<hr>
+
+- **Driver L298N**
+
+
+
+- **Ultrasound Sensors**
+
+
+
+- **Fischertechnik Maker Kit Car**
+
+
+
+<h3> Other components the kit contains </h3>
+
+> Servomotor
+
+
+
+> C Motor
+
+
+
+> Differential Gear
+
 
 
 ## Power Management 🔋
+
+- **LX-2BUPS UPS**
+
+
+
+- **Lithium batteries**
+
+
+
+- **Micro Protoboard**
 
 
 
@@ -114,7 +160,8 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
 
 2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
-<img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
+
+## Components abstract
 
 ## Componentes y Hardware ⚙️
 
