@@ -40,7 +40,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 <img src="pistaObstaculos" alt="Pista con Obstáculos" width="500" height="300">
 
-## Hardware and Software employed to Vision Management
+## Vision Management 🖥️
 
 - **Logitech C922**:
 
@@ -102,7 +102,15 @@ _OpenCV (Open Source Computer Vision Library) is a massive, free, and open-sourc
 
 <hr>
 
-## Mobility Management
+## Mobility Management ⚙️
+
+
+
+## Power Management 🔋
+
+
+
+## Obstacle Management
 
 
 
