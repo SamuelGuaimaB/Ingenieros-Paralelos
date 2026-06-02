@@ -96,7 +96,16 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
 
 _Is an open-source, cross-platform framework developed by Google that allows developers to build high-performance machine learning (ML) pipelines for processing "streaming" media like video and audio. It is specifically optimized for real-time performance on edge devices such as mobile phones (Android, iOS), web browsers, and embedded systems like Raspberry Pi. With the implementation of this framework with the purpose of obstacles detection, the camera is able to detect objets in real time supported by the dataset clasificador_pista.tflite._
 
-<h3> OpenCV </h3>
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./GoogleMediapipe.png " alt="Logitech C922 Webcam" >
+    </td>
+    <td>
+      <h3> OpenCV </h3>
+    </td>
+  </tr>
+</table>
 
 _OpenCV (Open Source Computer Vision Library) is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it._
 
