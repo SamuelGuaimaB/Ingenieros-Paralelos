@@ -215,9 +215,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ## Components abstract
 
-## Componentes y Hardware ⚙️
-
-| Components                           | Cantidad | Precio/Unidad ($) | Total ($)   |
+| Component                            | Cantidad | Precio/Unidad ($) | Total ($)   |
 |--------------------------------------|----------|-------------------|-------------|
 | **Raspberry Pi 4**                   | 1        | **21.42**         | **21.42**   |
 | **L298N Driver**                     | 1        | **22.45**         | **22.45**   |
@@ -230,6 +228,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **Lithium batteries**                | 4        | **80.00**         | **80.00**   |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 
+## Componentes y Hardware ⚙️
 
 ### Descripción y funcionalidades
 
