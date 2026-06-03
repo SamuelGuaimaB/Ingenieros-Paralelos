@@ -161,11 +161,32 @@ The L298N is a dual H-Bridge motor driver module used to control the direction a
 
 - **HC-SR04 Ultrasonic Sensors**
 
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/HC-SR04_Ultrasonic_Sensor.png " alt="HC-SR04 Ultrasonic Sensor" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Measuring Range: 2 cm to 400 cm (about 1 inch to 13 feet) </li>
+        <li> Accuracy: ±3mm </li>
+        <li> Operating Frequency: 40kHz </li>
+        <li> Sensing Angle: 15° to 30° cone effect </li>
+        <li> Operating Voltage: Typically 5V DC (though some newer variants like the HC-SR04+ support 3.3V) </li>
+        <li> Operating Current: ~15mA </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
+The HC-SR04 is a widely used, budget-friendly ultrasonic sensor that measures distance by emitting high-frequency sound waves and calculating the time it takes for the echo to bounce back. It is a staple in robotics for obstacle avoidance and proximity sensing.
 
 - **Fischertechnik Maker Kit Car**
 
+<img src="./resources/Fischertechnik_Maker_Kit_Car.png " alt="Fischertechnik Maker Kit Car" width="300px" >
 
+The Fischertechnik Maker Kit Car is an advanced construction kit designed for makers, hobbyists, and robotic enthusiasts to build a highly customizable, mobile robotic vehicle chassis. Includes pieces for building sturdy structural superstructures and custom mounts, so we took advantage of this by using the blocks as the base or skeleton of our car to later assembly the other components around it.
 
 <h3> Other components the kit contains </h3>
 
@@ -210,7 +231,7 @@ Robotics Role: When a car turns, the outside wheel has to travel a longer distan
 | **Arduino Uno**                      | 1        | **19.92**         | **19.92**   |
 | **HC-SR04 Ultrasonic Sensors**       | 4        | **4.05**          | **4.05**    |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
-| **Fischertechnik Maker Kit Car**     | 1        | **8.50**          | **8.50**    |
+| **Fischertechnik Maker Kit Car**     | 1        | **135.00**        | **8.50**    |
 | **Logitech C922 Web Camera**         | 1        | **8.50**          | **8.50**    |
 | **LX-2BUPS UPS**                     | 2        | **8.50**          | **8.50**    |
 | **Lithium batteries**                | 4        | **80.00**         | **80.00**   |
