@@ -99,6 +99,30 @@ _Open Source Computer Vision Library is a massive, free, and open-source softwar
 
 - **Arduino Uno**
 
+<table>
+  <tr>
+    <td align="center" >
+      <img src="./resources/Arduino_Uno.png " alt="Arduino Uno" width="300" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Microcontroller: ATmega328P </li>
+        <li> Operating Voltage: 5V </li>
+        <li> Input Voltage (Recommended): 7V to 12V </li>
+        <li> Input Voltage (Limit): 6V to 20V </li>
+        <li> Digital I/O Pins: 14 (6 provide PWM output) </li>
+        <li> Analog Input Pins: 6 </li>
+        <li> DC Current per I/O Pin: 20mA </li>
+        <li> Clock Speed: 16MHz </li>
+        <li> Flash Memory: 32KB (of which 0.5KB is used by the bootloader) </li>
+        <li> SRAM: 2KB </li>
+        <li> EEPROM: 1KB </li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
 The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of a project, allowing people to read inputs (like a sensor, button, or temperature reading) and turn them into outputs (like moving a motor or turning on an LED). Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino.
 
 <hr>
@@ -112,11 +136,30 @@ En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de do
 
 <hr>
 
-- **Driver L298N**
+- **L298N Driver**
 
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/Driver_L298N .png " alt="Driver L298N" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Driver IC: STMicroelectronics L298N </li>
+        <li> Motor Supply Voltage (Vs): 5V to 35V </li>
+        <li> Peak Output Current: 2A per channel (4A total max) </li>
+        <li> Logic Supply Voltage (Vss): 5V to 7V </li>
+        <li> Maximum Power Dissipation: 20W at 75°C </li>
+        <li> Control Signal Level: Low (-0.3V to 1.5V), High (2.3V to Vss) </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
+The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between our microcontroller, the Arduino Uno, and high-power motors, supplying the necessary current and voltage.
 
-- **Ultrasound Sensors**
+- **HC-SR04 Ultrasonic Sensors**
 
 
 
