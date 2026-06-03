@@ -234,7 +234,7 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 
 - **Ultrafire TR 18650 9800mAh 3.7V batteries**
 
-<img src="./resources/Ultrafire_TR_18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" width="300px" >
+<img src="./resources/Ultrafire_TR18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" width="300px" >
 
 > [!IMPORTANT]
 > Specifications
@@ -250,7 +250,24 @@ In the project we used four of these batteries, two for each UPS.
 
 - **Micro Protoboard**
 
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/Micro_Protoboard.png " alt="Micro Protoboard" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Grid/Pitch: Standard 2.54mm (0.1") spacing to perfectly fit traditional through-hole components (like microcontrollers, ICs, and resistors). </li>
+        <li> Dimensions: Typically ranges from 2cm x 8cm up to 5cm x 7cm, with many being snappable to exact custom sizes. </li>
+        <li> Material: FR-4 fiberglass commonly, which is heat-resistant for soldering, or flexible Bakelite. </li>
+        <li> Hole Diameter: Standard 1.0mm drill holes to accommodate component leads and jumper wires easily. </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
+A micro protoboard (or mini protoboard/perfboard) is a tiny, physical prototyping board used in electronics to transition a temporary breadboard circuit into a permanent, soldered one. It features a matrix of pre-drilled, copper-clad holes for point-to-point wiring and soldering components.
 
 ## Components abstract
 
@@ -279,69 +296,7 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 
-## Componentes y Hardware ⚙️
-
-### Descripción y funcionalidades
-
-- `Raspberry Pi 4`:
-
-> [!IMPORTANT]
-> Specifications
->- Procesador: Broadcom BCM2711, ARM Cortex-A72 de cuatro núcleos.
->- Memoria RAM: Disponible en diferentes capacidades (desde 1 GB hasta 8 GB). /
->- Conectividad: Puertos USB 3.0, Gigabit Ethernet, Wi-Fi de doble banda y Bluetooth.
->- Gráficos: Soporta decodificación de video 4K en hasta dos monitores simultáneamente.
->- Alimentación: Se alimenta a través de un puerto USB-C.
-
-- `Driver L298N`
-
-Es un módulo electrónico basado en un circuito integrado con tecnología de Puente H. Permite controlar la dirección, inversión y velocidad de motores de forma segura desde un microcontrolador, como Arduino. 
-
-- [x] Voltaje de motor (potencia): Desde 5V hasta 35V DC.
-- [x] Corriente de salida: Hasta 2A por canal (con picos máximos de hasta 3A a 4A).
-- [x] Voltaje lógico: Funciona a 5V para la comunicación con el microcontrolador.
-- [x] Consumo de corriente (lógica): Entre 0 y 36mA.
-- [x] Potencia máxima: 25W.
-- [x] Protección: Incorpora protección térmica para evitar que se queme por sobrecalentamiento y disipador de calor. 
-
-- `Arduino Uno`
-
-Es una placa controladora de electrónica de código abierto. Su función es actuar como el cerebro de circuitos interactivos, permitiendo leer sensores y controlar motores o luces al conectar la placa a una computadora y programarla fácilmente.
-
-- [x] Microcontrolador: ATmega328P de 8 bits.
-- [x] Voltaje de Operación: 5V.
-- [x] Voltaje de Entrada Recomendado: 7V a 12V (límite de 6V a 20V).
-- [x] Pines de E/S Digitales: 14 pines, 6 de ellos ofrecen salida PWM.
-- [x] Pines de Entradas Analógicas: 6 pines.
-- [x] Velocidad de Reloj: 16MHz.
-- [x] Memoria Flash: 32KB, de los cuales 0.5KB son utilizados por el gestor de arranque.
-- [x] Memoria SRAM: 2KB.
-- [x] Memoria EEPROM: 1KB. 
-
-- `Micro Protoboard`: 
-
-
-- `Fischertechnik Maker Kit Car`:
-
-El Fischertechnik Maker Kit Car (modelo 571900) es un chasis robótico móvil básico. Funciona como una plataforma abierta y altamente extensible para construir coches robóticos personalizados. El kit proporciona la base mecánica y de tracción del vehículo:
-
-- [x] Motor codificador: Para un control preciso del movimiento y la velocidad.
-- [x] Engranaje diferencial: Permite que las ruedas giren a diferentes velocidades en las curvas.
-- [x] Mecanismo de dirección: Equipado con un servomotor para un guiado exacto del eje delantero.
-
-A diferencia de otros kits tradicionales de la marca, la línea Maker está pensada para integrarse con tecnologías externas, siendo este factor muy óptimo para nuestro proyecto: 
-
-- [x] Sin controlador incluido: El kit no trae un cerebro electrónico, ya que está diseñado para la implementación de una placa.
-- [x] Compatibilidad de hardware: Se adapta de forma ideal a controladores populares como Arduino Uno, Arduino Mega o Raspberry Pi (modelos 3, 4 y 5).
-- [x] Soportes en impresión 3D: Fischertechnik proporciona de forma gratuita los archivos y datos 3D para imprimir los soportes específicos de estas placas de desarrollo.
-- [x] Diseño Digital: El chasis se puede ampliar con sensores y actuadores adicionales, los cuales se pueden diseñar de forma previa en el software Fischertechnik Design Studio.
-
-## Software / Tecnologías 🖥️
-
->Python: 
-- `Mediapipe`: Es un marco de código abierto desarrollado por Google que permite construir soluciones de inteligencia artificial y aprendizaje automático, principalmente enfocado en el análisis y procesamiento de visión artificial en tiempo real (vídeo, imágenes y audio). Con la implementación de este framework con la finalidad de detección de obstáculos, la cámara logra detectar objetos en tiempo real gracias al dataset clasificador_pista.tflite.
-
-- `OpenCV (Open Source Computer Vision Library)`: Es una librería de código abierto especializada en visión por computadora, procesamiento de imágenes y aprendizaje automático. Permite que las computadoras tengan visión e interpreten información visual a partir de fotografías o videos en tiempo real. Esta librería se tomó en cuenta para nuestro proyecto con el fin de la identificación de colores para realizar acciones específicas:
+Esta librería se tomó en cuenta para nuestro proyecto con el fin de la identificación de colores para realizar acciones específicas:
 
 1) Rojo: Esquivar obstáculo por la derecha.
 2) Verde: Esquivar obstáculo por la izquierda.
@@ -353,10 +308,3 @@ El código escrito en el lenguaje Python envía strings conformados por dos cara
 
 - Dirección: F(recto), I(izquierda), D(derecha), 1(giro leve izquierda), 2(giro leve dereche), S(parar).
 - Potencia: H(alta/255), M(media/195), L(baja/115).
-
-
->Arduino (C++):
-
-- `servo.h`: Esta librería es el archivo de código estándar incluido en el entorno de desarrollo de Arduino que facilita el control preciso de servomotores. Su función es generar las señales eléctricas necesarias (modulación por ancho de pulsos o PWM) para mover el eje del motor a un ángulo exacto.
-
-En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de dos caracteres enviada por la Raspberry Pi 4, se procede a procesarla. El código de Arduino escrito en C++, contiene una serie de funciones, ciclos y condicionales necesarias para el procesamiento y ejecución de la instrucción correspondiente, para que la placa Arduino posteriormente posea la capacidad de enviar pequeñas señales de corriente al driver, indicándole a éste la manera en la que va a alimentar con corriente el servo motor, pudiendo así ejecutar de manera eficaz la indicación solicitada.
