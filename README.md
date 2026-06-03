@@ -34,7 +34,7 @@ _Somos un equipo conformado por estudiantes de Ingeniería Informática de la Un
 
 ## Vision Management 🖥️
 
-- **Logitech C922**
+- **Logitech C922 Web Camera**
 
 <table>
   <tr>
@@ -78,7 +78,7 @@ The Logitech C922 Pro Stream is a popular, high-definition webcam designed speci
   </tr>
 </table>
 
-The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It functions as a fully operational, low-cost computer capable of desktop computing, media streaming, home automation, and robotics, while using only a fraction of the power of a standard desktop. This piece of hardware acts as the brain of the car, with software capable to process the view of the web camera, deciding which is the most appropriate action to execute, according the scenery, to later let our microcontroller perform it.
+The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It functions as a fully operational, low-cost computer capable of desktop computing, media streaming, home automation, and robotics, while using only a fraction of the power of a standard desktop. <b>This piece of hardware acts as the brain of the car, with software capable to process the view of the web camera, deciding which is the most appropriate action to execute, according the scenery, to later let our microcontroller perform it</b>.
 
 <hr>
 
@@ -86,12 +86,12 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
 
 <img src="./resources/GoogleMediapipe.png " alt="Mediapipe Logo" height="70" >
 
-_Is an open-source, cross-platform framework developed by Google that allows developers to build high-performance machine learning (ML) pipelines for processing "streaming" media like video and audio. It is specifically optimized for real-time performance on edge devices such as mobile phones (Android, iOS), web browsers, and embedded systems like Raspberry Pi. With the implementation of this framework with the purpose of obstacles detection, the camera is able to detect objets in real time supported by the dataset clasificador_pista.tflite._
+_Is an open-source, cross-platform framework developed by Google that allows developers to build high-performance machine learning (ML) pipelines for processing "streaming" media like video and audio. It is specifically optimized for real-time performance on edge devices such as mobile phones (Android, iOS), web browsers, and embedded systems like Raspberry Pi. <b>Implementing this framework with the purpose of obstacles detection, the camera is able to detect objets in real time supported by the dataset clasificador_pista.tflite</b>._
 
 
 <img src="./resources/OpenCV_Logo.png " alt="OpenCV Logo" height="100" width="200">
 
-_Open Source Computer Vision Library is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it._
+_Open Source Computer Vision Library is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. <b>OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it</b>._
 
 <hr>
 
@@ -129,7 +129,7 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
 
 <h3> Arduino Code (C++) </h3>
 
-The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles (usually 0 to 180 degrees) or at continuous speeds. We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver.
+The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles (usually 0 to 180 degrees) or at continuous speeds. <b>We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver</b>.
 
 // Modify or take as reference
 En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de dos caracteres enviada por la Raspberry Pi 4, se procede a procesarla. El código de Arduino escrito en C++, contiene una serie de funciones, ciclos y condicionales necesarias para el procesamiento y ejecución de la instrucción correspondiente, para que la placa Arduino posteriormente posea la capacidad de enviar pequeñas señales de corriente al driver, indicándole a éste la manera en la que va a alimentar con corriente el servo motor, pudiendo así ejecutar de manera eficaz la indicación solicitada. 
@@ -217,16 +217,18 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 ## Componentes y Hardware ⚙️
 
-| Componentes                          | Cantidad | Precio/Unidad ($) | Total ($)   |
+| Components                           | Cantidad | Precio/Unidad ($) | Total ($)   |
 |--------------------------------------|----------|-------------------|-------------|
 | **Raspberry Pi 4**                   | 1        | **21.42**         | **21.42**   |
-| **Driver L298N**                     | 1        | **22.45**         | **22.45**   |
+| **L298N Driver**                     | 1        | **22.45**         | **22.45**   |
 | **Arduino Uno**                      | 1        | **19.92**         | **19.92**   |
-| **Sensores de Ultrasonido**          | 4        | **4.05**          | **4.05**    |
+| **HC-SR04 Ultrasonic Sensors**       | 4        | **4.05**          | **4.05**    |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 | **Fischertechnik Maker Kit Car**     | 1        | **8.50**          | **8.50**    |
-| **Cámara Logitech C922**             | 1        | **8.50**          | **8.50**    |
-| **UPS ----           .**             | 1        | **8.50**          | **8.50**    |
+| **Logitech C922 Web Camera**         | 1        | **8.50**          | **8.50**    |
+| **LX-2BUPS UPS**                     | 2        | **8.50**          | **8.50**    |
+| **Lithium batteries**                | 4        | **80.00**         | **80.00**   |
+| **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 
 
 ### Descripción y funcionalidades
