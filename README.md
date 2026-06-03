@@ -215,7 +215,7 @@ Robotics Role: When a car turns, the outside wheel has to travel a longer distan
 <table>
   <tr>
     <td align="center" width="300" >
-      <img src="./resources/LX-2BUPS_UPS.png " alt="LX-2BUPS UPS" >
+      <img src="./resources/LX-2BUPS.png " alt="LX-2BUPS" >
     </td>
     <td>
       <h3>Specifications:</h3>
