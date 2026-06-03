@@ -212,7 +212,25 @@ Robotics Role: When a car turns, the outside wheel has to travel a longer distan
 
 - **LX-2BUPS UPS**
 
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/LX-2BUPS_UPS.png " alt="LX-2BUPS UPS" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Battery Type: Two parallel 18650 lithium-ion batteries (3.7V) </li>
+        <li> Output Voltage: Typically available in 5V, 9V, or 12V versions </li>
+        <li> Max Output Current: Up to 3A </li>
+        <li> Max Output Power: 15W to 24W </li>
+        <li> Input Voltage: Standard DC 5V (via Micro USB or USB Type-C depending on the board variant) </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
+The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
 
 - **Lithium batteries**
 
