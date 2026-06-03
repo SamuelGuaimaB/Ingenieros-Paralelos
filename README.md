@@ -99,13 +99,16 @@ _Open Source Computer Vision Library is a massive, free, and open-source softwar
 
 - **Arduino Uno**
 
-
+The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of a project, allowing people to read inputs (like a sensor, button, or temperature reading) and turn them into outputs (like moving a motor or turning on an LED). Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino.
 
 <hr>
 
 <h3> Arduino Code (C++) </h3>
 
+The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles (usually 0 to 180 degrees) or at continuous speeds. We employed this library to manage the angles of our servo motor, depending the instruction to execute.
 
+// Modify
+En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de dos caracteres enviada por la Raspberry Pi 4, se procede a procesarla. El código de Arduino escrito en C++, contiene una serie de funciones, ciclos y condicionales necesarias para el procesamiento y ejecución de la instrucción correspondiente, para que la placa Arduino posteriormente posea la capacidad de enviar pequeñas señales de corriente al driver, indicándole a éste la manera en la que va a alimentar con corriente el servo motor, pudiendo así ejecutar de manera eficaz la indicación solicitada. 
 
 <hr>
 
@@ -125,15 +128,21 @@ _Open Source Computer Vision Library is a massive, free, and open-source softwar
 
 > Servomotor
 
+What it is: A specialized motor designed to turn to a specific, exact angle (usually between 0° and 180°) and hold that position.
+Function: It connects directly to the front steering knuckles of the chassis.
+Robotics Role: It controls the steering mechanism. Unlike the drive motor, you do not program it to spin continuously. Instead, you command it to change degrees (e.g., "turn 15 degrees left" or "return to 0 degrees to go straight"), giving your robot precise navigation capabilities.
 
+> Encoder Motor or C Motor
 
-> C Motor
-
-
+What it is: The primary drive engine of the vehicle. It does not just spin; it counts its own rotations.
+Function: It provides the driving power (traction) to move the car forward and backward.
+Robotics Role: The built-in encoder sends digital pulses back to your controller (like an Arduino). This allows you to measure exactly how far the car has traveled, calculate its speed, and program precise movements (e.g., "move forward exactly 50 centimeters").
 
 > Differential Gear
 
-
+What it is: A mechanical gearbox located between the two driven wheels.
+Function: It allows the left and right wheels to rotate at different speeds while still receiving power from the motor.
+Robotics Role: When a car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents the robot from losing traction.
 
 ## Power Management 🔋
 
