@@ -141,7 +141,7 @@ En nuestro carro autónomo, una vez el Arduino Uno haya recibido la cadena de do
 <table>
   <tr>
     <td align="center" width="300" >
-      <img src="./resources/Driver_L298N .png " alt="Driver L298N" >
+      <img src="./resources/Driver_L298N.png " alt="Driver L298N" >
     </td>
     <td>
       <h3>Specifications:</h3>
