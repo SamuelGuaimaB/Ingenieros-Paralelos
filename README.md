@@ -252,7 +252,7 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 | **Fischertechnik Maker Kit Car**     | 1        | **135.00**        | **8.50**    |
 | **Logitech C922 Web Camera**         | 1        | **8.50**          | **8.50**    |
 | **LX-2BUPS UPS**                     | 2        | **8.50**          | **8.50**    |
-| **Lithium batteries**                | 4        | **80.00**         | **80.00**   |
+| **Ultrafire Lithium batteries**      | 4        | **9.00**          | **36.00**   |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
 
 ## Obstacle Management
