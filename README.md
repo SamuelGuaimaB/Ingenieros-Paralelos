@@ -232,9 +232,21 @@ Robotics Role: When a car turns, the outside wheel has to travel a longer distan
 
 The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
 
-- **Lithium batteries**
+- **Ultrafire TR 18650 9800mAh 3.7V batteries**
 
+<img src="./resources/Ultrafire_TR_18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" width="300px" >
 
+> [!IMPORTANT]
+> Specifications
+>- Form Factor: Standard 18650 cylindrical cell.
+>- Diameter: 18 mm.
+>- Length: 65 mm (can reach up to 68mm if it includes a button-top or an unlisted protection circuit).
+>- Chemistry: Lithium-ion (Li-ion).
+>- Terminal Type: Flat top or Button top (varies by distributor).
+>- Nominal Voltage: 3.7V advertised (Standard Li-ion curve: 4.2V fully charged, ~2.75V cut-off)
+>- Stated Capacity: 9800 mAh.
+
+In the project we used four of these batteries, two for each UPS.
 
 - **Micro Protoboard**
 
