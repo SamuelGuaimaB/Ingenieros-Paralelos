@@ -201,18 +201,6 @@ Robotics Role: When a car turns, the outside wheel has to travel a longer distan
 
 
 
-## Obstacle Management
-
-// Explain the function of every component in the challenges
-
->Propósito del equipo
-
-Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
-
-1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
-
-2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
-
 ## Components abstract
 
 | Component                            | Cantidad | Precio/Unidad ($) | Total ($)   |
@@ -227,6 +215,18 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 | **LX-2BUPS UPS**                     | 2        | **8.50**          | **8.50**    |
 | **Lithium batteries**                | 4        | **80.00**         | **80.00**   |
 | **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
+
+## Obstacle Management
+
+// Explain the function of every component in the challenges
+
+>Propósito del equipo
+
+Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
+
+1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
+
+2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
 
 ## Componentes y Hardware ⚙️
 
