@@ -7,7 +7,7 @@
 - Andrés Villareal
 - David Xu
 
-_We are a team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
+_We are a Venezuelan team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
 
 ## Vision Management 🖥️
 
@@ -201,17 +201,25 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 
 - **Ultrafire TR 18650 9800mAh 3.7V batteries**
 
-<img src="./resources/Ultrafire_TR18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" width="300px" >
-
-> [!IMPORTANT]
-> Specifications
->- Form Factor: Standard 18650 cylindrical cell.
->- Diameter: 18 mm.
->- Length: 65 mm (can reach up to 68mm if it includes a button-top or an unlisted protection circuit).
->- Chemistry: Lithium-ion (Li-ion).
->- Terminal Type: Flat top or Button top (varies by distributor).
->- Nominal Voltage: 3.7V advertised (Standard Li-ion curve: 4.2V fully charged, ~2.75V cut-off)
->- Stated Capacity: 9800 mAh.
+<table>
+  <tr>
+    <td align="center" width="300" >
+      <img src="./resources/Ultrafire_TR18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" >
+    </td>
+    <td>
+      <h3>Specifications:</h3>
+      <ul>
+        <li> Form Factor: Standard 18650 cylindrical cell. </li>
+        <li> Diameter: 18 mm. </li>
+        <li> Length: 65 mm (can reach up to 68mm if it includes a button-top or an unlisted protection circuit). </li>
+        <li> Chemistry: Lithium-ion (Li-ion). </li>
+        <li> Terminal Type: Flat top or Button top (varies by distributor). </li>
+        <li> Nominal Voltage: 3.7V advertised (Standard Li-ion curve: 4.2V fully charged, ~2.75V cut-off). </li>
+        <li> Stated Capacity: 9800 mAh. </li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 In the project we used four of these batteries, two for each UPS.
 
@@ -265,11 +273,13 @@ Nuestro objetivo es crear un carro autónomo con la capacidad de superar las car
 
 Esta librería se tomó en cuenta para nuestro proyecto con el fin de la identificación de colores para realizar acciones específicas:
 
-1) Rojo: Esquivar obstáculo por la derecha.
-2) Verde: Esquivar obstáculo por la izquierda.
-3) Magenta: Estacionamiento.
-4) Naranja: Indicar giro a la derecha.
-5) Azul: Indicar giro a la izquierda.
+> [!IMPORTANT]
+> Colors
+>- Rojo: Esquivar obstáculo por la derecha.
+>- Verde: Esquivar obstáculo por la izquierda.
+>- Magenta: Estacionamiento.
+>- Naranja: Indicar giro a la derecha.
+>- Azul: Indicar giro a la izquierda.
 
 El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino, pudiendo estas cadenas variar dependiendo de lo detectado en la cámara y el gestionamiento de dicha información por Mediapipe junto a OpenCV:
 
