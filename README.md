@@ -161,21 +161,15 @@ The Fischertechnik Maker Kit Car is an advanced construction kit designed for ma
 
 > Servomotor
 
-What it is: A specialized motor designed to turn to a specific, exact angle (usually between 0° and 180°) and hold that position.
-Function: It connects directly to the front steering knuckles of the chassis.
-Robotics Role: It controls the steering mechanism. Unlike the drive motor, you do not program it to spin continuously. Instead, you command it to change degrees (e.g., "turn 15 degrees left" or "return to 0 degrees to go straight"), giving your robot precise navigation capabilities.
+Is a specialized motor designed to turn to a specific, exact angle (usually between 0° and 180°) and hold that position. It connects directly to the front steering knuckles of the chassis and it controls the steering mechanism. Unlike the drive motor, it is not programmed to spin continuously. Instead, you command it to change degrees, giving your robot precise navigation capabilities.
 
 > Encoder Motor or C Motor
 
-What it is: The primary drive engine of the vehicle. It does not just spin; it counts its own rotations.
-Function: It provides the driving power (traction) to move the car forward and backward.
-Robotics Role: The built-in encoder sends digital pulses back to your controller (like an Arduino). This allows you to measure exactly how far the car has traveled, calculate its speed, and program precise movements (e.g., "move forward exactly 50 centimeters").
+Is the primary drive engine of the vehicle. It does not just spin; it counts its own rotations. It provides the driving power (traction) to move the car forward and backward. The built-in encoder sends digital pulses back to our controller, the Arduino Uno. This allows us to measure exactly how far the car has traveled, calculate its speed, and program precise movements.
 
 > Differential Gear
 
-What it is: A mechanical gearbox located between the two driven wheels.
-Function: It allows the left and right wheels to rotate at different speeds while still receiving power from the motor.
-Robotics Role: When a car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents the robot from losing traction.
+Is a mechanical gearbox located between the two driven wheels. It allows the left and right wheels to rotate at different speeds while still receiving power from the motor. When the car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents our car from losing traction.
 
 ## Power Management 🔋
 
