@@ -161,9 +161,13 @@ The Fischertechnik Maker Kit Car is an advanced construction kit designed for ma
 
 > Servomotor
 
+<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Check specifications</a>
+
 Is a specialized motor designed to turn to a specific, exact angle (usually between 0° and 180°) and hold that position. It connects directly to the front steering knuckles of the chassis and it controls the steering mechanism. Unlike the drive motor, it is not programmed to spin continuously. Instead, you command it to change degrees, giving your robot precise navigation capabilities.
 
 > Encoder Motor or C Motor
+
+<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Check specifications</a>
 
 Is the primary drive engine of the vehicle. It does not just spin; it counts its own rotations. It provides the driving power (traction) to move the car forward and backward. The built-in encoder sends digital pulses back to our controller, the Arduino Uno. This allows us to measure exactly how far the car has traveled, calculate its speed, and program precise movements.
 
