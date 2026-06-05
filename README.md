@@ -263,8 +263,6 @@ A micro protoboard (or mini protoboard/perfboard) is a tiny, physical prototypin
 
 // Explain the function of every component in the challenges
 
->Propósito del equipo
-
 Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
 
 1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
