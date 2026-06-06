@@ -244,20 +244,24 @@ In the project we used four of these batteries, two for each UPS.
 
 A micro protoboard (or mini protoboard/perfboard) is a tiny, physical prototyping board used in electronics to transition a temporary breadboard circuit into a permanent, soldered one. It features a matrix of pre-drilled, copper-clad holes for point-to-point wiring and soldering components.
 
-## Components abstract
+## Component Budget
 
-| Component                            | Cantidad | Precio/Unidad ($) | Total ($)   |
-|--------------------------------------|----------|-------------------|-------------|
-| **Raspberry Pi 4**                   | 1        | **21.42**         | **21.42**   |
-| **L298N Driver**                     | 1        | **22.45**         | **22.45**   |
-| **Arduino Uno**                      | 1        | **19.92**         | **19.92**   |
-| **HC-SR04 Ultrasonic Sensors**       | 4        | **4.05**          | **4.05**    |
-| **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
-| **Fischertechnik Maker Kit Car**     | 1        | **135.00**        | **8.50**    |
-| **Logitech C922 Web Camera**         | 1        | **8.50**          | **8.50**    |
-| **LX-2BUPS UPS**                     | 2        | **8.50**          | **8.50**    |
-| **Ultrafire Lithium batteries**      | 4        | **9.00**          | **36.00**   |
-| **Micro Protoboard**                 | 1        | **80.00**         | **80.00**   |
+| Component                    | Quantity | Unit Price | Subtotal |
+| ---------------------------- | -------: | ---------: | -------: |
+| Raspberry Pi 4               |        1 |     $21.42 |   $21.42 |
+| L298N Driver                 |        1 |     $22.45 |   $22.45 |
+| Arduino Uno                  |        1 |     $19.92 |   $19.92 |
+| HC-SR04 Ultrasonic Sensor    |        4 |      $4.05 |   $16.20 |
+| Micro Breadboard             |        1 |     $80.00 |   $80.00 |
+| Fischertechnik Maker Kit Car |        1 |    $135.00 |  $135.00 |
+| Logitech C922 Web Camera     |        1 |      $8.50 |    $8.50 |
+| LX-2BUPS UPS                 |        2 |      $8.50 |   $17.00 |
+| Ultrafire Lithium Batteries  |        4 |      $9.00 |   $36.00 |
+
+**Estimated total:** $370.49
+
+> Note: Prices are approximate and may vary depending on the supplier, availability, and country of purchase.
+
 
 # Explanation of `MainCode.py`
 
