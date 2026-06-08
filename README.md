@@ -603,17 +603,19 @@ The file integrates perception, decision-making, and control in the same driving
 
 <h3> 🔵 Block 1: System Initialization </h2>
 
-> On Arduino:
+<hr>
 
 > [!IMPORTANT]
+> On Arduino:
 >- The servo (steering) is configured on pin 8, initial position at 86°.
 >- The DC motor pins are configured (PWM on pin 7, direction on 9 and 10).
 >- The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
 >- The Arduino waits for commands in <speed,angle> format via Serial.
 
-> On Raspberry:
+<hr>
 
 > [!IMPORTANT]
+> On Raspberry:
 >- It attempts to connect to the Arduino via Serial (/dev/ttyACM0, /dev/ttyUSB0, or COM3).
 >- Two threads are started: 
 >  1. hilo_lectura_serial: reads data like D:front,rear,left,right (though the current .ino only sends US:distance). 
@@ -624,90 +626,69 @@ The file integrates perception, decision-making, and control in the same driving
 >  1. If dist_F < 40 and dist_A < 40 → COMPETITION_MODE = "OBSTACLES_PARKED" (second challenge).
 >  2. If not → COMPETITION_MODE = "OPEN_RACE" (first challenge).
 
+<hr>
 
-<h3> 🟢 Block 2: First Challenge – Without Obstacles </h3>
+<h3> 🟢 Block 2: First Challenge – The Open Challenge </h3>
 
-> Main logic (Python file – Main Loop):
+<p> The Open Challenge focuses strictly on lane-keeping, speed, wall avoidance, and endurance. The main objective is to establish a solid baseline for autonomous navigation before adding complex objects to the track. </p>
 
-1) Image capture and reduction to 160x120.
+<hr>
 
-2) Color detection (in LAB space):
+> [!IMPORTANT]
+> <b> Main logic (Python file – Main Loop) </b>
+>- Image capture and reduction to 160x120.
+>- Color detection (in LAB space):
+>  1. MAGENTA = finish line.
+>  2. ORANGE and BLUE = corner start points (to detect clockwise/counterclockwise direction).
+>  3. //RED and GREEN = pillars (in the first challenge they shouldn't exist, they are ignored or used as visual references).
+>- //AI classification (MediaPipe) asynchronously: Returns Straight, Near-Curve, etc.
+>- Steering control in Straight:
+>  1. Uses calculate_pd_steering_angle(dist_L, dist_R) (PD control with lateral ultrasonics).
+>  2. If no functional ultrasonics, the code has a vision fallback.
+>- //Steering control in Near-Curve:
+>  1. Reduces speed (M).
+>  2. Uses red/green pillar detection to calculate the turn.
+>  3. If no pillar is detected, it turns fixed according to the track direction.
+>- Lap detection:
+>  1. Counts 4 corners (orange or blue) to add 1 lap.
+>  2. When reaching 4 laps, sends stop command (A090PS or A090S).
 
-- MAGENTA = finish line.
+<hr>
 
-- ORANGE and BLUE = corner start points (to detect clockwise/counterclockwise direction).
+> [!IMPORTANT]
+> <b> On Arduino (responds to commands) </b>
+>  1. Receives <speed,angle>.
+>  2. Speeds: speedAuto (0..255) – although in the Python file letters are used (H, M, L, S, P), in the final version it's converted to a number.
+>  3. The servo moves to angleServo (60..120°).
+>  4. The motor moves forward with PWM.
 
-- //RED and GREEN = pillars (in the first challenge they shouldn't exist, they are ignored or used as visual references).
+<hr>
 
-- //AI classification (MediaPipe) asynchronously:
+<h3> 🔴 Block 3: Second Challenge – Obstacle Challenge </h3>
 
-3) Returns STRAIGHT, NEAR_CURVE, etc.
+The Obstacle Challenge introduces dynamic object detection and real-time path planning. The track geometry remains the same, but it is now populated with randomly placed traffic signs represented by colored pillars. Here the car must avoid the blocks following the WRO rules: Red → pass on the right. Green → pass on the left. (specify more the rules if it is neccessary).
 
-4) Steering control:
+<hr>
 
-In STRAIGHT:
+> [!IMPORTANT]
+> <b> Key differences in Python file: </b>
+>- At startup it detects if the car is in parked obstacle mode (dist_F < 40).
+>- Evasion logic (inside the main loop):
+>  1. If local_scenario == "RIGHT_OBSTACLE" and red is detected, calculate angle to pass on the right.
+>  2. If local_scenario == "LEFT_OBSTACLE" and green is detected, calculate angle to pass on the left.
+>  3. Speed is reduced to 'L' (low) during evasion.
+>- Invisibility mask injection (in the second code WROAutonomousCar): When an obstacle (red/green) is detected, that area is painted white in the binarized image so the wall-following algorithm ignores it.
+>- Lap control:
+>  1. Also counts 4 corners of the first color detected, but the finish line is magenta.
+>  2. It stops after completing 3 laps (configurable).
 
-- Uses calculate_pd_steering_angle(dist_L, dist_R) (PD control with lateral ultrasonics).
+<hr>
 
-- If no functional ultrasonics, the code has a vision fallback.
+> [!IMPORTANT]
+> <b> On Arduino (no significant changes) </b>
+>  1. Only receives speed and angle commands.
+>  2. Does not distinguish between challenges.
 
-//In NEAR_CURVE:
+<hr>
 
-- Reduces speed (M).
-
-- Uses red/green pillar detection to calculate the turn.
-
-- If no pillar is detected, it turns fixed according to the track direction.
-
-5) Lap detection:
-
-- Counts 4 corners (orange or blue) to add 1 lap.
-
-- When reaching 4 laps → sends stop command (A090PS or A090S).
-
-> On Arduino (responds to commands):
-
-1) Receives <speed,angle>.
-
-2) Speeds: speedAuto (0..255) – although in prueba20.py letters are used (H, M, L, S, P), in the final version it's converted to a number.
-
-3) The servo moves to angleServo (60..120°).
-
-4) The motor moves forward with PWM.
-
-
-<h3> 🔴 BLOCK 3: SECOND CHALLENGE – WITH OBSTACLES </h3>
-
-Here the car must avoid the blocks following the WRO rules:
-
-Red → pass on the right.
-
-Green → pass on the left.
-
-Key differences in prueba20.py:
-At startup it detects if the car is in parked obstacle mode (dist_F < 40).
-
-Evasion logic (inside the main loop):
-
-If local_scenario == "RIGHT_OBSTACLE" and red is detected → calculate angle to pass on the right.
-
-If local_scenario == "LEFT_OBSTACLE" and green is detected → calculate angle to pass on the left.
-
-Speed is reduced to 'L' (low) during evasion.
-
-Invisibility mask injection (in the second code WROAutonomousCar):
-
-When an obstacle (red/green) is detected, that area is painted white in the binarized image so the wall-following algorithm ignores it.
-
-Lap control:
-
-Also counts 4 corners, but the finish line is magenta.
-
-After completing 3 laps (configurable), it stops.
-
-On Arduino (no significant changes):
-Only receives speed and angle commands.
-
-Does not distinguish between challenges.
-
-<a href="src"> Detailed information about our code </a>
+<p> This is just a theoretical interpretation of our code, here is <a href="src"> detailed information about our code </a> . </p>
