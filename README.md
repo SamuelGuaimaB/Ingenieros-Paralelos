@@ -252,7 +252,6 @@ A micro protoboard (or mini protoboard/perfboard) is a tiny, physical prototypin
 | L298N Driver                 |        1 |     $22.45 |   $22.45 |
 | Arduino Uno                  |        1 |     $19.92 |   $19.92 |
 | HC-SR04 Ultrasonic Sensor    |        4 |      $4.05 |   $16.20 |
-| Micro Breadboard             |        1 |     $80.00 |   $80.00 |
 | Fischertechnik Maker Kit Car |        1 |    $135.00 |  $135.00 |
 | Logitech C922 Web Camera     |        1 |      $8.50 |    $8.50 |
 | LX-2BUPS UPS                 |        2 |      $8.50 |   $17.00 |
@@ -601,34 +600,73 @@ The file integrates perception, decision-making, and control in the same driving
 ###########################################################
 ## Obstacle Management
 
-<h3> 🔵 Block 1: System Initialization </h2>
+<h3> 🔵 Part 1: System Initialization </h3>
+
+<br><h3> 1.1 Power-on and serial connection </h3>
+
+<hr>
+
+> [!IMPORTANT]
+> On Raspberry Pi:
+>- Creates an instance of the WROAutonomousCar class.
+>- Attempts to open the serial port (/dev/ttyACM0, /dev/ttyUSB0, or COM3) at 115200 baud.
+>- Waits 2 seconds for the Arduino to stabilize.
+>- Starts a thread (process_vision) that will capture and process the camera in parallel.
+>- The main thread (main_loop) is responsible for sending commands to the Arduino continuously.
 
 <hr>
 
 > [!IMPORTANT]
 > On Arduino:
->- The servo (steering) is configured on pin 8, initial position at 86°.
->- The DC motor pins are configured (PWM on pin 7, direction on 9 and 10).
->- The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
->- The Arduino waits for commands in <speed,angle> format via Serial.
+>- Configures the servo on pin 8, initial position at 86° (straight).
+>- Configures the DC motor: pins 9 and 10 for direction, pin 7 for PWM.
+>- Configures the ultrasonic sensor: pin 3 (Trig) and pin 11 (Echo).
+>- Initializes serial communication at 115200 baud.
+>- Enters the main loop(), ready to receive commands.
 
 <hr>
+
+<h3> 1.2 Camera configuration and initial parameters </h3>
 
 > [!IMPORTANT]
-> On Raspberry:
->- It attempts to connect to the Arduino via Serial (/dev/ttyACM0, /dev/ttyUSB0, or COM3).
->- Two threads are started: 
->  1. hilo_lectura_serial: reads data like D:front,rear,left,right (though the current .ino only sends US:distance). 
->  2. hilo_escritura_serial: sends commands to the Arduino in a non-blocking way.
->- //The MediaPipe model (clasificador_pista.tflite) is loaded to classify scenes in real time (STRAIGHT, RIGHT_OBSTACLE, LEFT_OBSTACLE, NEAR_CURVE).
->- The camera is configured at 320x240 for low computational cost.
->- It waits for the first sensor readings to decide the competition mode:
->  1. If dist_F < 40 and dist_A < 40 → COMPETITION_MODE = "OBSTACLES_PARKED" (second challenge).
->  2. If not → COMPETITION_MODE = "OPEN_RACE" (first challenge).
+> Raspberry Pi:
+>- Opens the camera at 320×240 pixels (low resolution for higher speed).
+>- Defines fixed parameters:
+>  1. MITAD_ANCHO_PISTA_PX = 140 pixels (estimated width from one wall to the track center).
+>  2. Binarization threshold: 95 (pixels brighter than that are white floor).
+>  3. Region of interest: rows 80 to 140 (where the track is expected to be seen).
+>  4. PID with kp=0.06, ki=0, kd=0.20.
+>- State variables:
+>  1. SENTIDO_GIRO = "AUTO" (will be auto-detected at the first curve).
+>  2. vueltas_completadas = 0, curvas_superadas = 0, en_curva = False.
+>  3. current_speed = 0, current_angle = 86.
 
 <hr>
 
-<h3> 🟢 Block 2: First Challenge – The Open Challenge </h3>
+<h3> 1.3 Bidirectional communication </h3>
+
+<b>Raspberry → Arduino:</b>
+
+- The main thread sends commands in <speed,angle> format every 50 ms.
+- Example: <250,86> means speed 250, angle 86 degrees.
+
+<b>Arduino → Raspberry:</b>
+
+- Every 50 ms, the Arduino reads the ultrasonic sensor and sends US:distance.
+- The Raspberry does not use this data in this code (although it receives it).
+
+<hr>
+
+<h3> 1.4 Initial car state </h3>
+
+- The car starts stopped (current_speed = 0).
+- The steering is centered (current_angle = 86).
+- The vision thread is already processing the camera, but has not yet detected the track direction.
+- The car waits to find the first curve to auto-determine whether the circuit is clockwise or counterclockwise.
+
+<hr>
+
+<h3> 🟢 Part 2: First Challenge – The Open Challenge </h3>
 
 <p> The Open Challenge focuses strictly on lane-keeping, speed, wall avoidance, and endurance. The main objective is to establish a solid baseline for autonomous navigation before adding complex objects to the track. </p>
 
