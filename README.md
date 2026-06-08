@@ -599,27 +599,88 @@ The file integrates perception, decision-making, and control in the same driving
 
 
 ###########################################################
-## Obstacle Management
+## Obstacle Management by blocks
 
-// Explain the function of every component in the challenges
+<h3>🔵 BLOCK 1: SYSTEM INITIALIZATION </h2>
 
-Nuestro objetivo es crear un carro autónomo con la capacidad de superar las carreras de la competición en la categoría Futuros Ingenieros.
+> On Arduino:
 
-1) Desafío Abierto (Open Challenge): El vehículo autónomo debe completar 3 vueltas en un circuito donde las paredes interiores cambian de posición de forma aleatoria en cada ronda.
+1) The servo (steering) is configured on pin 8, initial position at 86°.
 
-2) Desafío de Obstáculos (Obstacle Challenge): El vehículo debe completar 3 vueltas en una pista con obstáculos (postes rojos y verdes) colocados aleatoriamente. Los postes indican el lado del carril por el que debe pasar el coche sin derribarlos, finalizando con un estacionamiento en paralelo.
+2) The DC motor pins are configured (PWM on pin 7, direction on 9 and 10).
 
-Esta librería se tomó en cuenta para nuestro proyecto con el fin de la identificación de colores para realizar acciones específicas:
+3) The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
 
-> [!IMPORTANT]
-> Colors
->- Rojo: Esquivar obstáculo por la derecha.
->- Verde: Esquivar obstáculo por la izquierda.
->- Magenta: Estacionamiento.
->- Naranja: Indicar giro a la derecha.
->- Azul: Indicar giro a la izquierda.
+4) The Arduino waits for commands in <speed,angle> format via Serial.
 
-El código escrito en el lenguaje Python envía strings conformados por dos caractares para posteriormente ser procesados en el Arduino, pudiendo estas cadenas variar dependiendo de lo detectado en la cámara y el gestionamiento de dicha información por Mediapipe junto a OpenCV:
+> On Raspberry (prueba20.py):
 
-- Dirección: F(recto), I(izquierda), D(derecha), 1(giro leve izquierda), 2(giro leve dereche), S(parar).
-- Potencia: H(alta/255), M(media/195), L(baja/115).
+1) It attempts to connect to the Arduino via Serial (/dev/ttyACM0, /dev/ttyUSB0, or COM3).
+
+2) Two threads are started:
+
+3) hilo_lectura_serial: reads data like D:front,rear,left,right (though the current .ino only sends US:distance).
+
+4) hilo_escritura_serial: sends commands to the Arduino in a non-blocking way.
+
+5) //The MediaPipe model (clasificador_pista.tflite) is loaded to classify scenes in real time (STRAIGHT, RIGHT_OBSTACLE, LEFT_OBSTACLE, NEAR_CURVE).
+
+6) The camera is configured at 320x240 for low computational cost.
+
+7) It waits for the first sensor readings to decide the competition mode:
+
+8) If dist_F < 40 and dist_A < 40 → COMPETITION_MODE = "OBSTACLES_PARKED" (second challenge).
+
+9) If not → COMPETITION_MODE = "OPEN_RACE" (first challenge).
+
+<h3> 🟢 BLOCK 2: FIRST CHALLENGE – WITHOUT OBSTACLES </h3>
+
+> Main logic (Python file – Main Loop):
+
+1) Image capture and reduction to 160x120.
+
+2) Color detection (in LAB space):
+
+- MAGENTA = finish line.
+
+- ORANGE and BLUE = corner start points (to detect clockwise/counterclockwise direction).
+
+- //RED and GREEN = pillars (in the first challenge they shouldn't exist, they are ignored or used as visual references).
+
+- //AI classification (MediaPipe) asynchronously:
+
+3) Returns STRAIGHT, NEAR_CURVE, etc.
+
+4) Steering control:
+
+In STRAIGHT:
+
+- Uses calculate_pd_steering_angle(dist_L, dist_R) (PD control with lateral ultrasonics).
+
+- If no functional ultrasonics, the code has a vision fallback.
+
+//In NEAR_CURVE:
+
+- Reduces speed (M).
+
+- Uses red/green pillar detection to calculate the turn.
+
+- If no pillar is detected, it turns fixed according to the track direction.
+
+5) Lap detection:
+
+- Counts 4 corners (orange or blue) to add 1 lap.
+
+- When reaching 4 laps → sends stop command (A090PS or A090S).
+
+> On Arduino (responds to commands):
+
+1) Receives <speed,angle>.
+
+2) Speeds: speedAuto (0..255) – although in prueba20.py letters are used (H, M, L, S, P), in the final version it's converted to a number.
+
+3) The servo moves to angleServo (60..120°).
+
+4) The motor moves forward with PWM.
+
+<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf"> Detailed information about our code </a>
