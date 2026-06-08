@@ -652,24 +652,15 @@ The file integrates perception, decision-making, and control in the same driving
 
 <hr>
 
+<h3> 2.1 Main vision flow </h3>
+
 > [!IMPORTANT]
-> <b> Main logic (Python file – Main Loop) </b>
->- Image capture and reduction to 160x120.
->- Color detection (in LAB space):
->  1. MAGENTA = finish line.
->  2. ORANGE and BLUE = corner start points (to detect clockwise/counterclockwise direction).
->  3. //RED and GREEN = pillars (in the first challenge they shouldn't exist, they are ignored or used as visual references).
->- //AI classification (MediaPipe) asynchronously: Returns Straight, Near-Curve, etc.
->- Steering control in Straight:
->  1. Uses calculate_pd_steering_angle(dist_L, dist_R) (PD control with lateral ultrasonics).
->  2. If no functional ultrasonics, the code has a vision fallback.
->- //Steering control in Near-Curve:
->  1. Reduces speed (M).
->  2. Uses red/green pillar detection to calculate the turn.
->  3. If no pillar is detected, it turns fixed according to the track direction.
->- Lap detection:
->  1. Counts 4 corners (orange or blue) to add 1 lap.
->  2. When reaching 4 laps, sends stop command (A090PS or A090S).
+> <b> Step 1: Capture and preprocessing </b>
+>- One frame is captured from the camera.
+>- It is converted to grayscale.
+>- Gaussian blur (7×7) is applied to reduce noise.
+>- The region of interest (rows 80 to 140) is extracted.
+>- Binarization with threshold 95: bright pixels (floor) → 255, dark pixels (walls) → 0.
 
 <hr>
 
