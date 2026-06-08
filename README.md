@@ -599,7 +599,7 @@ The file integrates perception, decision-making, and control in the same driving
 
 
 ###########################################################
-## Obstacle Management by blocks
+## Obstacle Management
 
 <h3>🔵 BLOCK 1: SYSTEM INITIALIZATION </h2>
 
@@ -683,4 +683,4 @@ In STRAIGHT:
 
 4) The motor moves forward with PWM.
 
-<a href="src/README.md"> Detailed information about our code </a>
+<a href="src"> Detailed information about our code </a>
