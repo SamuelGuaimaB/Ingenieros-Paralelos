@@ -223,26 +223,6 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 
 In the project we used four of these batteries, two for each UPS.
 
-- **Micro Protoboard**
-
-<table>
-  <tr>
-    <td align="center" width="300" >
-      <img src="./resources/Micro_Protoboard.png " alt="Micro Protoboard" >
-    </td>
-    <td>
-      <h3>Specifications:</h3>
-      <ul>
-        <li> Grid/Pitch: Standard 2.54mm (0.1") spacing to perfectly fit traditional through-hole components (like microcontrollers, ICs, and resistors). </li>
-        <li> Dimensions: Typically ranges from 2cm x 8cm up to 5cm x 7cm, with many being snappable to exact custom sizes. </li>
-        <li> Material: FR-4 fiberglass commonly, which is heat-resistant for soldering, or flexible Bakelite. </li>
-        <li> Hole Diameter: Standard 1.0mm drill holes to accommodate component leads and jumper wires easily. </li>
-      </ul>
-    </td>
-  </tr>
-</table>
-
-A micro protoboard (or mini protoboard/perfboard) is a tiny, physical prototyping board used in electronics to transition a temporary breadboard circuit into a permanent, soldered one. It features a matrix of pre-drilled, copper-clad holes for point-to-point wiring and soldering components.
 
 ## Component Budget
 
