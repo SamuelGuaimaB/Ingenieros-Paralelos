@@ -605,9 +605,9 @@ The file integrates perception, decision-making, and control in the same driving
 
 > On Arduino:
 
-1) The servo (steering) is configured on pin 8, initial position at 86°.
+<p> 1. The servo (steering) is configured on pin 8, initial position at 86°. </p>
 
-2) The DC motor pins are configured (PWM on pin 7, direction on 9 and 10).
+<p> 2. The DC motor pins are configured (PWM on pin 7, direction on 9 and 10). </p>
 
 3) The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
 
