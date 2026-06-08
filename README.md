@@ -665,8 +665,8 @@ The file integrates perception, decision-making, and control in the same driving
 <hr>
 
 > [!IMPORTANT]
-> <b> On Arduino (responds to commands) </b>
->  1. Receives <speed,angle>.
+> <b> Step 2: Raycasting to find walls </b>
+>- The center row of the binarized region is taken.
 >  2. Speeds: speedAuto (0..255) – although in the Python file letters are used (H, M, L, S, P), in the final version it's converted to a number.
 >  3. The servo moves to angleServo (60..120°).
 >  4. The motor moves forward with PWM.
