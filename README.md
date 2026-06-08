@@ -601,39 +601,31 @@ The file integrates perception, decision-making, and control in the same driving
 ###########################################################
 ## Obstacle Management
 
-<h3>🔵 BLOCK 1: SYSTEM INITIALIZATION </h2>
+<h3> 🔵 Block 1: System Initialization </h2>
 
 > On Arduino:
 
-<p> 1. The servo (steering) is configured on pin 8, initial position at 86°. </p>
+> [!IMPORTANT]
+>- The servo (steering) is configured on pin 8, initial position at 86°.
+>- The DC motor pins are configured (PWM on pin 7, direction on 9 and 10).
+>- The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
+>- The Arduino waits for commands in <speed,angle> format via Serial.
 
-<p> 2. The DC motor pins are configured (PWM on pin 7, direction on 9 and 10). </p>
+> On Raspberry:
 
-3) The ultrasonic sensor is initialized (Trig pin 3, Echo pin 11) for distance measurement.
+> [!IMPORTANT]
+>- It attempts to connect to the Arduino via Serial (/dev/ttyACM0, /dev/ttyUSB0, or COM3).
+>- Two threads are started: 
+>  1. hilo_lectura_serial: reads data like D:front,rear,left,right (though the current .ino only sends US:distance). 
+>  2. hilo_escritura_serial: sends commands to the Arduino in a non-blocking way.
+>- //The MediaPipe model (clasificador_pista.tflite) is loaded to classify scenes in real time (STRAIGHT, RIGHT_OBSTACLE, LEFT_OBSTACLE, NEAR_CURVE).
+>- The camera is configured at 320x240 for low computational cost.
+>- It waits for the first sensor readings to decide the competition mode:
+>  1. If dist_F < 40 and dist_A < 40 → COMPETITION_MODE = "OBSTACLES_PARKED" (second challenge).
+>  2. If not → COMPETITION_MODE = "OPEN_RACE" (first challenge).
 
-4) The Arduino waits for commands in <speed,angle> format via Serial.
 
-> On Raspberry (prueba20.py):
-
-1) It attempts to connect to the Arduino via Serial (/dev/ttyACM0, /dev/ttyUSB0, or COM3).
-
-2) Two threads are started:
-
-3) hilo_lectura_serial: reads data like D:front,rear,left,right (though the current .ino only sends US:distance).
-
-4) hilo_escritura_serial: sends commands to the Arduino in a non-blocking way.
-
-5) //The MediaPipe model (clasificador_pista.tflite) is loaded to classify scenes in real time (STRAIGHT, RIGHT_OBSTACLE, LEFT_OBSTACLE, NEAR_CURVE).
-
-6) The camera is configured at 320x240 for low computational cost.
-
-7) It waits for the first sensor readings to decide the competition mode:
-
-8) If dist_F < 40 and dist_A < 40 → COMPETITION_MODE = "OBSTACLES_PARKED" (second challenge).
-
-9) If not → COMPETITION_MODE = "OPEN_RACE" (first challenge).
-
-<h3> 🟢 BLOCK 2: FIRST CHALLENGE – WITHOUT OBSTACLES </h3>
+<h3> 🟢 Block 2: First Challenge – Without Obstacles </h3>
 
 > Main logic (Python file – Main Loop):
 
@@ -682,5 +674,40 @@ In STRAIGHT:
 3) The servo moves to angleServo (60..120°).
 
 4) The motor moves forward with PWM.
+
+
+<h3> 🔴 BLOCK 3: SECOND CHALLENGE – WITH OBSTACLES </h3>
+
+Here the car must avoid the blocks following the WRO rules:
+
+Red → pass on the right.
+
+Green → pass on the left.
+
+Key differences in prueba20.py:
+At startup it detects if the car is in parked obstacle mode (dist_F < 40).
+
+Evasion logic (inside the main loop):
+
+If local_scenario == "RIGHT_OBSTACLE" and red is detected → calculate angle to pass on the right.
+
+If local_scenario == "LEFT_OBSTACLE" and green is detected → calculate angle to pass on the left.
+
+Speed is reduced to 'L' (low) during evasion.
+
+Invisibility mask injection (in the second code WROAutonomousCar):
+
+When an obstacle (red/green) is detected, that area is painted white in the binarized image so the wall-following algorithm ignores it.
+
+Lap control:
+
+Also counts 4 corners, but the finish line is magenta.
+
+After completing 3 laps (configurable), it stops.
+
+On Arduino (no significant changes):
+Only receives speed and angle commands.
+
+Does not distinguish between challenges.
 
 <a href="src"> Detailed information about our code </a>
