@@ -683,4 +683,4 @@ In STRAIGHT:
 
 4) The motor moves forward with PWM.
 
-<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf"> Detailed information about our code </a>
+<a href="src/README.md"> Detailed information about our code </a>
