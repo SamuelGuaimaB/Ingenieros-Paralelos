@@ -238,10 +238,10 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 In the project we used four of these batteries, two for each UPS.
 
 
-## Components table
+## Estimated Component Budget
 
 > Estimated prices in USD.  
-> Most prices were taken as reference from MercadoLibre Venezuela, since the majority of components were provided by our university.
+> Most prices were taken as reference from MercadoLibre Venezuela.  
 > The **Fischertechnik Maker Kit Car** price was taken from eBay with an estimated cost of **$115.33**.
 
 | Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
@@ -252,17 +252,16 @@ In the project we used four of these batteries, two for each UPS.
 | HC-SR04 Ultrasonic Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
 | Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
 | LX-2BUPS UPS Module / 18650 UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
-| 18650 3.7V Battery | 1 | $5.00 | $5.00 | MercadoLibre Venezuela |
+| 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
 | Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
 ### Estimated Total
 
 | Concept | Total |
 |---|---:|
-| Total estimated budget | $428.10 |
+| Total estimated budget | $443.10 |
 
 > The final budget may vary depending on availability, seller, shipping cost, and product condition.
-
 
 ## Obstacle Management
 
