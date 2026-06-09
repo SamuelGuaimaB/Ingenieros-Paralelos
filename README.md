@@ -8,6 +8,8 @@
 2. [Vision Management](#vision-management)
 3. [Mobility Management](#mobility-management)
 4. [Power Management](#power-management)
+5. [Components table](#components-table)
+6. [Obstacle Management](#components-table)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
@@ -253,7 +255,7 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 In the project we used four of these batteries, two for each UPS.
 
 
-## Estimated Component Budget
+## Components table
 
 > Estimated prices in USD.  
 > Most prices were taken as reference from MercadoLibre Venezuela, since the majority of components were provided by our university.
