@@ -1,5 +1,29 @@
 # WRO2026 Future Engineers – Ingenieros Paralelos
 
+## Table of Contents
+
+<!-- toc -->
+
+- [1. About Us](#1-about-us)
+- [2. Vision Management](#2-vision-management)
+  - [2.1 Logitech C922 Web Camera](#21-logitech-c922-web-camera)
+  - [2.2 Raspberry Pi 4](#22-raspberry-pi-4)
+- [3. Mobility Management ⚙️](#3-mobility-management-⚙️)
+  - [3.1 Arduino Uno](#31-arduino-uno)
+  - [3.2 L298N Driver](#32-l298N-driver)
+  - [3.3 HC-SR04 Ultrasonic Sensors](#33-hc-sr04-ultrasonic-sensors)
+  - [3.4 Fischertechnik Maker Kit Car](#34-fischertechnik-maker-kit-car)
+- [4. Power Management 🔋](#4-power-management)
+  - [4.1 LX-2BUPS UPS](#41-lx-2bups-ups)
+  - [4.2 Ultrafire TR 18650 9800mAh 3.7V batteries](#42-ultrafire-tr-18650-9800mah-3.7v-batteries)
+- [5. Obstacle Management](#5-obstacle-management)
+  - [5.1🔵 Part 1: System Initialization](#51-system-initialization)
+  - [5.2 🟢 Part 2: First Challenge – The Open Challenge](#52-first-challenge)
+  - [5.3 🔴 Block 3: Second Challenge – Obstacle Challenge](#53-second-challenge)
+
+<!-- tocstop -->
+
+
 ## About us 👥
 
 >Team members
