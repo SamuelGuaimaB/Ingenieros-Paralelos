@@ -47,12 +47,33 @@ class WROAutonomousCar:
         self.current_speed = 0
         self.current_angle = 86 
         
-        print(f"[SISTEMA] Algoritmo Raycasting Iniciado. Giro ciego: {self.SENTIDO_GIRO}")
+        # --- NUEVAS VARIABLES PARA MODO Y ULTRASONIDO ---
+        self.distancia_us = 200      # Distancia leída del Arduino
+        self.modo_obstaculos = False # Falso = Modo 1 (Rápido), Verdadero = Modo 2 (Obstáculos)
+        self.start_time = time.time()# Para ignorar el garaje al inicio
         
+        print(f"[SISTEMA] Algoritmo Raycasting Iniciado. Giro ciego: {self.SENTIDO_GIRO}")
+       
+    def read_serial_data(self):
+        """Hilo dedicado a leer lo que envía el Arduino"""
+        while self.running:
+            try:
+                if self.ser.in_waiting > 0:
+                    linea = self.ser.readline().decode('utf-8').strip()
+                    if linea.startswith("US:"):
+                        # Extraemos el número después de "US:"
+                        self.distancia_us = int(linea.split(":")[1])
+            except:
+                pass
+            time.sleep(0.01)
+    
     def process_vision(self):
         cap = cv2.VideoCapture(0)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)#medir esta tolerancia
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+        
+        # Elemento estructurante para limpieza digital de ruido (Morfología)
+        kernel = np.ones((5, 5), np.uint8)
         last_time = time.time()
 
         while self.running:
@@ -62,6 +83,10 @@ class WROAutonomousCar:
             current_time = time.time()
             dt = current_time - last_time
             last_time = current_time
+            
+            #MEMORIA DE CHASIS
+            tiempo_ultimo_obstaculo = 0
+            memoria_tipo_obstaculo = "NINGUNO"
             
             # =======================================================
             # 1. OPENCV: PROCESAMIENTO Y UMBRAL FIJO
@@ -81,56 +106,67 @@ class WROAutonomousCar:
             # 1.5 DETECCIÓN DE OBSTÁCULOS (ROJO Y VERDE)
             # =======================================================
             # Usamos una franja similar para que las coordenadas X coincidan
-            roi_color = frame[80:160, 0:320] 
+            roi_color = frame[60:240, 0:320] 
             hsv = cv2.cvtColor(roi_color, cv2.COLOR_BGR2HSV)
             
             # Rangos VERDE (Ajusta estos números viendo la ventana "Filtro VERDE")
-            lower_green = np.array([40, 70, 50])
+            lower_green = np.array([35, 60, 50])
             upper_green = np.array([85, 255, 255])
             mask_green = cv2.inRange(hsv, lower_green, upper_green)
             
             # Rangos ROJO (Ajusta estos números viendo la ventana "Filtro ROJO")
-            lower_red1 = np.array([0, 70, 50])
-            upper_red1 = np.array([10, 255, 255])
-            lower_red2 = np.array([170, 70, 50])
+            lower_red1 = np.array([0, 100, 80])
+            upper_red1 = np.array([5, 255, 255])
+            lower_red2 = np.array([175, 100, 80])
             upper_red2 = np.array([180, 255, 255])
             mask_red = cv2.bitwise_or(cv2.inRange(hsv, lower_red1, upper_red1),
                                       cv2.inRange(hsv, lower_red2, upper_red2))
             
+            mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_OPEN, kernel)
+            mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_CLOSE, kernel)
+            
+            mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_OPEN, kernel)
+            mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_CLOSE, kernel)
+            
             obstaculo_tipo = "NINGUNO"
             obstaculo_cx = 160
             area_max_obs = 0
-            x_obs, w_obs = 0, 0 # Guardaremos el ancho del pilar para borrarlo
+            
+            lista_obstaculos = []
             
             contornos_v, _ = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             for c in contornos_v:
                 area = cv2.contourArea(c)
-                if area > 350 and area > area_max_obs:
-                    area_max_obs = area
-                    x, y, w, h = cv2.boundingRect(c)
-                    x_obs, w_obs = x, w
-                    obstaculo_cx = x + (w // 2)
-                    obstaculo_tipo = "VERDE"
+                x, y, w, h = cv2.boundingRect(c)
+                if area > 400 and w < 260 and area > area_max_obs:
+                    lista_obstaculos.append({"x": x, "w": w, "tipo": "VERDE", "area": area})
+                    if area > area_max_obs:
+                        area_max_obs = area
+                        obstaculo_cx = x + (w // 2)
+                        obstaculo_tipo = "VERDE"
                         
             contornos_r, _ = cv2.findContours(mask_red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             for c in contornos_r:
                 area = cv2.contourArea(c)
-                if area > 350 and area > area_max_obs:
-                    area_max_obs = area
-                    x, y, w, h = cv2.boundingRect(c)
-                    x_obs, w_obs = x, w
-                    obstaculo_cx = x + (w // 2)
-                    obstaculo_tipo = "ROJO"
-
+                x, y, w, h = cv2.boundingRect(c)
+                if area > 400 and w < 260 and area > area_max_obs:
+                    lista_obstaculos.append({"x": x, "w": w, "tipo": "ROJO", "area": area})
+                    if area > area_max_obs:
+                        area_max_obs = area
+                        obstaculo_cx = x + (w // 2)
+                        obstaculo_tipo = "ROJO"
+                    
+            if obstaculo_tipo != "NINGUNO":
+                tiempo_ultimo_obstaculo = current_time
+                memoria_tipo_obstaculo = obstaculo_tipo
+                
             # =======================================================
             # 1.6 LA CAPA DE INVISIBILIDAD (Hack de Muros)
             # =======================================================
-            if obstaculo_tipo != "NINGUNO":
-                # Si vemos un pilar, pintamos de BLANCO (255) esa zona en la imagen binarizada
-                # Le damos un margen de 20 píxeles para borrar la sombra completa.
-                # ¡Así el Raycasting ignorará el pilar y buscará los muros reales!
-                x_inicio = max(0, x_obs - 20)
-                x_fin = min(320, x_obs + w_obs + 20)
+            for obs in lista_obstaculos:
+                cx_temp = obs["x"] + (obs["w"] // 2)
+                x_inicio = max(0, obstaculo_cx - 20)
+                x_fin = min(320, obstaculo_cx + 20)
                 binarizada[:, x_inicio:x_fin] = 255
             
             cv2.imshow("Filtro VERDE", mask_green)
@@ -178,61 +214,72 @@ class WROAutonomousCar:
                     estado = "MURO_DER"
                 else:
                     estado = "CEGUERA_BLANCA"
+                    
+            # =======================================================
+            # 3.3 INYECCIÓN DE EVASIÓN (REPROGRAMACIÓN DEL PID)
+            # =======================================================
+            
+            # Se Calcula cuánto tiempo ha pasado desde que dejamos de ver el bloque
+            tiempo_ciego = current_time - tiempo_ultimo_obstaculo
+            
+            en_memoria_evasion = tiempo_ciego < 1
+            
+            tipo_evasion_activa = obstaculo_tipo if obstaculo_tipo != "NINGUNO" else memoria_tipo_obstaculo
+            
+            evadiendo = (obstaculo_tipo != "NINGUNO" or en_memoria_evasion)
+            
+            # Solo evadimos si vemos un obstáculo
+            if evadiendo:
+                
+                DISTANCIA_EVASION = 170
+                
+                if tipo_evasion_activa == "ROJO":
+                    # Regla WRO: Pasar por la DERECHA del bloque rojo
+                    centro_pista_x = 240 #260 #obstaculo_cx + DISTANCIA_EVASION #medir esta tolerancia
+                    estado = "EVADIENDO_ROJO" if obstaculo_tipo != "NINGUNO" else "MEMORIA_ROJO"
+                    
+                elif tipo_evasion_activa == "VERDE":
+                    # Regla WRO: Pasar por la IZQUIERDA del bloque verde
+                    centro_pista_x = 40 #60 #obstaculo_cx - DISTANCIA_EVASION #medir esta tolerancia
+                    estado = "EVADIENDO_VERDE" if obstaculo_tipo != "NINGUNO" else "MEMORIA_VERDE"
+                    
+                # ESCUDO ANTI-MURO: Evita chocar contra los bordes de la pista al esquivar
+                centro_pista_x = max(45, min(350, centro_pista_x)) #300 #medir esta tolerancia
+
 
             # =======================================================
             # 3.5 AUTODETECCIÓN DE SENTIDO (Solo se ejecuta 1 vez)
             # =======================================================
             es_vertice_curva = estado in ["MURO_FRONTAL"]
             
-            # =======================================================
-            # 3.3 INYECCIÓN DE EVASIÓN (REPROGRAMACIÓN DEL PID)
-            # =======================================================
-            
-            # Solo evadimos si vemos un obstáculo y NO estamos en plena curva peleando con la pared
-            if obstaculo_tipo != "NINGUNO" and not es_vertice_curva:
+            if self.SENTIDO_GIRO == "AUTO" and es_vertice_curva and (current_time - self.start_time > 1.5):
+                # Cortamos la imagen para mirar "a lo lejos" (solo la mitad superior)
+                horizonte = binarizada[:30, :] 
                 
-                DISTANCIA_EVASION = 110 # Aumentamos la fuerza del desvío para asegurar
+                blancos_izq = np.sum(horizonte[:, :160] == 255)
+                blancos_der = np.sum(horizonte[:, 160:] == 255)
                 
-                if obstaculo_tipo == "ROJO":
-                    # Regla WRO: Pasar por la DERECHA del bloque rojo
-                    centro_pista_x = obstaculo_cx + DISTANCIA_EVASION
-                    estado = "EVADIENDO_ROJO"
-                    print(f"[EVASIÓN] Bloque ROJO detectado en {obstaculo_cx}. Forzando centro a {centro_pista_x}")
-                    
-                elif obstaculo_tipo == "VERDE":
-                    # Regla WRO: Pasar por la IZQUIERDA del bloque verde
-                    centro_pista_x = obstaculo_cx - DISTANCIA_EVASION
-                    estado = "EVADIENDO_VERDE"
-                    print(f"[EVASIÓN] Bloque VERDE detectado en {obstaculo_cx}. Forzando centro a {centro_pista_x}")
-                    
-                # ESCUDO ANTI-MURO: Evita chocar contra los bordes de la pista al esquivar
-                if muro_der != -1:
-                    centro_pista_x = min(centro_pista_x, muro_der - 45)
-                if muro_izq != -1:
-                    centro_pista_x = max(centro_pista_x, muro_izq + 45)
-            
-            if self.SENTIDO_GIRO == "AUTO" and es_vertice_curva:
-                # Contamos matemáticamente los píxeles blancos (tapete libre) de cada lado
-                blancos_izq = np.sum(binarizada[:, :160] == 255)
-                blancos_der = np.sum(binarizada[:, 160:] == 255)
-                
-                # El lado con más píxeles blancos es el lado hacia donde se abre la pista
                 if blancos_der > blancos_izq:
                     self.SENTIDO_GIRO = "DERECHA"
-                    print("\n[!!!] ESPACIO LIBRE A LA DERECHA -> HORARIO CONFIRMADO [!!!]\n")
+                    print("\n[!!!] HORIZONTE LIBRE A LA DERECHA -> HORARIO CONFIRMADO [!!!]\n")
                 else:
                     self.SENTIDO_GIRO = "IZQUIERDA"
-                    print("\n[!!!] ESPACIO LIBRE A LA IZQ -> ANTIHORARIO CONFIRMADO [!!!]\n")
+                    print("\n[!!!] HORIZONTE LIBRE A LA IZQ -> ANTIHORARIO CONFIRMADO [!!!]\n")
                     
             # =======================================================
             # 3.6 CONTEO DE VUELTAS (Reglamento WRO)
             # =======================================================
+            
+            perdio_muro_interior = (self.SENTIDO_GIRO == "DERECHA" and muro_der == -1) or \
+                                   (self.SENTIDO_GIRO == "IZQUIERDA" and muro_izq == -1)
+            es_vertice_curva = estado == "MURO_FRONTAL" or perdio_muro_interior
+            
             # Consideramos que entró a una curva si perdió un muro o chocó de frente
             if es_vertice_curva:
-                # El candado cronometrado: Deben haber pasado al menos 3.8 segundos desde la última esquina
-                if not self.en_curva and (current_time - self.ultimo_tiempo_curva > 2.5):
+                # El candado cronometrado: Deben haber pasado al menos 3.5 segundos desde la última esquina
+                if not self.en_curva and (current_time - self.ultimo_tiempo_curva > 0.2):
                     self.en_curva = True
-                    self.ultimo_tiempo_curva = current_time# Ponemos el candado
+                    self.ultimo_tiempo_curva = current_time
                     self.curvas_superadas += 1
                     
                     # Si ya pasó 4 esquinas, es 1 vuelta completa
@@ -246,34 +293,38 @@ class WROAutonomousCar:
                             self.current_angle = 86
                             self.running = False # Detiene el bucle principal
                             
-            elif not es_vertice_curva and (current_time - self.ultimo_tiempo_curva > 2.5):
+            elif not es_vertice_curva and (current_time - self.ultimo_tiempo_curva > 0.5):
                 # Al volver a la recta y ver ambos muros, quitamos el candado 3.8
                 self.en_curva = False
                 
             # =======================================================
             # 4. DIRECCIÓN Y VELOCIDAD (CON ZONA MUERTA)
             # =======================================================
-            if estado == "MURO_FRONTAL":
+            if estado == "MURO_FRONTAL" and obstaculo_tipo == "NINGUNO":
                 # Evadir a toda costa la colisión frontal
                 #anadir orientacion dependiendo del sentido
                     
                 if self.SENTIDO_GIRO == "DERECHA":
-                    self.current_angle = 73
+                    self.current_angle = 60 if self.modo_obstaculos else 73
                 else:
-                    self.current_angle = 103
+                    self.current_angle = 115 if self.modo_obstaculos else 103
                 self.current_speed = 220
                 
             else:
                 error_absoluto_real = 160 - centro_pista_x
                 
-                # Zona Muerta Generosa (15 píxeles)
-                if abs(error_absoluto_real) < 150: #medir esta tolerancia
+                # Zona Muerta Generosa (150 píxeles)
+                zona_muerta = 45 if ("EVADIENDO" in estado or "MEMORIA" in estado) else 125#150medir esta tolerancia
+                
+                if abs(error_absoluto_real) < zona_muerta: 
                     self.current_angle = 86
                     self.pid.integral = 0
                 else:
-                    if "EVADIENDO" in estado:
-                        self.pid.kp = 0.12
-                        self.current_speed = 190 # Frenamos un poco para maniobrar seguro
+                    # AGRESIVIDAD DEL VOLANTE
+                    if evadiendo:
+                        #Esto le quita la duda y da un volantazo seguro y firme.
+                        self.pid.kp = 0.15
+                        self.current_speed = 200
                     else:
                         self.pid.kp = 0.08 if estado == "CENTRADO" else 0.15
                         self.current_speed = 250
@@ -282,13 +333,15 @@ class WROAutonomousCar:
                     angulo_pid = int(86 + correccion_pid)
                     
                     # --- LA MAGIA DUAL-RATE ---
-                    if estado == "CENTRADO":
+                    if evadiendo:
+                        self.current_angle = max(60, min(120, angulo_pid))
+                    elif estado == "CENTRADO":
                         # En recta: Topes físicos virtuales (Solo 10 grados de libertad)
                         # Esto destruye el zig-zag inmediatamente.
                         self.current_angle = max(76, min(96, angulo_pid))
                     else:
                         # Si perdió un muro, está entrando a curva: Liberamos el volante
-                        self.current_angle = max(60, min(120, angulo_pid))
+                        self.current_angle = max(65, min(120, angulo_pid))
                 
                 # Velocidad
                 if estado == "CENTRADO" and abs(error_absoluto_real) < 20:
@@ -298,12 +351,28 @@ class WROAutonomousCar:
 
             # Debug visual en consola
             if int(current_time * 10) % 5 == 0:
-                print(f"| Estado: {estado: <15} | Muros: [I:{muro_izq} D:{muro_der}] | Vel: {self.current_speed} | Ángulo: {self.current_angle}° |")
+                print(f"| Obs: {obstaculo_tipo: <7} | Estado: {estado: <15} | Muros: [I:{muro_izq} D:{muro_der}] | Vel: {self.current_speed} | Ángulo: {self.current_angle}° |")
 
             time.sleep(0.01)
         cap.release()
         
     def main_loop(self):
+        # Iniciar el hilo de lectura del Arduino
+        rt = threading.Thread(target=self.read_serial_data, daemon=True)
+        rt.start()
+        
+        # Esperar 2 segundos para que las lecturas del US se estabilicen
+        time.sleep(2) 
+        if self.distancia_us < 15: # Si hay algo a menos de 15cm atrás
+            self.modo_obstaculos = True
+            print("\n[MODO] MODO OBSTÁCULOS (MODO 2) ACTIVADO POR ULTRASONIDO\n")
+        else:
+            self.modo_obstaculos = False
+            print("\n[MODO] MODO VELOCIDAD (MODO 1) ACTIVADO\n")
+
+        self.start_time = time.time() # Reiniciamos el reloj de inicio
+            
+            
         vt = threading.Thread(target=self.process_vision)
         vt.start()
 
