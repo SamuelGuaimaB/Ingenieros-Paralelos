@@ -4,12 +4,12 @@
 
 <!-- toc -->
 
-1. [About us](#about-us)
-2. [Vision Management](#vision-management)
-3. [Mobility Management](#mobility-management)
-4. [Power Management](#power-management)
-5. [Components table](#components-table)
-6. [Obstacle Management](#components-table)
+- [About us](#about-us)
+- [Vision Management](#vision-management)
+- [Mobility Management](#mobility-management)
+- [Power Management](#power-management)
+- [Components table](#components-table)
+- [Obstacle Management](#components-table)
 
 - [About us](#about-us)
 - [Vision Management](#vision-management)
