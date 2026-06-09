@@ -6,7 +6,7 @@
 
 1. [About us](#about-us)
 2. [Vision Management](#vision-management)
-2.1. [Logitech C922 Web Camera](#logitech-c922-web-camera)
+  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
