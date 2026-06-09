@@ -699,6 +699,62 @@ The file integrates perception, decision-making, and control in the same driving
 
 <hr>
 
+> [!IMPORTANT]
+> <b> Step 3: Auto-detection of track direction (first time only) </b>
+>- The first time "MURO_FRONTAL" (a closed corner) is detected:
+>  1. It counts white pixels in the left and right halves of the image.
+>  2. If there are more white pixels on the right, SENTIDO_GIRO = "DERECHA" (clockwise circuit).
+>  3. If there are more white pixels on the left, SENTIDO_GIRO = "IZQUIERDA" (counterclockwise circuit).
+>- This happens only once and is used for decisions in subsequent curves.
+
+<hr>
+
+> [!IMPORTANT]
+> <b> Step 4: Steering control (PID) </b>
+>- error = 160 - centro_pista_x is calculated.
+>- Dead zone: If |error| < 15, the angle is fixed at 86° (straight).
+>- Otherwise:
+>  1. PID is applied: correction = kp * error + kd * (error - prev_error) / dt.
+>  2. angulo_pid = 86 + correction.>  3. If there are more white pixels on the left, SENTIDO_GIRO = "IZQUIERDA" (counterclockwise circuit).
+>- Limits by state:
+>  1. In "CENTRADO" (straight): angle between 76° and 96° (smooth turns).
+>  2. In other states: angle between 60° and 120° (more aggressive turns).
+
+<hr>
+
+> [!IMPORTANT]
+> <b> Step 5: Speed control</b>
+>- In "CENTRADO" with small error → speed 250 (maximum).
+>- In "MURO_FRONTAL" → speed 220.
+>- In any other case → speed 250.
+>- Note: In the first challenge, speed is always high; there is no reduction for obstacles.
+<hr>
+
+> [!IMPORTANT]
+> <b> Step 6: Curve and corner handling </b>
+>- If the state is "MURO_IZQ" or "MURO_DER" (one wall lost):
+>  1. The PID has more steering freedom (up to 60° or 120°).
+>  2. The car turns toward the side where the wall disappeared.
+>- If the state is "MURO_FRONTAL" (closed corner):
+>  1. If SENTIDO_GIRO == "DERECHA" → angle 73° (turns right).
+>  2. If SENTIDO_GIRO == "IZQUIERDA" → angle 103° (turns left).
+>  3. Speed 220.
+
+<hr>
+
+> [!IMPORTANT]
+> <b> Step 7: Curve and corner handling </b>
+>- If the state is "MURO_IZQ" or "MURO_DER" (one wall lost):
+>  1. The PID has more steering freedom (up to 60° or 120°).
+>  2. The car turns toward the side where the wall disappeared.
+>- If the state is "MURO_FRONTAL" (closed corner):
+>  1. If SENTIDO_GIRO == "DERECHA" → angle 73° (turns right).
+>  2. If SENTIDO_GIRO == "IZQUIERDA" → angle 103° (turns left).
+>  3. Speed 220.
+
+<hr>
+
+
 <h3> 🔴 Block 3: Second Challenge – Obstacle Challenge </h3>
 
 The Obstacle Challenge introduces dynamic object detection and real-time path planning. The track geometry remains the same, but it is now populated with randomly placed traffic signs represented by colored pillars. Here the car must avoid the blocks following the WRO rules: Red → pass on the right. Green → pass on the left. (specify more the rules if it is neccessary).
