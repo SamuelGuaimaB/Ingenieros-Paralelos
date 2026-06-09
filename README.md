@@ -6,8 +6,8 @@
 
 1. [About us](#about-us)
 2. [Vision Management](#vision-management)
-3. [Mobility Management](#3-mobility-management)
-4. [Power Management](#3-power-management)
+3. [Mobility Management](#mobility-management)
+4. [Power Management](#power-management)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
