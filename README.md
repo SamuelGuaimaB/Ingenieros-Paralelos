@@ -251,23 +251,30 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 In the project we used four of these batteries, two for each UPS.
 
 
-## Component Budget
+## Estimated Component Budget
 
-| Component                    | Quantity | Unit Price | Subtotal |
-| ---------------------------- | -------: | ---------: | -------: |
-| Raspberry Pi 4               |        1 |     $21.42 |   $21.42 |
-| L298N Driver                 |        1 |     $22.45 |   $22.45 |
-| Arduino Uno                  |        1 |     $19.92 |   $19.92 |
-| HC-SR04 Ultrasonic Sensor    |        4 |      $4.05 |   $16.20 |
-| Fischertechnik Maker Kit Car |        1 |    $135.00 |  $135.00 |
-| Logitech C922 Web Camera     |        1 |      $8.50 |    $8.50 |
-| LX-2BUPS UPS                 |        2 |      $8.50 |   $17.00 |
-| Ultrafire Lithium Batteries  |        4 |      $9.00 |   $36.00 |
+> Estimated prices in USD.  
+> Most prices were taken as reference from MercadoLibre Venezuela.  
+> The **Fischertechnik Maker Kit Car** price was taken from eBay with an estimated cost of **$115.33**.
 
-**Estimated total:** $370.49
+| Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
+|---|---:|---:|---:|---|
+| Raspberry Pi 4 Model B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
+| Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
+| L298N Motor Driver | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
+| HC-SR04 Ultrasonic Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
+| Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
+| LX-2BUPS UPS Module / 18650 UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
+| 18650 3.7V Battery | 1 | $5.00 | $5.00 | MercadoLibre Venezuela |
+| Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
-> Note: Prices are approximate and may vary depending on the supplier, availability, and country of purchase.
+### Estimated Total
 
+| Concept | Total |
+|---|---:|
+| Total estimated budget | $428.10 |
+
+> The final budget may vary depending on availability, seller, shipping cost, and product condition.
 
 # Explanation of `MainCode.py`
 
