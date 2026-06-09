@@ -4,7 +4,8 @@
 
 <!-- toc -->
 
-1. [About us 👥](#about-us)
+1. [About us](#about-us)
+2. [Vision Management](#vision-management)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
@@ -26,7 +27,7 @@
 <!-- tocstop -->
 
 
-## About us 👥
+## About us
 
 >Team members
 - Samuel Guaimacuto
@@ -35,7 +36,7 @@
 
 _We are a Venezuelan team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
 
-## Vision Management 🖥️
+## Vision Management
 
 - **Logitech C922 Web Camera**
 
