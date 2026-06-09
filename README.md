@@ -4,7 +4,7 @@
 
 <!-- toc -->
 
-1. [About us](#about-us)
+1. [About us 👥](#about-us)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
@@ -26,7 +26,7 @@
 <!-- tocstop -->
 
 
-## About us
+## About us 👥
 
 >Team members
 - Samuel Guaimacuto
