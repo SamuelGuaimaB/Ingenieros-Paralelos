@@ -6,6 +6,7 @@
 
 1. [About us](#about-us)
 2. [Vision Management](#vision-management)
+2.1. [Logitech C922 Web Camera](#logitech-c922-web-camera)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
@@ -448,6 +449,7 @@ In the project we used four of these batteries, two for each UPS.
 5. It completes 3 laps counting 4 corners per lap.
 6. It stops by sending <0,86>.
 
+<hr>
 
 <h3> 🔴 Block 3: Second Challenge – Obstacle Challenge </h3>
 
