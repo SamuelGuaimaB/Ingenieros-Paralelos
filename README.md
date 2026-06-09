@@ -11,7 +11,7 @@
 5. [Components table](#components-table)
 6. [Obstacle Management](#components-table)
 
-- [1. About us](#1-about-us)
+- [About us](#about-us)
 - [2. Vision Management](#2-vision-management)
   - [2.1 Logitech C922 Web Camera](#21-logitech-c922-web-camera)
   - [2.2 Raspberry Pi 4](#22-raspberry-pi-4)
