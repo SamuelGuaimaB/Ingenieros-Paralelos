@@ -12,9 +12,9 @@
 6. [Obstacle Management](#components-table)
 
 - [About us](#about-us)
-- [2. Vision Management](#2-vision-management)
-  - [2.1 Logitech C922 Web Camera](#21-logitech-c922-web-camera)
-  - [2.2 Raspberry Pi 4](#22-raspberry-pi-4)
+- [Vision Management](#vision-management)
+  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
+  - [Raspberry Pi 4](#raspberry-pi-4)
 - [3. Mobility Management ⚙️](#3-mobility-management-⚙️)
   - [3.1 Arduino Uno](#31-arduino-uno)
   - [3.2 L298N Driver](#32-l298N-driver)
