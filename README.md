@@ -254,7 +254,7 @@ In the project we used four of these batteries, two for each UPS.
 ## Estimated Component Budget
 
 > Estimated prices in USD.  
-> Most prices were taken as reference from MercadoLibre Venezuela.  
+> Most prices were taken as reference from MercadoLibre Venezuela, since the majority of components were provided by our university.
 > The **Fischertechnik Maker Kit Car** price was taken from eBay with an estimated cost of **$115.33**.
 
 | Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
@@ -400,6 +400,7 @@ In the project we used four of these batteries, two for each UPS.
 >- In "MURO_FRONTAL" → speed 220.
 >- In any other case → speed 250.
 >- Note: In the first challenge, speed is always high; there is no reduction for obstacles.
+
 <hr>
 
 > [!IMPORTANT]
@@ -415,16 +416,37 @@ In the project we used four of these batteries, two for each UPS.
 <hr>
 
 > [!IMPORTANT]
-> <b> Step 7: Curve and corner handling </b>
->- If the state is "MURO_IZQ" or "MURO_DER" (one wall lost):
->  1. The PID has more steering freedom (up to 60° or 120°).
->  2. The car turns toward the side where the wall disappeared.
->- If the state is "MURO_FRONTAL" (closed corner):
->  1. If SENTIDO_GIRO == "DERECHA" → angle 73° (turns right).
->  2. If SENTIDO_GIRO == "IZQUIERDA" → angle 103° (turns left).
->  3. Speed 220.
+> <b> Step 7: Lap counting </b>
+>- Every time "MURO_FRONTAL" is detected and more than 2.5 seconds have passed since the last curve:
+>  1. curvas_superadas is incremented.
+>  2. en_curva = True is set (prevents counting the same curve multiple times).
+>- When curvas_superadas % 4 == 0 (4 corners = 1 lap):
+>  1. vueltas_completadas is incremented.
+>  2. "VUELTA X/3 COMPLETADA" is printed.
+>- When vueltas_completadas >= 3:
+>  1. current_speed = 0 is set.
+>  2. current_angle = 86.
+>  3. running = False, program terminates.
 
 <hr>
+
+> [!IMPORTANT]
+> <b> Step 8: Sending to Arduino </b>
+>- The main thread sends <speed,angle> every 50 ms.
+>- Example during a straight: <250,86>.
+>- Example during a right turn: <250,73>.
+>- Example at the end: <0,86>.
+
+<hr>
+
+<h3> 2.2 Expected behavior (first challenge) </h3>
+
+1. The car starts centered on the track.
+2. On straights, the PID keeps the angle between 76° and 96° (minimal oscillations).
+3. When entering a curve, it loses one wall, the PID releases the angle, and the car turns until both walls are visible again.
+4. At closed corners, it detects "MURO_FRONTAL" and turns sharply.
+5. It completes 3 laps counting 4 corners per lap.
+6. It stops by sending <0,86>.
 
 
 <h3> 🔴 Block 3: Second Challenge – Obstacle Challenge </h3>
