@@ -6,7 +6,8 @@
 
 1. [About us](#about-us)
 2. [Vision Management](#vision-management)
-  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
+3. [Mobility Management](#3-mobility-management)
+4. [Power Management](#3-power-management)
 
 - [1. About us](#1-about-us)
 - [2. Vision Management](#2-vision-management)
@@ -95,7 +96,7 @@ _Open Source Computer Vision Library is a massive, free, and open-source softwar
 
 <hr>
 
-## Mobility Management ⚙️
+## Mobility Management
 
 - **Arduino Uno**
 
@@ -203,7 +204,7 @@ Is the primary drive engine of the vehicle. It does not just spin; it counts its
 
 Is a mechanical gearbox located between the two driven wheels. It allows the left and right wheels to rotate at different speeds while still receiving power from the motor. When the car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents our car from losing traction.
 
-## Power Management 🔋
+## Power Management
 
 - **LX-2BUPS UPS**
 
