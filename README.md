@@ -10,6 +10,8 @@
 - [Power Management](#power-management)
 - [Components table](#components-table)
 - [Obstacle Management](#components-table)
+- [Logbook]
+- [Changelog]
 
 <!-- tocstop -->
 
