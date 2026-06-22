@@ -28,11 +28,11 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 <a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
   <img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
 </a>
-[Click to See More](#Click-to-See-More)
+[Click to See More](#Click-to-See-More-1st)
 
 - **2th Mode**
 
-[Click to See More](#Click-to-See-More)
+[Click to See More](#Click-to-See-More-2th)
 
 ## Components Used and Estimated Budget
 
