@@ -4,7 +4,8 @@
 
 This document presents the implemented navigation system of an autonomous robot designed for the **WRO Future Engineers** competition, based on the following files:
 
-- `src/MainCode.py`
+- `src/1st Mode.py`
+- `src/1st Mode.py`
 - `src/Ino Code/Arduino_Code.ino`
 
 According to the WRO Future Engineers 2026 rules, the vehicle operates in a self-driving car challenge in which it must drive autonomously on a track whose configuration varies between rounds. The official challenge includes Open Challenge rounds and Obstacle Challenge rounds, both based on autonomous track navigation.
@@ -19,17 +20,16 @@ This documentation remains aligned with the code currently available in the repo
 
 The objective of the system is to allow the robot to:
 
-- observe the track through a camera,
-- detect walls and obstacles visually,
-- adapt to a round direction that may be clockwise or counterclockwise,
-- complete the required laps on the track autonomously,
-- interpret red and green field references during obstacle navigation,
-- determine a navigation state,
-- calculate steering corrections using PID control,
-- generate speed and steering-angle commands,
-- and execute those commands through the Arduino.
+- Observe the track through a camera.
+- Detect walls and obstacles visually.
+- Adapt to a round direction that may be clockwise or counterclockwise.
+- Complete the required laps on the track autonomously.
+- //interpret red and green field references during obstacle navigation.
+- determine a navigation state.
+- Generate speed and steering-angle commands
+- Execute the commands through the Arduino.
 
-In the WRO 2026 game description, the Open Challenge requires the vehicle to complete three laps on the track, while the Obstacle Challenge requires the vehicle to complete three laps while respecting the side indicated by red and green traffic signs. In the implemented system, these tasks are addressed through computer vision, state-based decision logic, PID control, serial communication, and ultrasonic-based mode selection.
+In the WRO 2026 game description, the Open Challenge requires the vehicle to complete three laps on the track, while the Obstacle Challenge requires the vehicle to complete three laps while respecting the side indicated by red and green traffic signs. In the implemented system, these tasks are addressed through computer vision, state-based decision logic and serial communication.
 
 ---
 
@@ -39,17 +39,15 @@ In the WRO 2026 game description, the Open Challenge requires the vehicle to com
 
 | Module | File | Main Function |
 |---|---|---|
-| Raspberry Pi | `src/MainCode.py` | Vision processing, navigation states, PID control, mode selection, and serial command transmission |
+| Raspberry Pi | `src/1st Mode.py` and `2nd Mode.py` | Vision processing, navigation states, mode selection (manually selected), and serial command transmission |
 | Arduino | `src/Ino Code/Arduino_Code.ino` | Command reception, servo control, motor control, ultrasonic sensing, and telemetry transmission |
 | Camera | Accessed through OpenCV | Track image acquisition |
-| Ultrasonic sensor | Processed by Arduino | Distance measurement used for telemetry and initial mode selection |
 
 ### 3.2 Physical System Flow
 
 ```text
 Camera -> Raspberry Pi -> Serial -> Arduino -> Servo / Motor
-                                     |
-                                     -> Ultrasonic sensor -> Serial telemetry
+
 ```
 
 ---
@@ -58,7 +56,7 @@ Camera -> Raspberry Pi -> Serial -> Arduino -> Servo / Motor
 
 For documentation purposes, the implemented system can be read in three main phases:
 
-1. initialization,
+1. Initialization,
 2. Mode 1,
 3. Mode 2.
 
@@ -68,12 +66,11 @@ This organization reflects the way the robot is prepared at startup and then ope
 
 During initialization, the system:
 
-- opens serial communication with the Arduino,
-- initializes the control variables,
-- starts the serial-reading thread,
-- receives ultrasonic telemetry,
-- classifies the operating mode,
-- and prepares the vision and control loop.
+- Opens serial communication with the Arduino.
+- Initializes the control variables.
+- Starts the serial-reading thread,
+- Classifies the operating mode,
+- Prepares the vision and control loop.
 
 This phase defines whether the robot will begin operation in `Mode 1` or `Mode 2`.
 
