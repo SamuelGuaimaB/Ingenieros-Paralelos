@@ -26,10 +26,9 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 ## Preview of the Car Performance
 
 <a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
-  <img src="DIRECCIONDEGIFAQUI.gif" alt="Video Preview" width="80%">
+  <img src="https://youtube.com" alt="Car Preview" width="80%">
 </a>
-
-
+  
 - [Click to See More](#Click-to-See-More)
 
 ## Vision Management
