@@ -59,7 +59,7 @@ The Logitech C922 Pro Stream is a popular, high-definition webcam designed speci
       <h3>Specifications:</h3>
       <ul>
         <li>Processor: Quad-Core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5–1.8 GHz </li>
-        <li>Memory: 1GB, 2GB, 4GB, or 8GB LPDDR4-3200 SDRAM </li>
+        <li>Memory: 4GB LPDDR4-3200 SDRAM </li>
         <li>Video: Dual micro-HDMI ports supporting 4K @ 60fps </li>
         <li>Connectivity: Gigabit Ethernet, 2.4/5.0 GHz Wi-Fi, and Bluetooth 5.0 </li>
         <li>USB: 2x USB 3.0, 2x USB 2.0 ports </li>
@@ -78,6 +78,10 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
 <img src="./resources/OpenCV_Logo.png " alt="OpenCV Logo" height="100" width="200">
 
 _Open Source Computer Vision Library is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. <b>OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it</b>._
+
+Explain Binary Vision...
+
+Configuration of the camera through the python script (kernel, buffer, resolution)
 
 <hr>
 
@@ -115,7 +119,9 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
 
 <h3> Arduino Code (C++) </h3>
 
-The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles (usually 0 to 180 degrees) or at continuous speeds. <b>We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver</b>.
+The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles, in our case 60 to 120 degrees, or at continuous speeds. <b>We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver</b>.
+
+Explain Serial Port...
 
 <hr>
 
@@ -189,6 +195,8 @@ Is the primary drive engine of the vehicle. It does not just spin; it counts its
 
 Is a mechanical gearbox located between the two driven wheels. It allows the left and right wheels to rotate at different speeds while still receiving power from the motor. When the car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents our car from losing traction.
 
+Ackerman Mechanism...
+
 ## Power Management
 
 - **LX-2BUPS UPS**
@@ -235,14 +243,10 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
   </tr>
 </table>
 
-In the project we used four of these batteries, two for each UPS.
+In the project we used four of these batteries, two for each UPS. Rechargable?
 
 
 ## Estimated Component Budget
-
-> Estimated prices in USD.  
-> Most prices were taken as reference from MercadoLibre Venezuela.  
-> The **Fischertechnik Maker Kit Car** price was taken from eBay with an estimated cost of **$115.33**.
 
 | Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
 |---|---:|---:|---:|---|
@@ -259,7 +263,7 @@ In the project we used four of these batteries, two for each UPS.
 
 | Concept | Total |
 |---|---:|
-| Total estimated budget | $443.10 |
+| Total | $443.10 |
 
 > The final budget may vary depending on availability, seller, shipping cost, and product condition.
 
