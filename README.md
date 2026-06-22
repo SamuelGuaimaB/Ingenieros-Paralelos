@@ -31,6 +31,27 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   
 [Click to See More](#Click-to-See-More)
 
+## Estimated Component Budget
+
+| Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
+|---|---:|---:|---:|---|
+| Raspberry Pi 4 Model B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
+| Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
+| L298N Motor Driver | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
+| HC-SR04 Ultrasonic Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
+| Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
+| LX-2BUPS UPS Module / 18650 UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
+| 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
+| Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
+
+### Estimated Total
+
+| Concept | Total |
+|---|---:|
+| Total | $443.10 |
+
+> The final budget may vary depending on availability, seller, shipping cost, and product condition.
+
 ## Vision Management
 
 - **Logitech C922 Web Camera**
@@ -252,28 +273,6 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 </table>
 
 In the project we used four of these batteries, two for each UPS. Rechargable?
-
-
-## Estimated Component Budget
-
-| Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
-|---|---:|---:|---:|---|
-| Raspberry Pi 4 Model B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
-| Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
-| L298N Motor Driver | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
-| HC-SR04 Ultrasonic Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
-| Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
-| LX-2BUPS UPS Module / 18650 UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
-| 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
-| Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
-
-### Estimated Total
-
-| Concept | Total |
-|---|---:|
-| Total | $443.10 |
-
-> The final budget may vary depending on availability, seller, shipping cost, and product condition.
 
 ## Obstacle Management
 
