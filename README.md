@@ -23,6 +23,13 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <!-- tocstop -->
 
+## Preview of the Car Performance
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
+    <img src="https://youtube.com" alt="Video Demo" width="80%">
+  </a>
+</p>
 
 ## Vision Management
 
