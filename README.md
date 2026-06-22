@@ -29,7 +29,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   <img src="https://youtube.com" alt="Car Preview" width="80%">
 </a>
   
-- [Click to See More](#Click-to-See-More)
+[Click to See More](#Click-to-See-More)
 
 ## Vision Management
 
