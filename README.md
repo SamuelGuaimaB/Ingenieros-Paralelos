@@ -34,7 +34,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 [Click to See More](#Click-to-See-More)
 
-## Estimated Component Budget
+## Components Used and Estimated Budget
 
 | Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
 |---|---:|---:|---:|---|
