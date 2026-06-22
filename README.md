@@ -228,7 +228,11 @@ Is the primary drive engine of the vehicle. It does not just spin; it counts its
 
 Is a mechanical gearbox located between the two driven wheels. It allows the left and right wheels to rotate at different speeds while still receiving power from the motor. When the car turns, the outside wheel has to travel a longer distance than the inside wheel. Without a differential, the wheels would lock up, slip, or skid during turns. This component ensures smooth, realistic cornering and prevents our car from losing traction.
 
+<hr>
+
 Ackerman Mechanism...
+
+<hr>
 
 ## Power Management
 
