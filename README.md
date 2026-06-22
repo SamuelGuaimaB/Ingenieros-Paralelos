@@ -25,11 +25,9 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 ## Preview of the Car Performance
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
-    <img src="https://youtube.com" alt="Team Ingenieros Paralelos | WRO 2026 Future Engineers" width="80%">
-  </a>
-</p>
+<a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
+  <img src="https://ytimg.com" alt="Video Demo" width="80%">
+</a>
 
 ## Vision Management
 
