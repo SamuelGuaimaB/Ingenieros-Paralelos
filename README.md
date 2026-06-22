@@ -1,4 +1,12 @@
 # WRO2026 Future Engineers – Ingenieros Paralelos
+## About us
+
+>Team members
+- Samuel Guaimacuto
+- Andrés Villareal
+- David Xu
+
+_We are a Venezuelan team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
 
 ## Table of Contents
 
@@ -13,15 +21,6 @@
 
 <!-- tocstop -->
 
-
-## About us
-
->Team members
-- Samuel Guaimacuto
-- Andrés Villareal
-- David Xu
-
-_We are a Venezuelan team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
 
 ## Vision Management
 
