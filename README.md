@@ -30,7 +30,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 </a>
 
 
-- [See More Here](#See More Here)
+- [Click to See More](#Click-to-See-More)
 
 ## Vision Management
 
