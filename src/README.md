@@ -4,13 +4,13 @@
 
 This document presents the implemented navigation system of an autonomous robot designed for the **WRO Future Engineers** competition, based on the following files:
 
-- `src/1st Mode.py` (Adaptive vision-based navigation)
-- `src/2th Mode.py` (Choreography-based manual sequence)
+- `src/1st_mode.py` (Adaptive vision-based navigation)
+- `src/2nd_mode.py` (Choreography-based manual sequence)
 - `src/Ino Code/Arduino_Code.ino`
 
 According to the WRO Future Engineers 2026 rules, the vehicle operates in a self-driving car challenge in which it must drive autonomously on a track whose configuration varies between rounds. The official challenge includes Open Challenge rounds and Obstacle Challenge rounds, both based on autonomous track navigation.
 
-The solution is distributed between a **Raspberry Pi**, responsible for vision processing and decision-making, and an **Arduino**, responsible for executing physical actions on the steering, traction, and ultrasonic sensing system.
+The solution is distributed between a **Raspberry Pi**, responsible for vision processing and decision-making, and an **Arduino**, responsible for executing physical actions on the steering and traction system.
 
 This documentation remains aligned with the code currently available in the repository and describes the implemented logic only.
 
@@ -21,15 +21,14 @@ This documentation remains aligned with the code currently available in the repo
 The objective of the system is to allow the robot to:
 
 - Observe the track through a camera.
-- Detect walls and obstacles visually.
+- Detect walls visually.
 - Adapt to a round direction that may be clockwise or counterclockwise.
 - Complete the required laps on the track autonomously.
-- //interpret red and green field references during obstacle navigation.
-- determine a navigation state.
-- Generate speed and steering-angle commands
+- Determine a navigation state.
+- Generate speed and steering-angle commands.
 - Execute the commands through the Arduino.
 
-In the WRO 2026 game description, the Open Challenge requires the vehicle to complete three laps on the track, while the Obstacle Challenge requires the vehicle to complete three laps while respecting the side indicated by red and green traffic signs. In the implemented system, these tasks are addressed through computer vision, state-based decision logic and serial communication.
+In the implemented system, these tasks are addressed through computer vision, time-based choreography, state-based decision logic, and serial communication between the Raspberry Pi and the Arduino.
 
 ---
 
@@ -39,9 +38,9 @@ In the WRO 2026 game description, the Open Challenge requires the vehicle to com
 
 | Module       | File                            | Main Function                                                                                            |
 | ------------ | ------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Raspberry Pi | `src/1st Mode.py`               | Real-time vision processing, adaptive navigation, automatic lap detection, and reactive steering control |
-| Raspberry Pi | `src/2th Mode.py`               | Choreographed sequence execution, pre-programmed motion commands, and time-based navigation              |
-| Arduino      | `src/Ino Code/Arduino_Code.ino` | Command reception, servo control, motor control, ultrasonic sensing, and telemetry transmission          |
+| Raspberry Pi | `src/1st_mode.py`               | Real-time vision processing, adaptive navigation, automatic lap detection, and reactive steering control |
+| Raspberry Pi | `src/2nd_mode.py`               | Choreographed sequence execution, pre-programmed motion commands, and time-based navigation              |
+| Arduino      | `src/Ino Code/Arduino_Code.ino` | Command reception, servo control, motor control, and physical execution of motion commands               |
 | Camera       | Accessed through OpenCV         | Track image acquisition and real-time frame processing                                                   |
 
 ### 3.2 Physical System Flow
@@ -51,79 +50,150 @@ Camera -> Raspberry Pi -> Serial -> Arduino -> Servo / Motor
 
 ```
 
+### 3.3 Software-to-Hardware Connection
+
+The current software connects with the physical components in the following way:
+
+- **USB Camera -> Raspberry Pi:** `1st_mode.py` opens the camera with `cv2.VideoCapture(0)` and reads live frames for track analysis.
+- **Raspberry Pi -> Arduino:** Both Python modes open the serial port `/dev/ttyUSB0` at `115200` baud and send movement packets in `<speed,angle>` format.
+- **Arduino-side serial input -> Raspberry Pi:** Both Python modes are prepared to listen for the `BTN:1` serial message used as the start signal.
+- **Arduino -> Steering Servo:** The steering angle calculated by the Python software is transmitted through the serial packet and then physically applied by the Arduino to the front steering servo.
+- **Arduino -> Drive Motor:** The speed value calculated by the Python software is transmitted through the same serial packet and then physically applied by the Arduino to the traction motor.
+
 ---
 
 ## 4. System Structure by Operating Phase
 
-For documentation purposes, the implemented system can be read in three main phases:
+The current Python implementation can be read in three phases:
 
-1. Initialization,
-2. Mode 1,
-3. Mode 2.
-
-This organization reflects the way the robot is prepared at startup and then operated according to the mode selected from the initial ultrasonic reading.
+1. Serial and hardware initialization
+2. Mode 1 autonomous execution
+3. Mode 2 choreography execution
 
 ### 4.1 Initialization
 
-During initialization, the system:
+Both Python modes begin by opening the serial connection with the Arduino:
 
-- Opens serial communication with the Arduino.
-- Initializes the control variables.
-- Starts the serial-reading thread,
-- Classifies the operating mode,
-- Prepares the vision and control loop.
+```python
+SERIAL_PORT = "/dev/ttyUSB0"
+BAUDRATE = 115200
+```
 
-This phase defines whether the robot will begin operation in `Mode 1` or `Mode 2`.
+After opening the port, each script waits 2 seconds so the Arduino can stabilize after the serial reset.
 
-### 4.2 Mode 1: Adaptive Vision-Based Navigation (1st Mode.py)
+In both modes, the physical connection at startup is:
 
-Mode 1 corresponds to the **adaptive, real-time operating condition** designed for the Open Challenge:
+- Raspberry Pi -> serial port -> Arduino
+- Arduino-side start signal -> Raspberry Pi
 
-- `modo_obstaculos = False`
-- Selected when `distancia_us >= 15` (obstacle-free distance detected)
-- **File:** `src/1st Mode.py`
-- **Class:** `WROPrimitivoBlindado`
+Both modes also use an initial steering handshake before the main action starts:
+
+```text
+<0,120>
+<0,60>
+<0,86>
+```
+
+This confirms that the steering servo responds correctly.
+
+### 4.2 Mode 1: Adaptive Vision-Based Navigation (`src/1st_mode.py`)
+
+**Class:** `WROPrimitivoBlindado`
+
+Mode 1 is the autonomous camera-based mode. It uses the USB camera as the main physical input and continuously sends steering and speed commands to the Arduino.
 
 #### How Mode 1 Works
 
-Mode 1 implements a **reactive vision system** that processes real-time camera frames to navigate the track autonomously without pre-programmed commands. The system operates in a continuous loop:
+The script starts two parallel tasks:
 
-**Vision Processing Pipeline:**
+- `read_serial_data()`: waits for the `BTN:1` start signal from the Arduino side
+- `process_vision()`: captures and processes frames from the USB camera
 
-1. **Frame Capture:** Acquires 320×240 resolution frames from the USB camera at high frame rate with minimal buffer lag
-2. **Region of Interest (ROI):** Extracts a horizontal band (rows 60-150) focused on track detection, filtering out ceiling and irrelevant visual data
-3. **Image Binarization:** Converts grayscale frames to binary using threshold value 95, separating white track pixels from black walls
-4. **Morphological Operations:** Applies opening operation to remove noise and smooth the binary image
-5. **Horizon Detection:** Scans the upper portion of the ROI to identify upcoming track geometry
-6. **Scan Line Analysis:** Examines a horizontal scan line at the bottom of the ROI to detect lateral walls
+The main loop then sends `<speed,angle>` packets to the Arduino while the robot is in race mode.
 
-**Navigation State Machine:**
+#### Vision Processing Pipeline
 
-The system operates in distinct states based on visual input:
+1. Capture one frame from the camera with `cv2.VideoCapture(0)`
+2. Set the resolution to `320x240`
+3. Convert the frame to grayscale
+4. Apply Gaussian blur with a `5x5` kernel
+5. Crop the track band using rows `60:150`
+6. Apply threshold `95` to create a binary image
+7. Apply morphological opening with a `3x3` kernel
+8. Split the processed image into:
+   - `horizonte` for far-track analysis
+   - `linea_escaneo` for near wall detection
 
-- **ESPERA (Wait):** Initial state, waiting for button activation
-- **CARRERA (Racing):** Active navigation state, continuous track following
-- **RETORNO_A_META (Return to Goal):** Triggered after completing 3 laps (12 corners detected)
+#### Physical Connections Used in Mode 1
 
-**Autonomous Direction Detection:**
+- The USB camera provides the visual input
+- The Raspberry Pi processes the image and computes the steering and speed values
+- The serial cable carries commands from Raspberry Pi to Arduino
+- The Arduino applies the received values to the steering servo and drive motor
+- The start signal is read in Python as `BTN:1`
 
-During the first few seconds of the race, the system analyzes pixel distribution in the left and right horizons to automatically determine track direction:
+#### State Machine
 
-- If more white pixels appear on the right horizon → **DERECHA (Clockwise)** detected
-- If more white pixels appear on the left horizon → **IZQUIERDA (Counterclockwise)** detected
-- Once detected, the system locks this direction for consistent navigation
+The mode uses three states:
 
-**Steering Control:**
+- `ESPERA`: the robot is idle, waiting for the start button
+- `CARRERA`: the robot is actively navigating the track
+- `RETORNO_A_META`: the robot has completed the required laps and executes the stop sequence
 
-- **In Curves:** Fixed steering angles (70° right turn, 104° left turn) with reduced speed (180) for stability
-- **In Straights:** Proportional steering correction based on track center position with higher speed (250)
-- **Curve Detection:** Identifies corners using a central box darkness threshold; debounces corner detection with 2-second timeout to avoid false positives
-- **Lap Counting:** Increments corner counter every 2 seconds when a corner is detected; every 4 corners = 1 complete lap
+#### Direction Detection
 
-**Safety Features:**
+At the beginning of the race, the code compares the white pixels on the left and right halves of the horizon:
 
-- Anti-false-positive during startup: Disables corner detection for the first 1.5 seconds to avoid confusion between the starting line and interior walls
-- Continuous ultrasonic monitoring: Maintains awareness of obstacles for potential mode switching during runtime
+- more white on the right -> `DERECHA`
+- more white on the left -> `IZQUIERDA`
+
+This establishes the corner direction that will be used for the rest of the run.
+
+#### Front and Side Wall Detection
+
+The code detects the front wall from a central box:
+
+```python
+caja_central = binarizada[30:70, 120:200]
+```
+
+The corner is considered detected when the dark-pixel ratio is greater than `0.55`.
+
+The side walls are detected by scanning from the image center outward:
+
+- left side -> `muro_izq`
+- right side -> `muro_der`
+
+These values are used to estimate the track center.
+
+#### Steering and Speed Logic
+
+When a front wall is detected:
+
+- angle `70` for right corners
+- angle `104` for left corners
+- speed `180`
+
+When no front wall is detected:
+
+- speed `250`
+- center the robot using a proportional correction based on track-center error
+- keep angle `86` if the error is inside the `22` pixel dead zone
+- clamp straight-line steering between `74` and `98`
+
+#### Lap Counting
+
+The code counts one corner only if the robot is not already flagged as being inside a corner and at least 2 seconds have passed since the previous corner.
+
+Every 4 corners:
+
+- `vueltas_completadas += 1`
+
+After 3 completed laps:
+
+- the state changes to `RETORNO_A_META`
+- the robot performs a short stop sequence
+- the program ends
 
 #### Key Parameters in Mode 1
 
@@ -134,171 +204,107 @@ During the first few seconds of the race, the system analyzes pixel distribution
 | Scan Line Position     | Row 65    | Wall detection line                 |
 | Straight Speed         | 250       | High-speed on open track            |
 | Curve Speed            | 180       | Safe speed through corners          |
-| Right Turn Angle       | 70°       | Fixed steering angle right          |
-| Left Turn Angle        | 104°      | Fixed steering angle left           |
-| Straight Angle         | 86°       | Neutral steering position           |
+| Right Turn Angle       | 70        | Fixed steering angle right          |
+| Left Turn Angle        | 104       | Fixed steering angle left           |
+| Straight Angle         | 86        | Neutral steering position           |
+| Dead Zone              | 22 px     | Straight stability                  |
 | Corner Debounce        | 2 seconds | Prevents multiple corner detections |
 
----
+### 4.3 Mode 2: Choreography-Based Manual Sequence (`src/2nd_mode.py`)
 
-### 4.3 Mode 2: Choreography-Based Manual Sequence (2th Mode.py)
+**Class:** `WROCoreografia`
 
-Mode 2 corresponds to the **pre-programmed, deterministic operating condition** designed for challenging obstacle courses:
-
-- `modo_obstaculos = True`
-- Selected when `distancia_us < 15` (nearby obstacle detected at startup)
-- **File:** `src/2th Mode.py`
-- **Class:** `WROCoreografia`
+Mode 2 is the fully timed choreography mode. It does not use the camera for control. Instead, it sends a predefined sequence of commands stored in `RUTINA_MANUAL`.
 
 #### How Mode 2 Works
 
-Mode 2 implements a **time-synchronized choreography system** that executes a pre-programmed sequence of movement commands. Unlike Mode 1's reactive approach, Mode 2 follows an exact script that has been tuned to the specific track configuration and challenge requirements.
+The sequence is:
 
-**Sequence Execution Pipeline:**
+1. Open serial communication with Arduino
+2. Perform the steering handshake
+3. Wait for `BTN:1`
+4. Execute each tuple in `RUTINA_MANUAL`
+5. Stop the robot with `<0,86>`
 
-1. **Initialization Handshake:** Sends servo greeting commands to confirm hardware connectivity:
-   - Set angle to 120° (full left)
-   - Set angle to 60° (full right)
-   - Set angle to 86° (center)
+#### Physical Connections Used in Mode 2
 
-2. **Button Synchronization:** Blocks execution until the physical button on the robot is pressed, ensuring proper starting conditions
+- The physical start button is received through Arduino as `BTN:1`
+- The start signal is received in Python as `BTN:1`
+- The Raspberry Pi sends only timed serial commands in this mode
+- The serial link carries each `<speed,angle>` packet
+- The Arduino applies each command to the steering servo and drive motor
 
-3. **Choreography Playback:** Iterates through the predefined `RUTINA_MANUAL` list, executing each command in strict sequence
+#### Choreography Structure
 
-4. **Command Transmission:** Each step sends a formatted packet `<velocity,angle>` via serial to the Arduino
-
-5. **Timing Synchronization:** Uses `time.sleep()` to maintain precise duration for each command segment
-
-**Choreography Structure:**
-
-Each command in the choreography is defined as a 4-tuple:
+Each instruction uses this format:
 
 ```python
 (velocity, angle, duration_seconds, "description")
 ```
 
-- **Velocity:** Motor speed (-200 to 250 range; negative = reverse, 0 = brake)
-- **Angle:** Servo steering angle (60° = full right, 86° = straight, 120° = full left)
-- **Duration:** Time in seconds to execute this command
-- **Description:** Human-readable label for debugging and verification
+Meaning:
 
-**Choreography Phases:**
+- `velocity`: motor command
+- `angle`: steering command
+- `duration_seconds`: command duration
+- `description`: console label
 
-The current implementation includes several distinct phases:
+#### Choreography Phases
 
-1. **Parking Exit:** Reverse movements to exit the starting position with coordinated turns
-2. **Main Race Loop:** Three repetitions of the complete track with optimized timing for each lap
-   - Acceleration in straights (velocity 250)
-   - Controlled turns (velocity 180, angles 60° or 120°)
-3. **Parking Entry:** Final reverse and turn commands to align with the goal parking zone
+The current routine contains:
 
-**Timing Optimization:**
-
-The choreography includes empirically-tuned timing values:
-
-- Longer durations (2.8s) for initial straights
-- Shorter durations (2.5s-2.2s) for subsequent lap straights (reducing due to track dynamics)
-- Consistent turn durations (1.6-1.8s) for each corner type
-- Specialized parking maneuvers with shorter, coordinated movements
-
-**Adaptive Adjustments:**
-
-The choreography can be modified at runtime:
-
-- Edit the `RUTINA_MANUAL` list directly in the code
-- Adjust timing values based on track conditions
-- Modify angle values to account for servo calibration differences
-- Comment/uncomment sections to test specific track segments
+1. Parking exit
+2. First lap
+3. Second lap
+4. Third lap
+5. Parking entry
+6. Final motor stop
 
 #### Key Parameters in Mode 2
 
-| Parameter                | Example Values | Purpose                   |
-| ------------------------ | -------------- | ------------------------- |
-| Velocity Range           | -200 to 250    | Motor control range       |
-| Right Turn Angle         | 60°            | Programmed right steering |
-| Center Angle             | 86°            | Neutral steering          |
-| Left Turn Angle          | 120°           | Programmed left steering  |
-| Turn Duration            | 1.6-1.8s       | Curve execution time      |
-| Straight Duration        | 2.2-2.8s       | Straight segments         |
-| Acceleration Duration    | 0.6s           | Initial pickup time       |
-| Total Choreography Steps | 48 steps       | Current sequence length   |
+| Parameter         | Example Values | Purpose                   |
+| ----------------- | -------------- | ------------------------- |
+| Velocity Range    | -140 to 250    | Motor control values      |
+| Right Turn Angle  | 60             | Programmed right steering |
+| Center Angle      | 86             | Neutral steering          |
+| Left Turn Angle   | 120            | Programmed left steering  |
+| Turn Duration     | 1.58-1.8s      | Curve execution time      |
+| Straight Duration | 0.6-2.8s       | Straight segments         |
 
----
+### 4.4 Operating Cycle
 
-### 4.4 Mode Selection Logic
+#### Mode 1 cycle
 
-The operating mode is automatically selected during the initialization phase based on a distance threshold from the **HC-SR04 ultrasonic sensor**:
+1. The camera provides a frame
+2. The Raspberry Pi processes the image
+3. The track walls are estimated
+4. Speed and steering are calculated
+5. A `<speed,angle>` packet is sent to Arduino
+6. The Arduino drives the servo and motor
 
-```
-if distancia_us >= 15:
-    → Mode 1 (Adaptive Vision)  # Open Challenge
-else:
-    → Mode 2 (Choreography)     # Obstacle Challenge
-```
+#### Mode 2 cycle
 
-This selection allows the robot to adapt its strategy based on the detected environment at startup without requiring manual intervention.
+1. The Raspberry Pi reads the next tuple from `RUTINA_MANUAL`
+2. The command is converted into `<speed,angle>`
+3. The packet is sent to Arduino
+4. The Arduino drives the servo and motor
+5. The Raspberry Pi waits for the configured duration
 
----
+From the hardware perspective, the software currently reads from:
 
-### 4.5 Operating Cycle (Common to Both Modes)
+- USB camera
+- start button event through Arduino
 
-Regardless of the selected mode, the hardware communication cycle follows this sequence:
+And writes to:
 
-1. the camera provides a frame to the Raspberry Pi,
-2. `MainCode.py` processes the image (in Mode 1) or executes choreography (in Mode 2),
-3. the system binarizes the track and detects visual references (Mode 1 only),
-4. a navigation state is determined,
-5. an estimated track center is calculated (Mode 1) or a choreography step is selected (Mode 2),
-6. steering and speed logic is applied,
-7. a serial packet `<speed,angle>` is generated,
-8. the Arduino receives the packet and drives the servo and motor,
-9. the Arduino measures the ultrasonic sensor and transmits telemetry as `US:distance`.
-
-This cycle is repeated continuously during robot operation, with Mode 1 updating roughly every 30-50ms (camera frame rate) and Mode 2 updating based on choreography timing (100ms to several seconds per step).
+- steering servo
+- drive motor
 
 ---
 
 ## 5. Python Implementation
 
-This section documents the two main Python implementations:
-
-- **Mode 1:** `src/1st Mode.py` (Adaptive Vision-Based Navigation)
-- **Mode 2:** `src/2th Mode.py` (Choreography-Based Manual Sequence)
-
-Both implementations handle serial communication with the Arduino and operate under the same hardware interface.
-
----
-
-### 5.1 Mode 1 Implementation: `src/1st Mode.py`
-
-#### Class Architecture
-
-```python
-class WROPrimitivoBlindado:
-    def __init__(self):
-        # Serial communication setup
-        # State machine initialization
-        # Vision and control variable setup
-
-    def read_serial_data(self):
-        # Background thread for ultrasonic telemetry
-
-    def process_vision(self):
-        # Main vision loop with corner detection
-        # State machine execution
-        # Command generation
-```
-
-#### Main Responsibilities
-
-- **Vision Processing:** Capture and analyze camera frames at 320×240 resolution
-- **Track Detection:** Binarize images and identify walls using morphological operations
-- **Direction Detection:** Automatically determine clockwise/counterclockwise track orientation
-- **State Management:** Maintain states (ESPERA, CARRERA, RETORNO_A_META)
-- **Corner Detection:** Identify track corners and count completed laps
-- **Steering Control:** Apply proportional corrections in straights and fixed angles in curves
-- **Speed Management:** Adjust velocity based on navigation state
-- **Serial Communication:** Send `<velocity,angle>` packets to Arduino and receive ultrasonic data
+### 5.1 Mode 1 Implementation: `src/1st_mode.py`
 
 #### Imported Libraries
 
@@ -312,74 +318,48 @@ import threading
 
 | Library     | Purpose                                                      |
 | ----------- | ------------------------------------------------------------ |
-| `cv2`       | Image processing with OpenCV                                 |
-| `numpy`     | Matrix operations and pixel counting                         |
+| `cv2`       | Image capture and OpenCV processing                          |
+| `numpy`     | Pixel counting and matrix operations                         |
 | `serial`    | Communication with the Arduino                               |
-| `time`      | Timing control and loop synchronization                      |
-| `threading` | Concurrent execution of serial reading and vision processing |
+| `time`      | Timing control                                               |
+| `threading` | Parallel execution of vision and serial button reading       |
 
-#### Configuration Parameters
-
-```python
-SERIAL_PORT = "/dev/ttyUSB0"  # Linux/Raspberry Pi serial port
-BAUDRATE = 115200             # Communication speed
-```
-
-#### Vision Pipeline Details
-
-**Binarization Process:**
-
-- Input: Grayscale frame (320×240)
-- Gaussian blur (5×5 kernel) for noise reduction
-- Threshold at value 95 to separate white track from black walls
-- Morphological opening to remove small noise artifacts
-- Output: Binary image with white track pixels (255) and black obstacles (0)
-
-**Lateral Wall Detection:**
-
-- Scans the horizontal scan line (row 65) from left to right
-- Identifies leftmost wall edge (muro_izq)
-- Identifies rightmost wall edge (muro_der)
-- Calculates track center: `centro_pista = (muro_izq + muro_der) / 2`
-
-**Front Wall Detection (Corner Detection):**
-
-- Analyzes central box (rows 30-70, columns 120-200)
-- Calculates dark pixel ratio (wall coverage)
-- Detects corner when ratio > 55%
-- Debounces with 2-second cooldown to prevent false positives
-- Disables detection for first 1.5 seconds to avoid startup confusion
-
----
-
-### 5.2 Mode 2 Implementation: `src/2th Mode.py`
-
-#### Class Architecture
+#### Main Methods
 
 ```python
-class WROCoreografia:
+class WROPrimitivoBlindado:
     def __init__(self):
-        # Serial communication setup
-        # Routine loading
-
-    def esperar_boton(self):
-        # Block until physical button is pressed
-
-    def ejecutar_rutina(self):
-        # Execute predefined choreography sequence
-
-    def run(self):
-        # Main entry point with servo handshake
+    def read_serial_data(self):
+    def process_vision(self):
+    def main_loop(self):
 ```
 
 #### Main Responsibilities
 
-- **Choreography Management:** Load and execute predefined movement sequences
-- **Timing Synchronization:** Maintain precise timing for each choreography step
-- **Serial Communication:** Send time-synchronized `<velocity,angle>` packets to Arduino
-- **Button Synchronization:** Wait for physical start signal before beginning execution
-- **State Sequencing:** Execute each command in strict order with specified duration
-- **Hardware Confirmation:** Send servo greeting sequence to verify Arduino connectivity
+- open serial communication
+- capture the camera image
+- detect walls and race direction
+- compute speed and angle
+- count corners and laps
+- send commands to Arduino
+
+#### Configuration Parameters
+
+```python
+SERIAL_PORT = "/dev/ttyUSB0"
+BAUDRATE = 115200
+```
+
+#### Important Values
+
+```python
+self.current_angle = 86
+self.current_speed = 0
+self.SENTIDO_GIRO = "AUTO"
+self.VER_PANTALLAS = True
+```
+
+### 5.2 Mode 2 Implementation: `src/2nd_mode.py`
 
 #### Imported Libraries
 
@@ -391,897 +371,61 @@ import time
 | Library  | Purpose                               |
 | -------- | ------------------------------------- |
 | `serial` | Communication with the Arduino        |
-| `time`   | Precise timing for choreography steps |
+| `time`   | Timing for choreography execution     |
+
+#### Main Methods
+
+```python
+class WROCoreografia:
+    def __init__(self):
+    def esperar_boton(self):
+    def ejecutar_rutina(self):
+    def run(self):
+```
+
+#### Main Responsibilities
+
+- open serial communication
+- wait for the start button
+- execute `RUTINA_MANUAL`
+- send `<speed,angle>` packets
+- stop the robot at the end
 
 #### Configuration Parameters
 
 ```python
-SERIAL_PORT = "/dev/ttyUSB0"  # Linux/Raspberry Pi serial port
-BAUDRATE = 115200             # Communication speed
-
-RUTINA_MANUAL = [             # Choreography sequence
+SERIAL_PORT = "/dev/ttyUSB0"
+BAUDRATE = 115200
+RUTINA_MANUAL = [
     (velocity, angle, duration, "description"),
-    ...
 ]
-```
-
-#### Choreography Format
-
-Each choreography step is a 4-tuple:
-
-```python
-(velocity, angle, duration_seconds, "description")
-```
-
-**Velocity Range:**
-
-- `-200 to -100`: Reverse (brake and backward motion)
-- `0`: Complete stop/brake
-- `100 to 250`: Forward motion (proportional speed)
-
-**Angle Range:**
-
-- `60°`: Full right turn
-- `86°`: Center (straight)
-- `120°`: Full left turn
-
-**Example Choreography Segment:**
-
-```python
-(250, 86,  0.6,  "1. Acceleration in initial straight"),
-(180, 60,  1.8,  "2. Taking curve 1 (Right)"),
-(250, 86,  2.8,  "3. Medium straight"),
-(180, 60,  1.62, "2. Taking curve 2 (Right)"),
 ```
 
 #### Servo Handshake Sequence
 
-At startup, the robot sends greeting commands to verify Arduino connectivity:
-
 ```python
-ser.write(b"<0,120>\n")  # Left extreme
+self.ser.write(b"<0,120>\n")
 time.sleep(0.3)
-ser.write(b"<0,60>\n")   # Right extreme
+self.ser.write(b"<0,60>\n")
 time.sleep(0.3)
-ser.write(b"<0,86>\n")   # Center
-```
-
----
-
-### 5.3 Shared Initialization Stage in `MainCode.py`
-
-`MainCode.py` contains the main navigation logic of the robot. Its function is to convert visual information from the track into movement commands (Mode 1) or execute choreography (Mode 2).
-
-#### Main Responsibilities During Initialization and Operation
-
-- capture video,
-- process image data,
-- detect walls,
-- detect obstacles,
-- infer the effective driving direction of the round,
-- execute the navigation state machine,
-- calculate PID correction (Mode 1),
-- count corners and laps (Mode 1),
-- read ultrasonic telemetry from the Arduino,
-- select the operating mode,
-- send speed and steering commands through serial communication.
-
-#### Imported Libraries
-
-```python
-import cv2
-import os
-import numpy as np
-import serial
-import time
-import threading
-```
-
-| Library     | Purpose                                           |
-| ----------- | ------------------------------------------------- |
-| `cv2`       | Image processing with OpenCV                      |
-| `numpy`     | Matrix operations and pixel counting              |
-| `serial`    | Communication with the Arduino                    |
-| `time`      | Interval measurement and temporal control         |
-| `threading` | Concurrent execution of vision and serial reading |
-| `os`        | Auxiliary import currently present in the file    |
-
-#### Relationship with Hardware
-
-`MainCode.py` interacts directly with:
-
-- the USB camera through OpenCV,
-- the Arduino through a serial port.
-
----
-
-### 5.4 Shared PID Module
-
-The `PIDController` class implements steering correction.
-
-```python
-class PIDController:
-    def __init__(self, kp, ki, kd, setpoint=160):
-        self.kp = kp
-        self.ki = ki
-        self.kd = kd
-        self.setpoint = setpoint
-        self.prev_error = 0
-        self.integral = 0
-
-    def compute(self, current_value, dt):
-        error = self.setpoint - current_value
-        self.integral += error * dt
-        derivative = (error - self.prev_error) / dt if dt > 0 else 0
-        self.prev_error = error
-        return (self.kp * error) + (self.ki * self.integral) + (self.kd * derivative)
-```
-
-#### Purpose
-
-Convert the difference between the desired visual center and the detected center into an angular correction for the steering servo.
-
-#### Main Variables
-
-| Variable     | Description          |
-| ------------ | -------------------- |
-| `kp`         | Proportional gain    |
-| `ki`         | Integral gain        |
-| `kd`         | Derivative gain      |
-| `setpoint`   | Target image center  |
-| `prev_error` | Previous error value |
-| `integral`   | Accumulated error    |
-
-#### Input and Output
-
-| Element         | Type    | Description                      |
-| --------------- | ------- | -------------------------------- |
-| `current_value` | numeric | Detected track center            |
-| `dt`            | numeric | Time interval between iterations |
-| output          | numeric | Steering correction              |
-
-#### Relationship with Hardware
-
-The PID output does not drive the servo directly. It determines the steering angle that is then sent to the Arduino for physical execution.
-
-#### Implemented Safeguard
-
-The derivative term prevents division by zero:
-
-```python
-derivative = (error - self.prev_error) / dt if dt > 0 else 0
-```
-
----
-
-### 5.5 Initialization of `WROAutonomousCar`
-
-`WROAutonomousCar` represents the full logical unit of the autonomous vehicle.
-
-#### Constructor
-
-```python
-class WROAutonomousCar:
-    def __init__(self, serial_port='/dev/ttyACM0', baudrate=115200):
-        self.ser = serial.Serial(serial_port, baudrate, timeout=0.1)
-        time.sleep(2)
-```
-
-#### Program Instantiation
-
-```python
-if __name__ == "__main__":
-    bot = WROAutonomousCar(serial_port='/dev/ttyUSB0')
-    bot.main_loop()
-```
-
-#### Purpose
-
-Integrate:
-
-- robot configuration,
-- vision processing,
-- state-based navigation,
-- lap counting,
-- serial reading from Arduino,
-- and command transmission.
-
-#### Configuration Variables
-
-```python
-self.SENTIDO_GIRO = "AUTO"
-self.memoria_muro_exterior = "NINGUNO"
-self.MITAD_ANCHO_PISTA_PX = 140
-
-self.vueltas_completadas = 0
-self.curvas_superadas = 0
-self.en_curva = False
-
-self.ultimo_tiempo_curva = time.time()
-self.pid = PIDController(kp=0.06, ki=0.000, kd=0.20)
-self.running = True
-
-self.centro_suavizado = 160.0
-self.current_speed = 0
-self.current_angle = 86
-
-self.distancia_us = 200
-self.modo_obstaculos = False
-self.start_time = time.time()
-```
-
-#### Main Variables
-
-| Variable               | Description                                     |
-| ---------------------- | ----------------------------------------------- |
-| `SENTIDO_GIRO`         | Global track orientation                        |
-| `MITAD_ANCHO_PISTA_PX` | Geometric estimate of half track width          |
-| `vueltas_completadas`  | Lap counter                                     |
-| `curvas_superadas`     | Corner counter                                  |
-| `en_curva`             | Corner lockout state                            |
-| `current_speed`        | Last calculated speed                           |
-| `current_angle`        | Last calculated steering angle                  |
-| `distancia_us`         | Last ultrasonic distance received from Arduino  |
-| `modo_obstaculos`      | Operating mode selected from ultrasonic reading |
-| `start_time`           | Reference time used by orientation detection    |
-
-#### Relationship with Hardware
-
-- `serial_port` defines the physical link to the Arduino.
-- `current_speed` and `current_angle` are the values that ultimately act on motor and servo.
-- `distancia_us` stores telemetry received from the ultrasonic sensor via Arduino.
-
----
-
-### 5.4 Initialization Telemetry Reading from Arduino
-
-The file includes a dedicated serial-reading thread:
-
-```python
-def read_serial_data(self):
-    while self.running:
-        try:
-            if self.ser.in_waiting > 0:
-                linea = self.ser.readline().decode('utf-8').strip()
-                if linea.startswith("US:"):
-                    self.distancia_us = int(linea.split(":")[1])
-        except:
-            pass
-        time.sleep(0.01)
-```
-
-#### Purpose
-
-Read telemetry lines sent by the Arduino and update the latest ultrasonic distance.
-
-#### Output
-
-This routine updates:
-
-- `self.distancia_us`
-
-#### Relationship with Hardware
-
-This block depends on the serial output generated by the Arduino ultrasonic subsystem.
-
----
-
-### 5.5 Shared Video Capture for Both Modes
-
-Video capture is performed inside `process_vision()`:
-
-```python
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-```
-
-#### Purpose
-
-Acquire real-time images to feed the navigation logic.
-
-#### Implemented Parameters
-
-| Parameter    | Current Value | Purpose               |
-| ------------ | ------------: | --------------------- |
-| Camera index |           `0` | Main system camera    |
-| Width        |         `320` | Horizontal resolution |
-| Height       |         `240` | Vertical resolution   |
-
-#### Capture Cycle
-
-```python
-ret, frame = cap.read()
-if not ret:
-    continue
-
-current_time = time.time()
-dt = current_time - last_time
-last_time = current_time
-```
-
-#### Output
-
-Each iteration produces:
-
-- `frame`: current image,
-- `dt`: time interval between frames.
-
-#### Relationship with Hardware
-
-This block depends directly on the camera connected to the Raspberry Pi.
-
----
-
-### 5.6 Shared Wall-Detection Pipeline
-
-Track detection is based on a specific horizontal strip of the image.
-
-```python
-gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (7, 7), 0)
-
-y_arriba = 80
-y_abajo = 140
-roi_blur = blur[y_arriba:y_abajo, 0:320]
-
-_, binarizada = cv2.threshold(
-    roi_blur, 95, 255, cv2.THRESH_BINARY)
-```
-
-#### Purpose
-
-Reduce the visual scene to a simple binary representation in which the track and the walls can be distinguished quickly.
-
-#### Implemented Stages
-
-| Stage                | Purpose                                  |
-| -------------------- | ---------------------------------------- |
-| Grayscale conversion | Simplify visual information              |
-| Gaussian blur        | Reduce local noise                       |
-| Region of interest   | Concentrate analysis on the useful strip |
-| Fixed threshold      | Separate floor and walls                 |
-
-#### Binary Convention
-
-| Value | Interpretation             |
-| ----: | -------------------------- |
-| `255` | Clear floor / free space   |
-|   `0` | Dark wall / track boundary |
-
-#### Binary Decision Logic
-
-Navigation starts from a binary reading over the analyzed strip:
-
-- `255` represents free space,
-- `0` represents wall.
-
-The system makes decisions based on this binary image rather than on the original RGB image.
-
-```text
-Original image -> grayscale -> blur -> fixed threshold -> binary image
-```
-
-The basic questions solved at this stage are:
-
-- Is there a wall at the center?
-- Is there a wall to the left of the center?
-- Is there a wall to the right of the center?
-
-#### Relationship with Hardware
-
-This block processes the image supplied directly by the camera.
-
----
-
-### 5.7 Mode 2 Obstacle Detection and Evasion
-
-The implementation includes a color-based obstacle-detection stage.
-
-```python
-roi_color = frame[60:240, 0:320]
-hsv = cv2.cvtColor(roi_color, cv2.COLOR_BGR2HSV)
-```
-
-#### Purpose
-
-Detect green and red obstacles inside a region of interest compatible with the navigation geometry. Under the WRO obstacle rules, the red pillar indicates that the vehicle must pass on the right side of the sign, and the green pillar indicates that the vehicle must pass on the left side.
-
-#### Additional Preprocessing
-
-The implemented version applies morphological filtering with:
-
-```python
-kernel = np.ones((5, 5), np.uint8)
-```
-
-and then:
-
-```python
-mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_OPEN, kernel)
-mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_CLOSE, kernel)
-
-mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_OPEN, kernel)
-mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_CLOSE, kernel)
-```
-
-#### Implemented Color Ranges
-
-```python
-lower_green = np.array([35, 60, 50])
-upper_green = np.array([85, 255, 255])
-mask_green = cv2.inRange(hsv, lower_green, upper_green)
-
-lower_red1 = np.array([0, 100, 80])
-upper_red1 = np.array([5, 255, 255])
-lower_red2 = np.array([175, 100, 80])
-upper_red2 = np.array([180, 255, 255])
-mask_red = cv2.bitwise_or(cv2.inRange(hsv, lower_red1, upper_red1),
-                          cv2.inRange(hsv, lower_red2, upper_red2))
-```
-
-#### Detection Logic
-
-The system:
-
-1. builds color masks,
-2. extracts contours,
-3. filters by area and width,
-4. stores detected obstacles in `lista_obstaculos`,
-5. identifies the most relevant obstacle,
-6. assigns `ROJO` or `VERDE`.
-
-Relevant condition:
-
-```python
-if area > 400 and w < 260 and area > area_max_obs:
-```
-
-#### Obstacle Memory and Evasion Variables
-
-The implemented logic defines and evaluates:
-
-- `tiempo_ultimo_obstaculo`,
-- `memoria_tipo_obstaculo`,
-- `tiempo_ciego`,
-- `en_memoria_evasion`,
-- `tipo_evasion_activa`,
-- `evadiendo`.
-
-This logic is used to derive obstacle-related states such as:
-
-- `EVADIENDO_ROJO`
-- `EVADIENDO_VERDE`
-- `MEMORIA_ROJO`
-- `MEMORIA_VERDE`
-
-#### Invisibility Layer
-
-The implementation also modifies the binary image before raycasting:
-
-```python
-for obs in lista_obstaculos:
-    cx_temp = obs["x"] + (obs["w"] // 2)
-    x_inicio = max(0, obstaculo_cx - 20)
-    x_fin = min(320, obstaculo_cx + 20)
-    binarizada[:, x_inicio:x_fin] = 255
-```
-
-#### Output
-
-This stage produces:
-
-- `obstaculo_tipo`,
-- `obstaculo_cx`,
-- `lista_obstaculos`,
-- evasion-related states and variables.
-
-#### Relationship with Hardware
-
-This detection depends directly on the camera and on the visual appearance of the track environment.
-
----
-
-### 5.8 Shared Raycasting for Track Estimation
-
-After binarization, the system analyzes the center line of the region of interest.
-
-```python
-alto_roi, ancho_roi = binarizada.shape
-linea_escaneo = binarizada[alto_roi // 2, :]
-```
-
-#### Purpose
-
-Find lateral track references and estimate the navigation center.
-
-#### Implemented Scan
-
-```python
-for x in range(160, -1, -1):
-    if linea_escaneo[x] == 0:
-        muro_izq = x
-        break
-
-for x in range(160, ancho_roi):
-    if linea_escaneo[x] == 0:
-        muro_der = x
-        break
-```
-
-#### Central Scan Logic
-
-The raycasting sequence is:
-
-1. take the center row of the binary strip,
-2. inspect the center pixel (`x = 160`),
-3. if that pixel is black, classify the situation as `MURO_FRONTAL`,
-4. if the center is free, search for the first wall on the left,
-5. then search for the first wall on the right,
-6. estimate the track center from that combination.
-
-#### Logical Result
-
-```text
-Blocked center         -> MURO_FRONTAL
-Left and right walls   -> CENTRADO
-Only left wall         -> MURO_IZQ
-Only right wall        -> MURO_DER
-None                   -> CEGUERA_BLANCA
-```
-
-#### Output
-
-The raycasting stage produces:
-
-- `muro_izq`,
-- `muro_der`,
-- `centro_pista_x`,
-- `estado`.
-
----
-
-### 5.9 Shared State Machine
-
-The implementation uses the following states:
-
-| State             | Meaning                                      |
-| ----------------- | -------------------------------------------- |
-| `CENTRADO`        | Both walls are detected                      |
-| `MURO_IZQ`        | Only the left wall is detected               |
-| `MURO_DER`        | Only the right wall is detected              |
-| `MURO_FRONTAL`    | The center of the track is blocked           |
-| `CEGUERA_BLANCA`  | No wall is detected                          |
-| `EVADIENDO_ROJO`  | The trajectory is forced by a red obstacle   |
-| `EVADIENDO_VERDE` | The trajectory is forced by a green obstacle |
-| `MEMORIA_ROJO`    | Memory-based red obstacle handling           |
-| `MEMORIA_VERDE`   | Memory-based green obstacle handling         |
-
-#### Main Transition Logic
-
-```python
-if linea_escaneo[160] == 0:
-    estado = "MURO_FRONTAL"
-else:
-    if muro_izq != -1 and muro_der != -1:
-        centro_pista_x = (muro_izq + muro_der) // 2
-        estado = "CENTRADO"
-    elif muro_izq != -1 and muro_der == -1:
-        centro_pista_x = muro_izq + self.MITAD_ANCHO_PISTA_PX
-        estado = "MURO_IZQ"
-    elif muro_izq == -1 and muro_der != -1:
-        centro_pista_x = muro_der - self.MITAD_ANCHO_PISTA_PX
-        estado = "MURO_DER"
-    else:
-        estado = "CEGUERA_BLANCA"
-```
-
-#### State-Based Decision Logic
-
-The state machine transforms binary observations into navigation decisions.
-
-It first obtains:
-
-- wall present or absent at the center,
-- wall present or absent on the left,
-- wall present or absent on the right.
-
-Then it defines a state, and that state determines:
-
-- the estimated track center,
-- PID tuning behavior,
-- steering limits,
-- speed output,
-- corner counting conditions.
-
-```text
-Level 1: binary perception of walls and obstacles
-Level 2: state-based navigation decision
-```
-
----
-
-### 5.10 Shared Automatic Turning-Direction Detection
-
-When the system enters `MURO_FRONTAL` and `SENTIDO_GIRO` is still `AUTO`, it evaluates the free space on both sides. In the implemented logic, the comparison uses the upper part of the binary image:
-
-```python
-if self.SENTIDO_GIRO == "AUTO" and es_vertice_curva and (current_time - self.start_time > 1.5):
-    horizonte = binarizada[:30, :]
-
-    blancos_izq = np.sum(horizonte[:, :160] == 255)
-    blancos_der = np.sum(horizonte[:, 160:] == 255)
-
-    if blancos_der > blancos_izq:
-        self.SENTIDO_GIRO = "DERECHA"
-    else:
-        self.SENTIDO_GIRO = "IZQUIERDA"
-```
-
-#### Orientation Logic
-
-| Condition                      | Result      |
-| ------------------------------ | ----------- |
-| More white pixels on the right | `DERECHA`   |
-| More white pixels on the left  | `IZQUIERDA` |
-
-#### Purpose
-
-Define a global orientation used when resolving frontal collisions. This is consistent with the WRO round condition in which the driving direction may vary between clockwise and counterclockwise configurations.
-
----
-
-### 5.11 Shared Corner and Lap Counting
-
-Corner detection starts from:
-
-```python
-perdio_muro_interior = (self.SENTIDO_GIRO == "DERECHA" and muro_der == -1) or \
-                       (self.SENTIDO_GIRO == "IZQUIERDA" and muro_izq == -1)
-es_vertice_curva = estado == "MURO_FRONTAL" or perdio_muro_interior
-```
-
-Then a temporal lockout is applied:
-
-```python
-if not self.en_curva and (current_time - self.ultimo_tiempo_curva > 0.2):
-```
-
-#### Counting Rule
-
-| Event           | Result                     |
-| --------------- | -------------------------- |
-| 1 valid corner  | `curvas_superadas += 1`    |
-| 4 valid corners | `vueltas_completadas += 1` |
-| 3 laps          | system stop                |
-
-This counting logic is consistent with the WRO challenge structure in which the vehicle is required to complete three laps autonomously.
-
-#### Control Fragment
-
-```python
-if self.curvas_superadas % 4 == 0:
-    self.vueltas_completadas += 1
-
-    if self.vueltas_completadas >= 3:
-        self.current_speed = 0
-        self.current_angle = 86
-        self.running = False
-```
-
-#### Temporal Logic
-
-Corner counting depends on:
-
-- a visual condition (`MURO_FRONTAL` or loss of the inner wall),
-- a temporal condition (`0.2 s` lockout),
-- an accumulated corner counter.
-
-The reset condition uses:
-
-```python
-elif not es_vertice_curva and (current_time - self.ultimo_tiempo_curva > 0.5):
-    self.en_curva = False
-```
-
----
-
-### 5.12 Mode-Dependent Steering and Speed Calculation
-
-The implemented control separates two main scenarios.
-
-#### Mode Summary
-
-| Mode   | Internal Condition        | Main Control Profile                                                 |
-| ------ | ------------------------- | -------------------------------------------------------------------- |
-| Mode 1 | `modo_obstaculos = False` | Speed-oriented wall-following and standard frontal turning profile   |
-| Mode 2 | `modo_obstaculos = True`  | Obstacle-oriented wall-following and tighter frontal turning profile |
-
-#### Case 1: Frontal wall without visible obstacle
-
-```python
-if estado == "MURO_FRONTAL" and obstaculo_tipo == "NINGUNO":
-    if self.SENTIDO_GIRO == "DERECHA":
-        self.current_angle = 60 if self.modo_obstaculos else 73
-    else:
-        self.current_angle = 115 if self.modo_obstaculos else 103
-    self.current_speed = 220
-```
-
-#### Case 2: Normal navigation
-
-```python
-error_absoluto_real = 160 - centro_pista_x
-
-zona_muerta = 45 if ("EVADIENDO" in estado or "MEMORIA" in estado) else 125
-
-if abs(error_absoluto_real) < zona_muerta:
-    self.current_angle = 86
-    self.pid.integral = 0
-else:
-    if evadiendo:
-        self.pid.kp = 0.15
-        self.current_speed = 200
-    else:
-        self.pid.kp = 0.08 if estado == "CENTRADO" else 0.15
-        self.current_speed = 250
-```
-
-#### PID Correction and Limits
-
-```python
-correccion_pid = self.pid.compute(centro_pista_x, dt)
-angulo_pid = int(86 + correccion_pid)
-
-if evadiendo:
-    self.current_angle = max(60, min(120, angulo_pid))
-elif estado == "CENTRADO":
-    self.current_angle = max(76, min(96, angulo_pid))
-else:
-    self.current_angle = max(65, min(120, angulo_pid))
-```
-
-#### Final Speed in Normal Navigation
-
-```python
-if estado == "CENTRADO" and abs(error_absoluto_real) < 20:
-    self.current_speed = 250
-else:
-    self.current_speed = 250
-```
-
-#### Control Logic
-
-1. determine the current state,
-2. calculate the track-center error,
-3. evaluate the dead zone,
-4. if required, apply PID,
-5. limit the steering angle according to the state,
-6. update `current_speed` and `current_angle`.
-
-#### Binary Control Rule
-
-| Condition               | Action            |
-| ----------------------- | ----------------- |
-| Error inside dead zone  | centered steering |
-| Error outside dead zone | PID correction    |
-
-#### Relationship with Hardware
-
-The result of this block translates directly into:
-
-- a steering angle for the servo,
-- a speed value for the motor.
-
----
-
-### 5.13 Initialization-Based Operating Mode Selection
-
-Before starting the main vision thread, the implementation reads ultrasonic telemetry for two seconds and selects an operating mode:
-
-```python
-rt = threading.Thread(target=self.read_serial_data, daemon=True)
-rt.start()
-
-time.sleep(2)
-if self.distancia_us < 15:
-    self.modo_obstaculos = True
-else:
-    self.modo_obstaculos = False
-```
-
-#### Purpose
-
-Choose between:
-
-- `modo_obstaculos = True`
-- `modo_obstaculos = False`
-
-based on the initial ultrasonic reading.
-
-#### Decision Rule
-
-| Condition            | Mode          |
-| -------------------- | ------------- |
-| `distancia_us < 15`  | obstacle mode |
-| `distancia_us >= 15` | speed mode    |
-
-#### Mode Mapping
-
-| Internal Variable         | Documentation Name | Operational Meaning                |
-| ------------------------- | ------------------ | ---------------------------------- |
-| `modo_obstaculos = False` | Mode 1             | Speed-oriented track navigation    |
-| `modo_obstaculos = True`  | Mode 2             | Obstacle-oriented track navigation |
-
-#### Relationship with Hardware
-
-This decision depends on ultrasonic telemetry generated by the Arduino.
-
----
-
-### 5.14 Shared Serial Transmission to the Arduino
-
-`main_loop()` maintains the continuous transmission of commands:
-
-```python
-paquete = f"<{self.current_speed},{self.current_angle}>\n"
-self.ser.write(paquete.encode('utf-8'))
-```
-
-#### Output Format
-
-```text
-<speed,angle>
-```
-
-Example:
-
-```text
-<250,86>
-```
-
-#### Shutdown Command
-
-```python
 self.ser.write(b"<0,86>\n")
 ```
 
-#### Relationship with Hardware
+### 5.3 Arduino Implementation: `src/Ino Code/Arduino_Code.ino`
 
-This serial link constitutes the direct interface between the Raspberry Pi and the Arduino.
-
----
-
-## 6. Arduino Implementation
-
-### 6.1 General Purpose of `Arduino_Code.ino`
-
-The Arduino receives the commands sent by the Raspberry Pi and converts them into physical actions on:
-
-- the steering servo,
-- the traction motor,
-- and the ultrasonic sensor.
-
----
-
-### 6.2 Libraries and Main Definition
+#### Imported Libraries
 
 ```cpp
 #include <Servo.h>
 #include <stdlib.h>
-
-Servo direccion;
 ```
 
-| Element           | Purpose                               |
-| ----------------- | ------------------------------------- |
-| `Servo.h`         | Servo angle control                   |
-| `stdlib.h`        | String-conversion utilities           |
-| `Servo direccion` | Object that drives the physical servo |
+| Library    | Purpose                         |
+| ---------- | ------------------------------- |
+| `Servo.h`  | Steering servo control          |
+| `stdlib.h` | Parsing numeric values from text |
 
----
-
-### 6.3 Pin Assignment
+#### Main Hardware Connections
 
 ```cpp
 const int pinServo = 8;
@@ -1292,83 +436,54 @@ const int pinTrig = 3;
 const int pinEcho = 11;
 ```
 
-|  Pin | Associated Component | Function                 |
-| ---: | -------------------- | ------------------------ |
-|  `8` | Servo                | Steering                 |
-|  `7` | Motor driver         | Speed PWM                |
-|  `9` | Motor driver         | Motor direction, input 1 |
-| `10` | Motor driver         | Motor direction, input 2 |
-|  `3` | Ultrasonic sensor    | Trigger                  |
-| `11` | Ultrasonic sensor    | Echo                     |
+| Pin  | Component         | Function                |
+| ---- | ----------------- | ----------------------- |
+| `8`  | Steering servo    | Steering angle output   |
+| `7`  | Motor driver PWM  | Motor speed control     |
+| `9`  | Motor driver IN1  | Motor direction line 1  |
+| `10` | Motor driver IN2  | Motor direction line 2  |
+| `3`  | Ultrasonic Trig   | Trigger pulse output    |
+| `11` | Ultrasonic Echo   | Echo pulse input        |
 
----
+#### Main Responsibilities
 
-### 6.4 Control Variables
+- initialize serial communication at `115200`
+- receive `<speed,angle>` packets from the Raspberry Pi
+- parse and validate the received values
+- apply the angle to the steering servo
+- apply the speed to the traction motor
+- read the ultrasonic sensor periodically
+- send ultrasonic telemetry as `US:<distance>`
+
+#### Main Variables
 
 ```cpp
 int distanciaUS = 200;
-const byte numChars = 32;
-char receivedChars[numChars];
-char tempChars[numChars];
-boolean newData = false;
-
 int velocidadAuto = 0;
 int anguloServo = 86;
 unsigned long previousMillisUS = 0;
 ```
 
-| Variable           | Purpose                                 |
-| ------------------ | --------------------------------------- |
-| `distanciaUS`      | Latest ultrasonic distance              |
-| `receivedChars`    | Serial reception buffer                 |
-| `tempChars`        | Temporary copy for parsing              |
-| `newData`          | Complete-packet flag                    |
-| `velocidadAuto`    | Current motor speed                     |
-| `anguloServo`      | Current servo angle                     |
-| `previousMillisUS` | Timing reference for ultrasonic reading |
+These variables store:
 
----
+- the last ultrasonic distance
+- the current motor speed
+- the current steering angle
+- the timing reference for ultrasonic sampling
 
-### 6.5 Initialization
+#### Setup Sequence
 
-```cpp
-void setup() {
-    Serial.begin(115200);
-    direccion.attach(pinServo);
-    direccion.write(86);
+In `setup()`, the Arduino:
 
-    pinMode(pinMotorPWM, OUTPUT);
-    pinMode(pinMotorDir1, OUTPUT);
-    pinMode(pinMotorDir2, OUTPUT);
-    pinMode(pinTrig, OUTPUT);
-    pinMode(pinEcho, INPUT);
-}
-```
+1. starts serial communication
+2. attaches the steering servo
+3. centers the servo at `86`
+4. configures the motor pins as outputs
+5. configures the ultrasonic pins
 
-#### Purpose
+#### Serial Protocol Received by Arduino
 
-Initialize communication, servo, motor, and ultrasonic sensor.
-
-#### Relationship with Hardware
-
-This block establishes the physical base state of the system before command reception begins.
-
----
-
-### 6.6 Serial Command Reception
-
-The implemented input protocol uses start and end markers:
-
-- start: `<`
-- end: `>`
-
-Reception is performed through:
-
-```cpp
-recvWithStartEndMarkers();
-```
-
-Expected format:
+The Arduino expects packets with start and end markers:
 
 ```text
 <speed,angle>
@@ -1380,664 +495,43 @@ Example:
 <250,86>
 ```
 
-#### Reception Logic
+The function `recvWithStartEndMarkers()` reads the packet, and `parseData()` converts the values into:
 
-The Arduino:
+- `velocidadAuto`
+- `anguloServo`
 
-1. waits for the `<` marker,
-2. stores incoming characters,
-3. closes the packet when `>` is received,
-4. activates `newData = true`.
+#### Applied Limits
 
----
+The Arduino constrains the parsed values as follows:
 
-### 6.7 Command Parsing
+- speed is limited to `0..255`
+- angle is accepted only in the range `60..120`
 
-```cpp
-strtokIndx = strtok(tempChars, ",");
-int velTemp = atoi(strtokIndx);
-strtokIndx = strtok(NULL, ",");
-int angTemp = atoi(strtokIndx);
-```
+#### Movement Execution
 
-#### Implemented Limits
+The function `ejecutarMovimiento()`:
 
-```cpp
-if (velTemp < 0) velTemp = 0;
-if (velTemp > 255) velTemp = 255;
+- writes `anguloServo` to the steering servo
+- drives the motor forward when `velocidadAuto > 0`
+- stops the motor when `velocidadAuto == 0`
 
-if (angTemp >= 60 && angTemp <= 120) {
-    anguloServo = angTemp;
-}
-```
+#### Ultrasonic Telemetry
 
-| Variable | Applied Range |
-| -------- | ------------- |
-| Speed    | `0..255`      |
-| Angle    | `60..120`     |
-
-#### Output
-
-Parsing updates:
-
-- `velocidadAuto`,
-- `anguloServo`.
-
----
-
-### 6.8 Movement Execution
-
-```cpp
-void ejecutarMovimiento() {
-    direccion.write(anguloServo);
-
-    if (velocidadAuto > 0) {
-        digitalWrite(pinMotorDir1, HIGH);
-        digitalWrite(pinMotorDir2, LOW);
-        analogWrite(pinMotorPWM, velocidadAuto);
-    } else {
-        digitalWrite(pinMotorDir1, LOW);
-        digitalWrite(pinMotorDir2, LOW);
-        analogWrite(pinMotorPWM, 0);
-    }
-}
-```
-
-#### Purpose
-
-Apply physically the steering angle and speed received from the Raspberry Pi.
-
-#### Current Behavior
-
-| Condition            | Result                  |
-| -------------------- | ----------------------- |
-| `velocidadAuto > 0`  | forward motor operation |
-| `velocidadAuto == 0` | motor stopped           |
-
-#### Relationship with Hardware
-
-This block directly controls:
-
-- the steering servo,
-- the motor driver,
-- the traction motor.
-
----
-
-### 6.9 Ultrasonic Reading and Telemetry
-
-The Arduino measures distance every 50 ms:
-
-```cpp
-if (currentMillis - previousMillisUS >= 50) {
-    previousMillisUS = currentMillis;
-    leerUltrasonido();
-    Serial.print("US:");
-    Serial.println(distanciaUS);
-}
-```
-
-Reading logic:
-
-```cpp
-long duration = pulseIn(pinEcho, HIGH, 12000);
-if (duration == 0) {
-    distanciaUS = 200;
-} else {
-    distanciaUS = duration * 0.034 / 2;
-}
-```
-
-#### Output Format
+Every 50 ms, the Arduino executes `leerUltrasonido()` and sends the result through serial:
 
 ```text
-US:123
+US:<distance>
 ```
 
-#### Purpose
+If no echo is received within the timeout, the stored distance falls back to `200`.
 
-Generate a periodic distance measurement and transmit it as serial telemetry.
+This makes the Arduino file the physical execution layer that turns the Raspberry Pi commands into real steering and motor movement while also publishing distance telemetry.
 
-#### Relationship with Hardware
+## 6. Conclusion
 
-This block depends directly on the ultrasonic sensor connected to the Arduino.
+The current software documented in this repository is centered on two Python control modes:
 
----
+- `src/1st_mode.py` for autonomous camera-based navigation
+- `src/2nd_mode.py` for manual time-based choreography
 
-## 7. Serial Communication Protocol
-
-The communication uses two formats.
-
-### 7.1 Raspberry Pi -> Arduino
-
-| Format          | Purpose        |
-| --------------- | -------------- |
-| `<speed,angle>` | Motion control |
-
-Examples:
-
-```text
-<250,86>
-<220,103>
-<0,86>
-```
-
-### 7.2 Arduino -> Raspberry Pi / Serial Monitor
-
-| Format        | Purpose              |
-| ------------- | -------------------- |
-| `US:distance` | Ultrasonic telemetry |
-
-Example:
-
-```text
-US:57
-```
-
----
-
-## 8. Navigation Logic
-
-The navigation logic is aligned with the core operational requirements of the WRO Future Engineers track challenge: autonomous lane-following, adaptation to variable driving direction, multi-lap execution, and obstacle-side interpretation based on colored field elements.
-
-The navigation system combines several decision layers.
-
-### 8.1 Initialization Logic
-
-The navigation process begins with an initialization phase in which the robot:
-
-- establishes serial communication,
-- receives the first ultrasonic readings,
-- classifies the operating mode,
-- and starts the vision-processing thread.
-
-This initialization stage determines whether the operating profile will be `Mode 1` or `Mode 2`.
-
-### 8.2 Binary Perception Logic
-
-The track is transformed into a binary image:
-
-- `255` = free track,
-- `0` = wall.
-
-Based on this representation, the system answers binary questions:
-
-- Is there a wall at the center?
-- Is there a wall on the left?
-- Is there a wall on the right?
-
-This perception stage is shared by both operating modes.
-
-### 8.3 Mode 1 Logic
-
-Mode 1 corresponds to the condition:
-
-- `modo_obstaculos = False`
-
-In this mode, the navigation profile is centered on:
-
-- wall-based track following,
-- raycasting-based center estimation,
-- automatic round-direction inference,
-- lap counting across three laps,
-- and the speed-mode steering profile used during frontal-wall resolution.
-
-#### Code Blocks Used in Mode 1
-
-Mode 1 is built from the following code blocks inside `MainCode.py`.
-
-##### 1. Mode 1 Activation Block
-
-This block leaves the robot in speed mode when the ultrasonic condition does not activate obstacle mode:
-
-```python
-time.sleep(2)
-if self.distancia_us < 15:
-    self.modo_obstaculos = True
-else:
-    self.modo_obstaculos = False
-    print("\n[MODO] MODO VELOCIDAD (MODO 1) ACTIVADO\n")
-```
-
-##### 2. Wall Image Processing Block
-
-Mode 1 navigation starts from the wall-detection strip:
-
-```python
-gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (7, 7), 0)
-
-y_arriba = 80
-y_abajo = 140
-roi_blur = blur[y_arriba:y_abajo, 0:320]
-
-_, binarizada = cv2.threshold(
-    roi_blur, 95, 255, cv2.THRESH_BINARY)
-```
-
-##### 3. Raycasting Block
-
-The wall references used in Mode 1 are extracted with raycasting over the center line:
-
-```python
-alto_roi, ancho_roi = binarizada.shape
-linea_escaneo = binarizada[alto_roi // 2, :]
-
-muro_izq = -1
-muro_der = -1
-
-for x in range(160, -1, -1):
-    if linea_escaneo[x] == 0:
-        muro_izq = x
-        break
-
-for x in range(160, ancho_roi):
-    if linea_escaneo[x] == 0:
-        muro_der = x
-        break
-```
-
-##### 4. State Estimation Block
-
-The robot converts the wall scan into a navigation state:
-
-```python
-if linea_escaneo[160] == 0:
-    estado = "MURO_FRONTAL"
-else:
-    if muro_izq != -1 and muro_der != -1:
-        centro_pista_x = (muro_izq + muro_der) // 2
-        estado = "CENTRADO"
-    elif muro_izq != -1 and muro_der == -1:
-        centro_pista_x = muro_izq + self.MITAD_ANCHO_PISTA_PX
-        estado = "MURO_IZQ"
-    elif muro_izq == -1 and muro_der != -1:
-        centro_pista_x = muro_der - self.MITAD_ANCHO_PISTA_PX
-        estado = "MURO_DER"
-    else:
-        estado = "CEGUERA_BLANCA"
-```
-
-##### 5. Orientation Detection Block
-
-When the round direction is still unknown, Mode 1 uses this block:
-
-```python
-if self.SENTIDO_GIRO == "AUTO" and es_vertice_curva and (current_time - self.start_time > 1.5):
-    horizonte = binarizada[:30, :]
-
-    blancos_izq = np.sum(horizonte[:, :160] == 255)
-    blancos_der = np.sum(horizonte[:, 160:] == 255)
-
-    if blancos_der > blancos_izq:
-        self.SENTIDO_GIRO = "DERECHA"
-    else:
-        self.SENTIDO_GIRO = "IZQUIERDA"
-```
-
-##### 6. Corner and Lap Counting Block
-
-Mode 1 keeps lap progress with the following logic:
-
-```python
-perdio_muro_interior = (self.SENTIDO_GIRO == "DERECHA" and muro_der == -1) or \
-                       (self.SENTIDO_GIRO == "IZQUIERDA" and muro_izq == -1)
-es_vertice_curva = estado == "MURO_FRONTAL" or perdio_muro_interior
-
-if es_vertice_curva:
-    if not self.en_curva and (current_time - self.ultimo_tiempo_curva > 0.2):
-        self.en_curva = True
-        self.ultimo_tiempo_curva = current_time
-        self.curvas_superadas += 1
-
-        if self.curvas_superadas % 4 == 0:
-            self.vueltas_completadas += 1
-```
-
-##### 7. Frontal-Turn Block for Mode 1
-
-Mode 1 frontal turning uses the speed-mode branch:
-
-```python
-if estado == "MURO_FRONTAL" and obstaculo_tipo == "NINGUNO":
-    if self.SENTIDO_GIRO == "DERECHA":
-        self.current_angle = 60 if self.modo_obstaculos else 73
-    else:
-        self.current_angle = 115 if self.modo_obstaculos else 103
-    self.current_speed = 220
-```
-
-Because `modo_obstaculos = False`, this branch applies:
-
-- `73` for right-turn frontal resolution,
-- `103` for left-turn frontal resolution.
-
-##### 8. PID Steering Block for Mode 1
-
-Normal navigation in Mode 1 continues through PID-based correction:
-
-```python
-if abs(error_absoluto_real) < zona_muerta:
-    self.current_angle = 86
-    self.pid.integral = 0
-else:
-    self.pid.kp = 0.08 if estado == "CENTRADO" else 0.15
-    self.current_speed = 250
-    correccion_pid = self.pid.compute(centro_pista_x, dt)
-```
-
-##### 9. Command Output Block
-
-The resulting Mode 1 command is sent to the Arduino through:
-
-```python
-paquete = f"<{self.current_speed},{self.current_angle}>\n"
-self.ser.write(paquete.encode('utf-8'))
-```
-
-#### Implementation in Mode 1
-
-Mode 1 is the operating profile used for speed-oriented track completion. In practice, the robot:
-
-1. receives the initial ultrasonic reading,
-2. remains in `modo_obstaculos = False`,
-3. captures the track image,
-4. binarizes the wall region,
-5. applies raycasting to estimate the track center,
-6. determines a navigation state,
-7. infers the global direction of the round when required,
-8. counts corners and laps,
-9. computes steering with PID,
-10. sends `<speed,angle>` commands to the Arduino.
-
-This mode is the direct implementation of the wall-following and three-lap logic used for autonomous track traversal.
-
-#### Hardware Related to Mode 1
-
-| Hardware Element  | Role in Mode 1                                               |
-| ----------------- | ------------------------------------------------------------ |
-| Camera            | Provides the wall image used for binarization and raycasting |
-| Raspberry Pi      | Executes wall detection, state logic, lap counting, and PID  |
-| Arduino           | Receives motion commands and actuates the servo and motor    |
-| Steering servo    | Applies the steering angle generated in `MainCode.py`        |
-| Traction motor    | Executes the requested speed                                 |
-| Ultrasonic sensor | Selects the initial operating profile before the run         |
-
-#### Functional Behavior of Mode 1
-
-Mode 1 behaves as a wall-guided autonomous driving module. Its main objective is to keep the vehicle centered with respect to the track boundaries, detect directional changes at corners, preserve progress over three laps, and resolve frontal-wall conditions with the standard turning profile associated with speed-oriented navigation.
-
-### 8.4 Mode 2 Logic
-
-Mode 2 corresponds to the condition:
-
-- `modo_obstaculos = True`
-
-In this mode, the controller preserves the shared wall-following structure but applies:
-
-- the obstacle-mode frontal turning profile,
-- obstacle-related states such as `EVADIENDO_ROJO` and `EVADIENDO_VERDE`,
-- and the memory-based continuation states `MEMORIA_ROJO` and `MEMORIA_VERDE`.
-
-#### Code Blocks Used in Mode 2
-
-Mode 2 is built from the following code blocks inside `MainCode.py`.
-
-##### 1. Mode 2 Activation Block
-
-This block activates obstacle mode from the initial ultrasonic reading:
-
-```python
-time.sleep(2)
-if self.distancia_us < 15:
-    self.modo_obstaculos = True
-    print("\n[MODO] MODO OBSTÁCULOS (MODO 2) ACTIVADO POR ULTRASONIDO\n")
-else:
-    self.modo_obstaculos = False
-```
-
-##### 2. Shared Wall-Detection Block
-
-Mode 2 preserves the same wall-processing pipeline used in track following:
-
-```python
-gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-blur = cv2.GaussianBlur(gray, (7, 7), 0)
-
-y_arriba = 80
-y_abajo = 140
-roi_blur = blur[y_arriba:y_abajo, 0:320]
-
-_, binarizada = cv2.threshold(
-    roi_blur, 95, 255, cv2.THRESH_BINARY)
-```
-
-##### 3. Obstacle-Detection Block
-
-Mode 2 adds the HSV segmentation used to identify red and green signs:
-
-```python
-roi_color = frame[60:240, 0:320]
-hsv = cv2.cvtColor(roi_color, cv2.COLOR_BGR2HSV)
-
-lower_green = np.array([35, 60, 50])
-upper_green = np.array([85, 255, 255])
-mask_green = cv2.inRange(hsv, lower_green, upper_green)
-
-lower_red1 = np.array([0, 100, 80])
-upper_red1 = np.array([5, 255, 255])
-lower_red2 = np.array([175, 100, 80])
-upper_red2 = np.array([180, 255, 255])
-mask_red = cv2.bitwise_or(cv2.inRange(hsv, lower_red1, upper_red1),
-                          cv2.inRange(hsv, lower_red2, upper_red2))
-```
-
-##### 4. Morphological Cleaning Block
-
-The obstacle masks are cleaned with morphology:
-
-```python
-mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_OPEN, kernel)
-mask_green = cv2.morphologyEx(mask_green, cv2.MORPH_CLOSE, kernel)
-
-mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_OPEN, kernel)
-mask_red = cv2.morphologyEx(mask_red, cv2.MORPH_CLOSE, kernel)
-```
-
-##### 5. Obstacle Selection Block
-
-The most relevant obstacle is selected by contour area:
-
-```python
-for c in contornos_v:
-    area = cv2.contourArea(c)
-    x, y, w, h = cv2.boundingRect(c)
-    if area > 400 and w < 260 and area > area_max_obs:
-        lista_obstaculos.append(
-            {"x": x, "w": w, "tipo": "VERDE", "area": area})
-        if area > area_max_obs:
-            area_max_obs = area
-            obstaculo_cx = x + (w // 2)
-            obstaculo_tipo = "VERDE"
-```
-
-##### 6. Obstacle Memory and Evasion Block
-
-Obstacle interpretation and evasion are handled by this block:
-
-```python
-tiempo_ciego = current_time - tiempo_ultimo_obstaculo
-en_memoria_evasion = tiempo_ciego < 1
-tipo_evasion_activa = obstaculo_tipo if obstaculo_tipo != "NINGUNO" else memoria_tipo_obstaculo
-evadiendo = (obstaculo_tipo != "NINGUNO" or en_memoria_evasion)
-
-if evadiendo:
-    if tipo_evasion_activa == "ROJO":
-        centro_pista_x = 240
-        estado = "EVADIENDO_ROJO" if obstaculo_tipo != "NINGUNO" else "MEMORIA_ROJO"
-
-    elif tipo_evasion_activa == "VERDE":
-        centro_pista_x = 40
-        estado = "EVADIENDO_VERDE" if obstaculo_tipo != "NINGUNO" else "MEMORIA_VERDE"
-
-    centro_pista_x = max(45, min(350, centro_pista_x))
-```
-
-##### 7. Frontal-Turn Block for Mode 2
-
-Mode 2 frontal turning uses the obstacle-mode branch:
-
-```python
-if estado == "MURO_FRONTAL" and obstaculo_tipo == "NINGUNO":
-    if self.SENTIDO_GIRO == "DERECHA":
-        self.current_angle = 60 if self.modo_obstaculos else 73
-    else:
-        self.current_angle = 115 if self.modo_obstaculos else 103
-    self.current_speed = 220
-```
-
-Because `modo_obstaculos = True`, this branch applies:
-
-- `60` for right-turn frontal resolution,
-- `115` for left-turn frontal resolution.
-
-##### 8. Obstacle-Mode Control Block
-
-During obstacle handling, the control profile is also adjusted:
-
-```python
-if evadiendo:
-    self.pid.kp = 0.15
-    self.current_speed = 200
-```
-
-##### 9. Command Output Block
-
-The resulting Mode 2 command is also sent to the Arduino through:
-
-```python
-paquete = f"<{self.current_speed},{self.current_angle}>\n"
-self.ser.write(paquete.encode('utf-8'))
-```
-
-#### Implementation in Mode 2
-
-Mode 2 is the obstacle-oriented operating profile. In practice, the robot:
-
-1. activates `modo_obstaculos = True` after the initial ultrasonic classification,
-2. captures the scene with the same camera used in wall navigation,
-3. detects red and green obstacles in HSV space,
-4. cleans the masks with morphological operations,
-5. selects the most relevant obstacle by contour area,
-6. changes the desired center of the track according to obstacle color,
-7. maintains a short memory state when the obstacle is no longer visible,
-8. applies a more aggressive obstacle-handling steering profile,
-9. sends the resulting motion command to the Arduino.
-
-This implementation allows the vehicle to maintain the same base navigation architecture while adding directional interpretation of the WRO red and green field elements.
-
-#### Hardware Related to Mode 2
-
-| Hardware Element  | Role in Mode 2                                                              |
-| ----------------- | --------------------------------------------------------------------------- |
-| Camera            | Captures both walls and colored obstacles                                   |
-| Raspberry Pi      | Executes HSV segmentation, evasion-state logic, and obstacle-aware steering |
-| Arduino           | Receives obstacle-mode motion commands and actuates the vehicle             |
-| Steering servo    | Applies the sharper turning profile used in obstacle mode                   |
-| Traction motor    | Executes reduced-speed obstacle maneuvers and normal forward motion         |
-| Ultrasonic sensor | Activates the obstacle-oriented profile at startup                          |
-
-#### Functional Behavior of Mode 2
-
-Mode 2 behaves as an obstacle-aware autonomous driving module. It preserves wall-based navigation as the structural reference, but superimposes color-based obstacle interpretation to force the robot toward the correct side of red and green signs. The result is a combined behavior in which the robot follows the track, keeps lap continuity, and modifies its trajectory according to obstacle position and obstacle color.
-
-### 8.5 State-Based Logic
-
-Binary observations are converted into navigation states:
-
-| State             | Function                                  |
-| ----------------- | ----------------------------------------- |
-| `CENTRADO`        | Navigation with both walls visible        |
-| `MURO_IZQ`        | Estimation using the left-side reference  |
-| `MURO_DER`        | Estimation using the right-side reference |
-| `MURO_FRONTAL`    | Response to a blocked front               |
-| `CEGUERA_BLANCA`  | No lateral reference detected             |
-| `EVADIENDO_ROJO`  | Forced adjustment due to a red obstacle   |
-| `EVADIENDO_VERDE` | Forced adjustment due to a green obstacle |
-| `MEMORIA_ROJO`    | Memory-based red obstacle state           |
-| `MEMORIA_VERDE`   | Memory-based green obstacle state         |
-
-These states allow the controller to transform the visual interpretation of the WRO field into discrete navigation actions.
-
-### 8.6 Global Orientation Logic
-
-When a frontal block exists and the orientation remains in `AUTO`, the system compares free white space on both sides and assigns:
-
-- `DERECHA`
-- `IZQUIERDA`
-
-This mechanism supports challenge rounds in which the vehicle may be required to drive either clockwise or counterclockwise.
-
-### 8.7 Temporal Logic
-
-Corner counting uses:
-
-- a visual signal (`MURO_FRONTAL` or inner-wall loss),
-- a time window,
-- an accumulated counter.
-
-By converting corner detections into lap progress, the controller maintains the sequence required for a three-lap autonomous run.
-
-### 8.8 Control Logic
-
-The control process follows this order:
-
-1. visual perception,
-2. state classification,
-3. error calculation,
-4. dead-zone evaluation,
-5. PID application,
-6. steering-angle limiting,
-7. serial transmission.
-
-### 8.9 Mode Selection Logic
-
-The implementation also includes an initial logic that classifies the operating mode from ultrasonic telemetry:
-
-- obstacle mode,
-- speed mode.
-
----
-
-## 9. Relationship Between Software and Physical Components
-
-| Physical Component | Associated Software                          | Function                              |
-| ------------------ | -------------------------------------------- | ------------------------------------- |
-| Camera             | `cv2.VideoCapture(0)` in `MainCode.py`       | Image capture                         |
-| Raspberry Pi       | `MainCode.py`                                | Visual processing and decision-making |
-| Arduino            | `Arduino_Code.ino`                           | Physical command execution            |
-| Servo              | `direccion.write(anguloServo)`               | Steering                              |
-| Motor / driver     | `analogWrite(pinMotorPWM, velocidadAuto)`    | Traction                              |
-| Ultrasonic sensor  | `leerUltrasonido()` and `read_serial_data()` | Distance measurement and telemetry    |
-
-The relationship between software and hardware is direct: the Raspberry Pi generates logical commands and the Arduino translates them into physical motion and sensor reporting.
-
----
-
-## 10. Conclusion
-
-The implemented system uses computer vision on the Raspberry Pi to interpret the track, detect walls and obstacles, classify navigation states, compute corrections through PID control, select an operating mode, and transmit motion commands to the Arduino.
-
-The Arduino receives those commands, controls the servo and motor, and measures distance using the ultrasonic sensor to generate serial telemetry.
-
-Taken together, the system combines:
-
-- binary visual perception,
-- raycasting over the central strip,
-- a navigation state machine,
-- global orientation based on free space,
-- PID control,
-- ultrasonic-assisted mode selection,
-- and structured serial communication.
-
-The result is a functional navigation architecture distributed between high-level processing on the Raspberry Pi and physical execution on the Arduino, consistent with the actual implementation documented in the repository and with the main operational demands of the WRO Future Engineers track challenge.
+Both modes use the same physical communication path from the Raspberry Pi to the Arduino and from there to the steering and traction hardware. One mode reacts to live camera input, while the other follows a predefined timed routine.
