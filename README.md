@@ -230,7 +230,9 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 <hr>
 
-Ackerman Mechanism...
+- **Ackerman Mechanism**
+
+
 
 <hr>
 
