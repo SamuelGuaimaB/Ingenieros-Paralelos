@@ -17,10 +17,11 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 - [About us](#about-us)
 - [Components table](#components-table)
+- [Logitech C922 Web Camera](#logitech-c922-web-camera)
 - [Vision Management](#vision-management)
 - [Mobility Management](#mobility-management)
 - [Power Management](#power-management)
-- [Obstacle Management](#components-table)
+- [Obstacle Management](#obstacle-management)
 
 <!-- tocstop -->
 
@@ -53,7 +54,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 ## Vision Management
 
-- **###Logitech C922 Web Camera**
+- #### Logitech C922 Web Camera
 
 <table>
   <tr>
