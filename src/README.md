@@ -16,8 +16,8 @@
   - [4.3 Arduino Implementation](#43-arduino-implementation)
 - [5. System Structure by Operating Phase](#5-system-structure-by-operating-phase)
   - [5.1 Initialization](#51-initialization)
-  - [5.2 Mode 1: Adaptive Vision-Based Navigation](#52-mode-1:-adaptive-vision-based-navigation)
-  - [5.3 Mode 2: Choreography-Based Manual Sequence](#53-mode-2:-choreography-based-manual-sequence)
+  - [5.2 Mode 1: Adaptive Vision-Based Navigation](#52-mode-1-adaptive-vision-based-navigation)
+  - [5.3 Mode 2: Choreography-Based Manual Sequence](#53-mode-2-choreography-based-manual-sequence)
   - [5.4 Operating Cycle](#54-operating-cycle)
 - [6. Conclusion](#6-conclusion)
 
