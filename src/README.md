@@ -11,7 +11,7 @@
   - [3.2 Physical System Flow](#32-physical-system-flow)
   - [3.3 Software-to-Hardware Connection](#33-software-to-hardware-connection)
 - [4. Python Implementation](#4-python-implementation)
-  - [4.1 Mode 1 Implementation: `src/1st_mode.py`](#41-mode-1-implementation:-`src/1st_mode.py`)
+  - [4.1 Mode 1 Implementation](#41-mode-1-implementation)
   - [Raspberry Pi 4](#raspberry-pi-4)
 - [Mobility Management](#mobility-management)
   - [Arduino Uno](#arduino-uno)
@@ -91,7 +91,8 @@ The current software connects with the physical components in the following way:
 
 ## 4. Python Implementation
 
-### 4.1 Mode 1 Implementation: `src/1st_mode.py`
+### 4.1 Mode 1 Implementation
+### File: `src/1st_mode.py`
 
 #### Imported Libraries
 
@@ -149,7 +150,8 @@ self.VER_PANTALLAS = True
 > [!IMPORTANT]
 > The angle was set to 86 because at 90 the wheels were not completely straight.
 
-### 4.2 Mode 2 Implementation: `src/2nd_mode.py`
+### 4.2 Mode 2 Implementation
+### File: `src/2nd_mode.py`
 
 #### Imported Libraries
 
@@ -201,7 +203,8 @@ time.sleep(0.3)
 self.ser.write(b"<0,86>\n") # Straighten the wheels.
 ```
 
-### 4.3 Arduino Implementation: `src/Ino Code/Arduino_Code.ino`
+### 4.3 Arduino Implementation
+### File: `src/Ino Code/Arduino_Code.ino`
 
 #### Imported Libraries
 
