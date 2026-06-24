@@ -26,7 +26,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   - [Ackermann Mechanism](#ackermann-mechanism)
 - [Power Management](#power-management)
   - [LX-2BUPS UPS](#lx-2bups-ups)
-  - [Ultrafire TR 18650 9800mAh 3.7V batteries](#ultrafire-tr-18650-9800mah-3.7v-batteries)
+  - [Ultrafire TR 18650 Batteries](#ultrafire-tr-18650-batteries)
 - <a href="src"> Obstacle Management </a>
 
 <!-- tocstop -->
@@ -223,7 +223,7 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
 
-- #### Ultrafire TR 18650 9800mAh 3.7V batteries
+- #### Ultrafire TR 18650 Batteries
 
 <table>
   <tr>
