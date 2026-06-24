@@ -10,7 +10,7 @@
   - [3.1 Functional Distribution](#31-functional-distribution)
   - [3.2 Physical System Flow](#32-physical-system-flow)
   - [3.3 Software-to-Hardware Connection](#33-software-to-hardware-connection)
-- [4. Python Implementation](#4-python-implementation)
+- [4. Software Implementation](#4-software-implementation)
   - [4.1 Mode 1 Implementation](#41-mode-1-implementation)
   - [4.2 Mode 2 Implementation](#42-mode-2-implementation)
   - [4.3 Arduino Implementation](#43-arduino-implementation)
@@ -87,7 +87,7 @@ The current software connects with the physical components in the following way:
 
 ---
 
-## 4. Python Implementation
+## 4. Software Implementation
 
 ### 4.1 Mode 1 Implementation
 ### File: `src/1st_mode.py`
