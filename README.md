@@ -24,16 +24,10 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 <!-- tocstop -->
 
 ## Preview of the Car Performance
-- **1st Mode**
-<a href="https://www.youtube.com/watch?v=6vZ5giluS2M">
-  <img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
-</a>
 
-[Click to See More](#Click-to-See-More)
+<img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
 
-- **2th Mode**
-
-[Click to See More](#Click-to-See-More)
+<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Click to See More </a>
 
 ## Components Used and Estimated Budget
 
