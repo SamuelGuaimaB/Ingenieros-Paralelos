@@ -35,6 +35,23 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <hr>
 
+## Preview of the Car
+
+<table>
+  <tr>
+    <td align="center"><strong>Top</strong><br><img src="./v-photos/IMG_5101.JPG width="300"></td>
+    <td align="center"><strong>Front</strong><br><img src="./v-photos/IMG_5102.JPG width="300"></td>
+    <td align="center"><strong>Left</strong><br><img src="./v-photos/IMG_5103.JPG width="300"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Bottom</strong><br><img src="./v-photos/IMG_5104.JPG width="300"></td>
+    <td align="center"><strong>Back</strong><br><img src="./v-photos/IMG_5105.JPG width="300"></td>
+    <td align="center"><strong>Right</strong><br><img src="./v-photos/IMG_5100.JPG width="300"></td>
+  </tr>
+</table>
+
+<hr>
+
 ## Preview of the Car Performance
 
 <img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
@@ -67,7 +84,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 <table>
   <tr>
     <td align="center" width="300" >
-      <img src="./resources/Logitech C922.png " alt="Logitech C922 Webcam" >
+      <img src="./resources/Logitech C922.png" alt="Logitech C922 Webcam" >
     </td>
     <td>
       <h3>Specifications:</h3>
