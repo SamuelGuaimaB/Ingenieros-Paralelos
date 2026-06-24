@@ -17,9 +17,14 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 - [About us](#about-us)
 - [Components table](#components-table)
-- [Logitech C922 Web Camera](#logitech-c922-web-camera)
 - [Vision Management](#vision-management)
+  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
+  - [Raspberry Pi 4](#raspberry-pi-4)
 - [Mobility Management](#mobility-management)
+  - [Arduino Uno](#arduino-uno)
+  - [L298N Driver](#l298n-driver)
+  - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
+  - [Ackermann Mechanism](#ackermann-mechanism)
 - [Power Management](#power-management)
 - [Obstacle Management](#obstacle-management)
 
@@ -77,7 +82,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
 
-- **Raspberry Pi 4**
+- #### Raspberry Pi 4
 
 <table>
   <tr>
@@ -116,7 +121,7 @@ Configuration of the camera through the python script (kernel, buffer, resolutio
 
 ## Mobility Management
 
-- **Arduino Uno**
+- #### Arduino Uno
 
 <table>
   <tr>
@@ -154,7 +159,7 @@ Explain Serial Port...
 
 <hr>
 
-- **L298N Driver**
+- #### L298N Driver
 
 <table>
   <tr>
@@ -177,30 +182,7 @@ Explain Serial Port...
 
 The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. 
 
-- **HC-SR04 Ultrasonic Sensors**
-
-<table>
-  <tr>
-    <td align="center" width="300" >
-      <img src="./resources/HC-SR04_Ultrasonic_Sensor.png " alt="HC-SR04 Ultrasonic Sensor" >
-    </td>
-    <td>
-      <h3>Specifications:</h3>
-      <ul>
-        <li> Measuring Range: 2 cm to 400 cm (about 1 inch to 13 feet) </li>
-        <li> Accuracy: ±3mm </li>
-        <li> Operating Frequency: 40kHz </li>
-        <li> Sensing Angle: 15° to 30° cone effect </li>
-        <li> Operating Voltage: Typically 5V DC (though some newer variants like the HC-SR04+ support 3.3V) </li>
-        <li> Operating Current: ~15mA </li>
-      </ul>
-    </td>
-  </tr>
-</table>
-
-The HC-SR04 is a widely used, budget-friendly ultrasonic sensor that measures distance by emitting high-frequency sound waves and calculating the time it takes for the echo to bounce back. It is a staple in robotics for obstacle avoidance and proximity sensing.
-
-- **Fischertechnik Maker Kit Car**
+- #### Fischertechnik Maker Kit Car
 
 <img src="./resources/Fischertechnik_Maker_Kit_Car.png " alt="Fischertechnik Maker Kit Car" width="300px" >
 
@@ -226,7 +208,7 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 <hr>
 
-- **Ackerman Mechanism**
+- #### Ackermann Mechanism
 
 
 
@@ -234,7 +216,7 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 ## Power Management
 
-- **LX-2BUPS UPS**
+- #### LX-2BUPS UPS
 
 <table>
   <tr>
@@ -256,7 +238,7 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
 
-- **Ultrafire TR 18650 9800mAh 3.7V batteries**
+- #### Ultrafire TR 18650 9800mAh 3.7V batteries
 
 <table>
   <tr>
