@@ -1,4 +1,5 @@
 # WRO2026 Future Engineers – Ingenieros Paralelos
+
 ## About us
 
 >Team members
@@ -15,10 +16,10 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 <!-- toc -->
 
 - [About us](#about-us)
+- [Components table](#components-table)
 - [Vision Management](#vision-management)
 - [Mobility Management](#mobility-management)
 - [Power Management](#power-management)
-- [Components table](#components-table)
 - [Obstacle Management](#components-table)
 
 <!-- tocstop -->
@@ -52,7 +53,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 ## Vision Management
 
-- **Logitech C922 Web Camera**
+- **###Logitech C922 Web Camera**
 
 <table>
   <tr>
