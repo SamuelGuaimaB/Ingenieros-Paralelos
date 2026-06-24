@@ -30,8 +30,6 @@ The objective of the system is to allow the robot to:
 
 In the implemented system, these tasks are addressed through computer vision, time-based choreography, state-based decision logic, and serial communication between the Raspberry Pi and the Arduino. The Raspberry Pi acts as the host computer executing the Python script depending the challenge, while the Arduino operates as an embedded microcontroller executing the `src/Ino Code/Arduino_Code.ino` script code. **They exchange text or binary data bytes through a synchronized speed setting called the baud rate**.
 
-The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles, in our case 60 to 120 degrees, or at continuous speeds. We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver.
-
 ---
 
 ## 3. Robot Architecture
