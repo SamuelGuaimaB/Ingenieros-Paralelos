@@ -27,7 +27,6 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 - [Power Management](#power-management)
   - [LX-2BUPS UPS](#lx-2bups-ups)
   - [Ultrafire TR 18650 9800mAh 3.7V batteries](#ultrafire-tr-18650-9800mah-3.7v-batteries)
-- [Obstacle Management](#obstacle-management)
 - <a href="src"> Obstacle Management </a>
 
 <!-- tocstop -->
@@ -139,7 +138,7 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
   </tr>
 </table>
 
-The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of a project, allowing people to read inputs (like a sensor, button, or temperature reading) and turn them into outputs (like moving a motor or turning on an LED). Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino. 
+The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of our project, it allows to read inputs such as a sensor, button, or temperature reading and turn them into outputs, like moving a motor or turning on an LED. This hardware acts as the nervous system of our car, sending small electric pulses to the driver. Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino. 
 
 <a href="src"> See the implemented code in the Arduino </a>
 
@@ -166,7 +165,7 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
   </tr>
 </table>
 
-The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. 
+The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. This component acts as the muscles of the car, suplying the necessary energy to the motors, but since the Arduino and Raspberry manage a low voltage (not enough to supply the driver), it is necessary the implementation of an additional power source to this component.
 
 - #### Fischertechnik Maker Kit Car
 
@@ -180,7 +179,7 @@ The Fischertechnik Maker Kit Car is an advanced construction kit designed for ma
 
 <a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Check specifications</a>
 
-Is a specialized motor designed to turn to a specific, exact angle (usually between 0° and 180°) and hold that position. It connects directly to the front steering knuckles of the chassis and it controls the steering mechanism. Unlike the drive motor, it is not programmed to spin continuously. Instead, you command it to change degrees, giving your robot precise navigation capabilities.
+Is a specialized motor designed to turn to a specific angle (in this case between 60° and 120°) and hold that position. It connects directly to the front steering knuckles of the chassis and it controls the steering mechanism. Unlike the drive motor, it is not programmed to spin continuously. Instead, it is commanded to change degrees, giving the car precise navigation capabilities.
 
 > Encoder Motor or C Motor
 
@@ -246,206 +245,4 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
   </tr>
 </table>
 
-In the project we used four of these batteries, two for each UPS. Rechargable?
-
-## Obstacle Management
-
-<h3> 🔵 Part 1: System Initialization </h3>
-
-<br><h3> 1.1 Power-on and serial connection </h3>
-
-<hr>
-
-> [!IMPORTANT]
-> On Raspberry Pi:
->- Creates an instance of the WROAutonomousCar class.
->- Attempts to open the serial port (/dev/ttyACM0, /dev/ttyUSB0, or COM3) at 115200 baud.
->- Waits 2 seconds for the Arduino to stabilize.
->- Starts a thread (process_vision) that will capture and process the camera in parallel.
->- The main thread (main_loop) is responsible for sending commands to the Arduino continuously.
-
-<hr>
-
-> [!IMPORTANT]
-> On Arduino:
->- Configures the servo on pin 8, initial position at 86° (straight).
->- Configures the DC motor: pins 9 and 10 for direction, pin 7 for PWM.
->- Configures the ultrasonic sensor: pin 3 (Trig) and pin 11 (Echo).
->- Initializes serial communication at 115200 baud.
->- Enters the main loop(), ready to receive commands.
-
-<hr>
-
-<h3> 1.2 Camera configuration and initial parameters </h3>
-
-> [!IMPORTANT]
-> Raspberry Pi:
->- Opens the camera at 320×240 pixels (low resolution for higher speed).
->- Defines fixed parameters:
->  1. MITAD_ANCHO_PISTA_PX = 140 pixels (estimated width from one wall to the track center).
->  2. Binarization threshold: 95 (pixels brighter than that are white floor).
->  3. Region of interest: rows 80 to 140 (where the track is expected to be seen).
->  4. PID with kp=0.06, ki=0, kd=0.20.
->- State variables:
->  1. SENTIDO_GIRO = "AUTO" (will be auto-detected at the first curve).
->  2. vueltas_completadas = 0, curvas_superadas = 0, en_curva = False.
->  3. current_speed = 0, current_angle = 86.
-
-<hr>
-
-<h3> 1.3 Bidirectional communication </h3>
-
-<b>Raspberry → Arduino:</b>
-
-- The main thread sends commands in <speed,angle> format every 50 ms.
-- Example: <250,86> means speed 250, angle 86 degrees.
-
-<b>Arduino → Raspberry:</b>
-
-- Every 50 ms, the Arduino reads the ultrasonic sensor and sends US:distance.
-- The Raspberry does not use this data in this code (although it receives it).
-
-<hr>
-
-<h3> 1.4 Initial car state </h3>
-
-- The car starts stopped (current_speed = 0).
-- The steering is centered (current_angle = 86).
-- The vision thread is already processing the camera, but has not yet detected the track direction.
-- The car waits to find the first curve to auto-determine whether the circuit is clockwise or counterclockwise.
-
-<hr>
-
-<h3> 🟢 Part 2: First Challenge – The Open Challenge </h3>
-
-<p> The Open Challenge focuses strictly on lane-keeping, speed, wall avoidance, and endurance. The main objective is to establish a solid baseline for autonomous navigation before adding complex objects to the track. </p>
-
-<hr>
-
-<h3> 2.1 Main vision flow </h3>
-
-> [!IMPORTANT]
-> <b> Step 1: Capture and preprocessing </b>
->- One frame is captured from the camera.
->- It is converted to grayscale.
->- Gaussian blur (7×7) is applied to reduce noise.
->- The region of interest (rows 80 to 140) is extracted.
->- Binarization with threshold 95: bright pixels (floor) → 255, dark pixels (walls) → 0.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 2: Raycasting to find walls </b>
->- The center row of the binarized region is taken.
->- It scans from the center (pixel 160) to the left looking for the first black pixel → muro_izq.
->- It scans to the right looking for the first black pixel → muro_der.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 3: Auto-detection of track direction (first time only) </b>
->- The first time "MURO_FRONTAL" (a closed corner) is detected:
->  1. It counts white pixels in the left and right halves of the image.
->  2. If there are more white pixels on the right, SENTIDO_GIRO = "DERECHA" (clockwise circuit).
->  3. If there are more white pixels on the left, SENTIDO_GIRO = "IZQUIERDA" (counterclockwise circuit).
->- This happens only once and is used for decisions in subsequent curves.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 4: Steering control (PID) </b>
->- error = 160 - centro_pista_x is calculated.
->- Dead zone: If |error| < 15, the angle is fixed at 86° (straight).
->- Otherwise:
->  1. PID is applied: correction = kp * error + kd * (error - prev_error) / dt.
->  2. angulo_pid = 86 + correction.>  3. If there are more white pixels on the left, SENTIDO_GIRO = "IZQUIERDA" (counterclockwise circuit).
->- Limits by state:
->  1. In "CENTRADO" (straight): angle between 76° and 96° (smooth turns).
->  2. In other states: angle between 60° and 120° (more aggressive turns).
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 5: Speed control</b>
->- In "CENTRADO" with small error → speed 250 (maximum).
->- In "MURO_FRONTAL" → speed 220.
->- In any other case → speed 250.
->- Note: In the first challenge, speed is always high; there is no reduction for obstacles.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 6: Curve and corner handling </b>
->- If the state is "MURO_IZQ" or "MURO_DER" (one wall lost):
->  1. The PID has more steering freedom (up to 60° or 120°).
->  2. The car turns toward the side where the wall disappeared.
->- If the state is "MURO_FRONTAL" (closed corner):
->  1. If SENTIDO_GIRO == "DERECHA" → angle 73° (turns right).
->  2. If SENTIDO_GIRO == "IZQUIERDA" → angle 103° (turns left).
->  3. Speed 220.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 7: Lap counting </b>
->- Every time "MURO_FRONTAL" is detected and more than 2.5 seconds have passed since the last curve:
->  1. curvas_superadas is incremented.
->  2. en_curva = True is set (prevents counting the same curve multiple times).
->- When curvas_superadas % 4 == 0 (4 corners = 1 lap):
->  1. vueltas_completadas is incremented.
->  2. "VUELTA X/3 COMPLETADA" is printed.
->- When vueltas_completadas >= 3:
->  1. current_speed = 0 is set.
->  2. current_angle = 86.
->  3. running = False, program terminates.
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Step 8: Sending to Arduino </b>
->- The main thread sends <speed,angle> every 50 ms.
->- Example during a straight: <250,86>.
->- Example during a right turn: <250,73>.
->- Example at the end: <0,86>.
-
-<hr>
-
-<h3> 2.2 Expected behavior (first challenge) </h3>
-
-1. The car starts centered on the track.
-2. On straights, the PID keeps the angle between 76° and 96° (minimal oscillations).
-3. When entering a curve, it loses one wall, the PID releases the angle, and the car turns until both walls are visible again.
-4. At closed corners, it detects "MURO_FRONTAL" and turns sharply.
-5. It completes 3 laps counting 4 corners per lap.
-6. It stops by sending <0,86>.
-
-<hr>
-
-<h3> 🔴 Block 3: Second Challenge – Obstacle Challenge </h3>
-
-The Obstacle Challenge introduces dynamic object detection and real-time path planning. The track geometry remains the same, but it is now populated with randomly placed traffic signs represented by colored pillars. Here the car must avoid the blocks following the WRO rules: Red → pass on the right. Green → pass on the left. (specify more the rules if it is neccessary).
-
-<hr>
-
-> [!IMPORTANT]
-> <b> Key differences in Python file: </b>
->- At startup it detects if the car is in parked obstacle mode (dist_F < 40).
->- Evasion logic (inside the main loop):
->  1. If local_scenario == "RIGHT_OBSTACLE" and red is detected, calculate angle to pass on the right.
->  2. If local_scenario == "LEFT_OBSTACLE" and green is detected, calculate angle to pass on the left.
->  3. Speed is reduced to 'L' (low) during evasion.
->- Invisibility mask injection (in the second code WROAutonomousCar): When an obstacle (red/green) is detected, that area is painted white in the binarized image so the wall-following algorithm ignores it.
->- Lap control:
->  1. Also counts 4 corners of the first color detected, but the finish line is magenta.
->  2. It stops after completing 3 laps (configurable).
-
-<hr>
-
-> [!IMPORTANT]
-> <b> On Arduino (no significant changes) </b>
->  1. Only receives speed and angle commands.
->  2. Does not distinguish between challenges.
-
-<hr>
-
-<p> This is just a theoretical interpretation of our code, here is <a href="src"> detailed information about our code </a> . </p>
+In the project we used four of these batteries, two for each UPS. They are rechargeable, we recharge them by plugging in the UPS with a USB-C charger of 20W (admitting 9V / 2.22A).
