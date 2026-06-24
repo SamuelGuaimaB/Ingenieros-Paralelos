@@ -220,7 +220,53 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 - #### Ackermann Mechanism
 
+<img src="./resources/Ackermann_Turning.png " alt="Fischertechnik Maker Kit Car" width="300px" >
 
+When a vehicle takes a turn, the front wheels follow paths with different radii. The inner wheel follows a tighter circle (smaller radius) while the outer wheel describes a wider arc (larger radius). If both wheels point in exactly the same direction (parallel to each other), the inner wheel tends to drag or slip sideways because it is geometrically forced to follow a path that does not correspond to it. This generates: Premature tire wear, Greater steering effort, Loss of stability and grip, Larger turning radius of the vehicle. The Ackermann mechanism solves this problem by making the wheels adopt different angles automatically when the steering wheel is turned.
+
+<hr>
+
+- #### The Ackermann principle
+
+The Ackermann principle is based on a geometric condition known as the "Ackermann condition":
+
+In a perfect turn, the axes of all wheels must intersect at a single common point located on the extension of the rear axle. That point is the instantaneous center of rotation of the vehicle.
+
+This implies that:
+
+Inner front wheel → must turn at a larger angle (αᵢ)
+
+Outer front wheel → must turn at a smaller angle (αₑ)
+
+The relationship between both angles is given by the formula:
+
+```text
+cot(αₑ) - cot(αᵢ) = d / L
+```
+
+Where:
+
+d = distance between the wheel pivot points (track width)
+
+L = distance between axles (wheelbase)
+
+This relationship ensures that, for any steering angle, the center of curvature remains on the line of the rear axle, preventing lateral dragging of the wheels.
+
+<hr>
+
+- #### Ackermann in our project
+
+In our car there is not presence of this mechanism, or it is called a 0% Ackermann, this does not affect a lot the performance since is a small vehicle, but if there was presence of this in the project it would help us improve the times. There are some reasons the kit does not includes it:
+
+1. It is a basic or "entry-level" kit – The Maker Kit Car is designed for the maker market as a base chassis, robust and easy to expand, not as a high-performance scale model.
+
+2. Priority on educational functionality – Its main objective is to serve as a platform for integrating development boards (Arduino, Raspberry Pi) and learning about robotics and programming. A simpler steering system, such as a steering knuckle with a servo motor, is easier to build and program for a beginner user.
+
+3. Product differentiation – fischertechnik reserves the Ackermann mechanism for its more advanced kits focused on competition, such as the STEM Coding Competition, which have a much higher price and complexity. The Maker Kit Car, with its 119 pieces, is a more affordable and versatile option for creative projects.
+
+4. Cost and manufacturing simplicity – A complete Ackermann mechanism requires more parts (angled steering arms, additional track rods, precise geometry) than a simple steering knuckle with a servo, which increases production cost and assembly complexity.
+
+5. Target audience – The kit is aimed at makers and hobbyists who want to experiment with electronics and programming, not necessarily at automotive engineering students who require an exact reproduction of vehicle dynamics.
 
 <hr>
 
