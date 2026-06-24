@@ -14,12 +14,12 @@
   - [4.1 Mode 1 Implementation](#41-mode-1-implementation)
   - [4.2 Mode 2 Implementation](#42-mode-2-implementation)
   - [4.3 Arduino Implementation](#43-arduino-implementation)
-- [Mobility Management](#mobility-management)
-  - [Arduino Uno](#arduino-uno)
-  - [L298N Driver](#l298n-driver)
-  - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
-  - [Ackermann Mechanism](#ackermann-mechanism)
-- [6. Conclusion](#conclusion)
+- [5. System Structure by Operating Phase](#5-system-structure-by-operating-phase)
+  - [5.1 Initialization](#51-initialization)
+  - [5.2 Mode 1: Adaptive Vision-Based Navigation](#52-mode-1:-adaptive-vision-based-navigation)
+  - [5.3 Mode 2: Choreography-Based Manual Sequence](#53-mode-2:-choreography-based-manual-sequence)
+  - [5.4 Operating Cycle](#54-operating-cycle)
+- [6. Conclusion](#6-conclusion)
 
 <!-- tocstop -->
 
@@ -354,7 +354,7 @@ Both modes also use an initial steering handshake before the main action starts:
 
 This confirms that the steering servo responds correctly.
 
-### 5.2 Mode 1: Adaptive Vision-Based Navigation (`src/1st_mode.py`)
+### 5.2 Mode 1: Adaptive Vision-Based Navigation
 
 **Class:** `WROPrimitivoBlindado`
 
@@ -468,7 +468,7 @@ After 3 completed laps:
 | Dead Zone              | 22 px     | Straight stability                  |
 | Corner Debounce        | 2 seconds | Prevents multiple corner detections |
 
-### 5.3 Mode 2: Choreography-Based Manual Sequence (`src/2nd_mode.py`)
+### 5.3 Mode 2: Choreography-Based Manual Sequence
 
 **Class:** `WROCoreografia`
 
