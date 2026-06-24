@@ -34,7 +34,7 @@ This document presents the implemented navigation system of an autonomous robot 
 - `src/1st_mode.py` (Adaptive vision-based navigation)
 - `src/2nd_mode.py` (Choreography-based manual sequence)
 - `src/Calibration.py` (Vision calibration support tool)
-- `src/Ino Code/Arduino_Code.ino` (Arduino motor, servo, and ultrasonic controller)
+- `src/Ino Code/Arduino_Code.ino` (Arduino motor, servo, and distance controller)
 
 According to the WRO Future Engineers 2026 rules, the vehicle operates in a self-driving car challenge in which it must drive autonomously on a track whose configuration varies between rounds. The official challenge includes Open Challenge rounds and Obstacle Challenge rounds, both based on autonomous track navigation.
 
@@ -72,7 +72,7 @@ The Raspberry Pi acts as the host computer executing the Python scripts dependin
 | Raspberry Pi | `src/1st_mode.py`               | Real-time vision processing, adaptive navigation, automatic lap detection, and reactive steering control |
 | Raspberry Pi | `src/2nd_mode.py`               | Choreographed sequence execution, pre-programmed motion commands, and time-based navigation              |
 | Raspberry Pi | `src/Calibration.py`            | Camera calibration tool for track thresholding and HSV color ranges                                      |
-| Arduino      | `src/Ino Code/Arduino_Code.ino` | Command reception, servo control, motor control, ultrasonic reading, and physical execution              |
+| Arduino      | `src/Ino Code/Arduino_Code.ino` | Command reception, servo control, motor control, distance reading, and physical execution                |
 | Camera       | Accessed through OpenCV         | Track image acquisition and real-time frame processing                                                   |
 
 ### 3.2 Physical System Flow
@@ -92,7 +92,7 @@ The current software connects with the physical components in the following way:
 - **Arduino-side serial input -> Raspberry Pi:** Both Python modes are prepared to listen for the `BTN:1` serial message used as the start signal.
 - **Arduino -> Steering Servo:** The steering angle calculated or selected by the Python software is transmitted through the serial packet and then physically applied by the Arduino to the front steering servo.
 - **Arduino -> Drive Motor:** The speed value calculated or selected by the Python software is transmitted through the same serial packet and then physically applied by the Arduino to the traction motor.
-- **Arduino -> Raspberry Pi:** The Arduino also sends ultrasonic telemetry using the `US:<distance>` format.
+- **Arduino -> Raspberry Pi:** The Arduino also sends distance telemetry using the `DIST:<distance>` format.
 
 ---
 
@@ -289,9 +289,9 @@ This moves the wheels to one side, then to the other side, and finally centers t
 ### 4.3 Arduino Implementation
 ### File: `src/Ino Code/Arduino_Code.ino`
 
-<img src="../resources/diagrama_arduino_controlador.png" alt="Flow diagram of the Arduino controller: motor, servo, and ultrasonic sensor">
+<img src="../resources/diagrama_arduino_controlador.png" alt="Flow diagram of the Arduino controller: motor, servo, and distance sensor">
 
-The Arduino code is the physical execution layer of the robot. It receives commands from the Raspberry Pi, parses the speed and angle values, applies the steering angle to the servo, controls the traction motor, and periodically sends ultrasonic sensor readings.
+The Arduino code is the physical execution layer of the robot. It receives commands from the Raspberry Pi, parses the speed and angle values, applies the steering angle to the servo, controls the traction motor, and periodically sends distance sensor readings.
 
 #### Imported Libraries
 
@@ -326,8 +326,8 @@ const int pinEcho = 11;
 | `7`  | Motor driver PWM  | Motor speed control     |
 | `9`  | Motor driver IN1  | Motor direction line 1  |
 | `10` | Motor driver IN2  | Motor direction line 2  |
-| `3`  | Ultrasonic Trig   | Trigger pulse output    |
-| `11` | Ultrasonic Echo   | Echo pulse input        |
+| `3`  | Distance Trig     | Trigger pulse output    |
+| `11` | Distance Echo     | Echo pulse input        |
 
 #### Main Responsibilities
 
@@ -336,24 +336,24 @@ const int pinEcho = 11;
 - Parse and validate the received values.
 - Apply the angle to the steering servo.
 - Apply the speed to the traction motor.
-- Read the ultrasonic sensor periodically.
-- Send ultrasonic telemetry as `US:<distance>`.
+- Read the distance sensor periodically.
+- Send distance telemetry as `DIST:<distance>`.
 
 #### Main Variables
 
 ```cpp
-int distanciaUS = 200;
+int distanciaSensor = 200;
 int velocidadAuto = 0;
 int anguloServo = 86;
-unsigned long previousMillisUS = 0;
+unsigned long previousMillisSensor = 0;
 ```
 
 These variables store:
 
-- the last ultrasonic distance,
+- the last measured distance,
 - the current motor speed,
 - the current steering angle,
-- the timing reference for ultrasonic sampling.
+- the timing reference for distance sampling.
 
 #### Setup Sequence
 
@@ -363,8 +363,8 @@ In `setup()`, the Arduino:
 2. Attaches the steering servo.
 3. Centers the servo at `86`.
 4. Configures the motor pins as outputs.
-5. Configures the ultrasonic trigger pin as output.
-6. Configures the ultrasonic echo pin as input.
+5. Configures the distance trigger pin as output.
+6. Configures the distance echo pin as input.
 
 #### Serial Protocol Received by Arduino
 
@@ -403,12 +403,12 @@ The function `ejecutarMovimiento()`:
 - drives the motor forward when `velocidadAuto > 0`,
 - stops the motor when `velocidadAuto == 0`.
 
-#### Ultrasonic Telemetry
+#### Distance Telemetry
 
-Every 50 ms, the Arduino executes `leerUltrasonido()` and sends the result through serial:
+Every 50 ms, the Arduino executes `leerDistancia()` and sends the result through serial:
 
 ```text
-US:<distance>
+DIST:<distance>
 ```
 
 If no echo is received within the timeout, the stored distance falls back to `200`.
@@ -918,7 +918,7 @@ From the hardware perspective, the software currently reads from:
 
 - USB camera,
 - start button event through Arduino,
-- ultrasonic sensor through Arduino telemetry.
+- distance sensor through Arduino telemetry.
 
 And writes to:
 
