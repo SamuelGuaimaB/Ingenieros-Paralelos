@@ -71,7 +71,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 | Raspberry Pi 4 Model B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
 | Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
 | L298N Motor Driver | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
-| HC-SR04 Ultrasonic Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
+| HC-SR04 Distance Sensor | 1 | $2.99 | $2.99 | MercadoLibre Venezuela |
 | Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
 | LX-2BUPS UPS Module / 18650 UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
 | 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
