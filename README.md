@@ -17,6 +17,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <!-- toc -->
 
+- [Preview of the Car](#preview-of-the-car)
+- [Preview of the Car Performance](#preview-of-the-car-performance)
 - [Components Used and Estimated Budget](#components-used-and-estimated-budget)
 - [Vision Management](#vision-management)
   - [Logitech C922 Web Camera](#logitech-c922-web-camera)
@@ -39,14 +41,14 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <table>
   <tr>
-    <td align="center"><strong>Top</strong><br><img src="./v-photos/IMG_5101.JPG width="300"></td>
-    <td align="center"><strong>Front</strong><br><img src="./v-photos/IMG_5102.JPG width="300"></td>
-    <td align="center"><strong>Left</strong><br><img src="./v-photos/IMG_5103.JPG width="300"></td>
+    <td align="center"><b>Top</b><br><img src="./v-photos/IMG_5101.JPG" width="300"></td>
+    <td align="center"><b>Front</b><br><img src="./v-photos/IMG_5102.JPG" width="300"></td>
+    <td align="center"><b>Left</b><br><img src="./v-photos/IMG_5103.JPG" width="300"></td>
   </tr>
   <tr>
-    <td align="center"><strong>Bottom</strong><br><img src="./v-photos/IMG_5104.JPG width="300"></td>
-    <td align="center"><strong>Back</strong><br><img src="./v-photos/IMG_5105.JPG width="300"></td>
-    <td align="center"><strong>Right</strong><br><img src="./v-photos/IMG_5100.JPG width="300"></td>
+    <td align="center"><b>Bottom</b><br><img src="./v-photos/IMG_5104.JPG" width="300"></td>
+    <td align="center"><b>Back</b><br><img src="./v-photos/IMG_5105.JPG" width="300"></td>
+    <td align="center"><b>Right</b><br><img src="./v-photos/IMG_5100.JPG" width="300"></td>
   </tr>
 </table>
 
