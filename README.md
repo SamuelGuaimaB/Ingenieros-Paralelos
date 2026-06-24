@@ -11,6 +11,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <img src="./t-photos/igshiix0ajvkbmse051z.jpeg" alt="Photo of Us" width="500">
 
+<hr>
+
 ## Table of Contents
 
 <!-- toc -->
@@ -31,11 +33,15 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <!-- tocstop -->
 
+<hr>
+
 ## Preview of the Car Performance
 
 <img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
 
-<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Click to See More </a>
+<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Click to See the Complete Performance </a>
+
+<hr>
 
 ## Components Used and Estimated Budget
 
@@ -51,6 +57,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 | Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
 ### Estimated Total: $443.10
+
+<hr>
 
 ## Vision Management
 
@@ -76,6 +84,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 </table>
 
 The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
+
+<hr>
 
 - #### Raspberry Pi 4
 
@@ -132,7 +142,7 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
   </tr>
 </table>
 
-The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of our project, it allows to read inputs such as a sensor, button, or temperature reading and turn them into outputs, like moving a motor or turning on an LED. This hardware acts as the nervous system of our car, sending small electric pulses to the driver. Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino. 
+The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of our project, it allows to read inputs such as a sensor, button, or temperature reading and turn them into outputs, like moving a motor or turning on an LED. <b>This hardware acts as the nervous system of our car, sending small electric pulses to the driver. Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino</b>. 
 
 <a href="src"> See the implemented code in the Arduino </a>
 
@@ -159,7 +169,7 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
   </tr>
 </table>
 
-The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. This component acts as the muscles of the car, suplying the necessary energy to the motors, but since the Arduino and Raspberry manage a low voltage (not enough to supply the driver), it is necessary the implementation of an additional power source to this component.
+The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. <b>This component acts as the muscles of the car, suplying the necessary energy to the motors, but since the Arduino and Raspberry manage a low voltage (not enough to supply the driver), it is necessary the implementation of an additional power source to this component</b>.
 
 <hr>
 
@@ -219,6 +229,8 @@ Is a mechanical gearbox located between the two driven wheels. It allows the lef
 
 The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
 
+<hr>
+
 - #### Ultrafire TR 18650 Batteries
 
 <table>
@@ -243,4 +255,6 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 
 In the project we used four of these batteries, two for each UPS. They are rechargeable, we recharge them by plugging in the UPS with a USB-C charger of 20W (admitting 9V / 2.22A).
 
-<a href="src"> Click here to see implemented software details </a>
+<hr>
+
+### End of the main section, <a href="src"> click here to see implemented software details </a>.
