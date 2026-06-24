@@ -15,7 +15,6 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <!-- toc -->
 
-- [About us](#about-us)
 - [Components table](#components-table)
 - [Vision Management](#vision-management)
   - [Logitech C922 Web Camera](#logitech-c922-web-camera)
@@ -26,6 +25,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
   - [Ackermann Mechanism](#ackermann-mechanism)
 - [Power Management](#power-management)
+  - [LX-2BUPS UPS](#lx-2bups-ups)
+  - [Ultrafire TR 18650 9800mAh 3.7V batteries](#ultrafire-tr-18650-9800mah-3.7v-batteries)
 - [Obstacle Management](#obstacle-management)
 
 <!-- tocstop -->
