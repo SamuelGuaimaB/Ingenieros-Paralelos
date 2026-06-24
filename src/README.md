@@ -1,5 +1,29 @@
 # Technical Documentation of the Implemented System
 
+## Table of Contents
+
+<!-- toc -->
+
+- [1. General Description]()
+- [Preview of the Car Performance](#preview-of-the-car-performance)
+- [Components Used and Estimated Budget](#components-used-and-estimated-budget)
+- [Vision Management](#vision-management)
+  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
+  - [Raspberry Pi 4](#raspberry-pi-4)
+- [Mobility Management](#mobility-management)
+  - [Arduino Uno](#arduino-uno)
+  - [L298N Driver](#l298n-driver)
+  - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
+  - [Ackermann Mechanism](#ackermann-mechanism)
+- [Power Management](#power-management)
+  - [LX-2BUPS UPS](#lx-2bups-ups)
+  - [Ultrafire TR 18650 Batteries](#ultrafire-tr-18650-batteries)
+- <a href="src"> Obstacle Management </a>
+
+<!-- tocstop -->
+
+---
+
 ## 1. General Description
 
 This document presents the implemented navigation system of an autonomous robot designed for the **WRO Future Engineers** competition, based on the following files:
