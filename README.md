@@ -28,6 +28,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   - [LX-2BUPS UPS](#lx-2bups-ups)
   - [Ultrafire TR 18650 9800mAh 3.7V batteries](#ultrafire-tr-18650-9800mah-3.7v-batteries)
 - [Obstacle Management](#obstacle-management)
+- <a href="src"> Obstacle Management </a>
 
 <!-- tocstop -->
 
@@ -106,17 +107,7 @@ The Logitech C922 Pro Stream is a popular, high-definition webcam designed speci
 
 The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It functions as a fully operational, low-cost computer capable of desktop computing, media streaming, home automation, and robotics, while using only a fraction of the power of a standard desktop. <b>This piece of hardware acts as the brain of the car, with software capable to process the view of the web camera, deciding which is the most appropriate action to execute, according the scenery, to later let our microcontroller perform it</b>.
 
-<hr>
-
-<h2> Software implemented in the Raspberry </h2>
-
-<img src="./resources/OpenCV_Logo.png " alt="OpenCV Logo" height="100" width="200">
-
-_Open Source Computer Vision Library is a massive, free, and open-source software library packed with tools for real-time computer vision, image processing, and machine learning. It is designed to act as the eyes of a system, allowing computers to read, analyze, and understand visual data like images and videos. Computers do not see images, they interpret them as huge numeric matrices of pixels. <b>OpenCV provides functions to manipulate these numbers rapidly, that is the reason why we applied this library, allowing the autonomous car to detect colors, performing mathematical operations to achieve it</b>._
-
-Explain Binary Vision...
-
-Configuration of the camera through the python script (kernel, buffer, resolution)
+<a href="src"> See the implemented code in the Raspberry </a>
 
 <hr>
 
@@ -150,13 +141,7 @@ Configuration of the camera through the python script (kernel, buffer, resolutio
 
 The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of a project, allowing people to read inputs (like a sensor, button, or temperature reading) and turn them into outputs (like moving a motor or turning on an LED). Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino. 
 
-<hr>
-
-<h3> Arduino Code (C++) </h3>
-
-The Servo.h library is a built-in library for Arduino that allows people to easily control RC (hobby) servo motors. It simplifies the process by handling the precise pulse-width modulation (PWM) signals in the background, allowing your motor to rotate to specific angles, in our case 60 to 120 degrees, or at continuous speeds. <b>We employed this library to manage the angles of our servo motor, depending the instruction to execute. When the microcontroller receives the decision taken by the Raspberry, the Arduino's code checks the action it is going to perform and how, sending small electric pulses to the driver</b>.
-
-Explain Serial Port...
+<a href="src"> See the implemented code in the Arduino </a>
 
 <hr>
 
