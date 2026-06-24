@@ -12,16 +12,14 @@
   - [3.3 Software-to-Hardware Connection](#33-software-to-hardware-connection)
 - [4. Python Implementation](#4-python-implementation)
   - [4.1 Mode 1 Implementation](#41-mode-1-implementation)
-  - [Raspberry Pi 4](#raspberry-pi-4)
+  - [4.2 Mode 2 Implementation](#42-mode-2-implementation)
+  - [4.3 Arduino Implementation](#43-arduino-implementation)
 - [Mobility Management](#mobility-management)
   - [Arduino Uno](#arduino-uno)
   - [L298N Driver](#l298n-driver)
   - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
   - [Ackermann Mechanism](#ackermann-mechanism)
-- [Power Management](#power-management)
-  - [LX-2BUPS UPS](#lx-2bups-ups)
-  - [Ultrafire TR 18650 Batteries](#ultrafire-tr-18650-batteries)
-- <a href="src"> Obstacle Management </a>
+- [6. Conclusion](#conclusion)
 
 <!-- tocstop -->
 
