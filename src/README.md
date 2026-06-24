@@ -72,7 +72,6 @@ In the implemented system, these tasks are addressed through computer vision, ti
 
 ```text
 Camera -> Raspberry Pi -> Serial -> Arduino -> Servo / Motor
-
 ```
 
 ### 3.3 Software-to-Hardware Connection
@@ -122,12 +121,12 @@ class WROPrimitivoBlindado:
 
 #### Main Responsibilities
 
-- open serial communication
-- capture the camera image
-- detect walls and race direction
-- compute speed and angle
-- count corners and laps
-- send commands to Arduino
+- Open serial communication
+- Capture the camera image
+- Detect walls and race direction
+- Compute speed and angle
+- Count corners and laps
+- Send commands to Arduino
 
 #### Configuration Parameters
 
@@ -194,11 +193,11 @@ RUTINA_MANUAL = [
 #### Servo Handshake Sequence
 
 ```python
-self.ser.write(b"<0,120>\n") # Turn right the wheels
+self.ser.write(b"<0,120>\n")
 time.sleep(0.3)
-self.ser.write(b"<0,60>\n") # Turn left the wheels
+self.ser.write(b"<0,60>\n")
 time.sleep(0.3)
-self.ser.write(b"<0,86>\n") # Straighten the wheels.
+self.ser.write(b"<0,86>\n")
 ```
 
 ### 4.3 Arduino Implementation
@@ -238,9 +237,9 @@ const int pinEcho = 11;
 
 #### Main Responsibilities
 
-- initialize serial communication at `115200`
-- receive `<speed,angle>` packets from the Raspberry Pi
-- parse and validate the received values
+- Initialize serial communication at `115200`
+- Receive `<speed,angle>` packets from the Raspberry Pi
+- Parse and validate the received values
 - apply the angle to the steering servo
 - apply the speed to the traction motor
 - read the ultrasonic sensor periodically
@@ -266,11 +265,11 @@ These variables store:
 
 In `setup()`, the Arduino:
 
-1. starts serial communication
-2. attaches the steering servo
-3. centers the servo at `86`
-4. configures the motor pins as outputs
-5. configures the ultrasonic pins
+1. Starts serial communication
+2. Attaches the steering servo
+3. Centers the servo at `86`
+4. Configures the motor pins as outputs
+5. Configures the ultrasonic pins
 
 #### Serial Protocol Received by Arduino
 
@@ -346,10 +345,12 @@ In both modes, the physical connection at startup is:
 
 Both modes also use an initial steering handshake before the main action starts:
 
-```text
-<0,120>
-<0,60>
-<0,86>
+```python
+self.ser.write(b"<0,120>\n") # Turn right the wheels
+time.sleep(0.3)
+self.ser.write(b"<0,60>\n") # Turn left the wheels
+time.sleep(0.3)
+self.ser.write(b"<0,86>\n") # Straighten the wheels.
 ```
 
 This confirms that the steering servo responds correctly.
@@ -551,12 +552,12 @@ The current routine contains:
 From the hardware perspective, the software currently reads from:
 
 - USB camera
-- start button event through Arduino
+- Start button event through Arduino
 
 And writes to:
 
-- steering servo
-- drive motor
+- Steering servo
+- Drive motor
 
 ---
 
