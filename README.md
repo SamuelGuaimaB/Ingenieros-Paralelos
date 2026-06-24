@@ -15,7 +15,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <!-- toc -->
 
-- [Components table](#components-table)
+- [Components Used and Estimated Budget](#components-used-and-estimated-budget)
 - [Vision Management](#vision-management)
   - [Logitech C922 Web Camera](#logitech-c922-web-camera)
   - [Raspberry Pi 4](#raspberry-pi-4)
@@ -50,13 +50,7 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 | 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
 | Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
-### Estimated Total
-
-| Concept | Total |
-|---|---:|
-| Total | $443.10 |
-
-> The final budget may vary depending on availability, seller, shipping cost, and product condition.
+### Estimated Total: $443.10
 
 ## Vision Management
 
@@ -167,6 +161,8 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
 
 The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. This component acts as the muscles of the car, suplying the necessary energy to the motors, but since the Arduino and Raspberry manage a low voltage (not enough to supply the driver), it is necessary the implementation of an additional power source to this component.
 
+<hr>
+
 - #### Fischertechnik Maker Kit Car
 
 <img src="./resources/Fischertechnik_Maker_Kit_Car.png " alt="Fischertechnik Maker Kit Car" width="300px" >
@@ -246,3 +242,5 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 </table>
 
 In the project we used four of these batteries, two for each UPS. They are rechargeable, we recharge them by plugging in the UPS with a USB-C charger of 20W (admitting 9V / 2.22A).
+
+<a href="src"> Click here to see implemented software details </a>
