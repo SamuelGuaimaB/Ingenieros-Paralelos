@@ -28,6 +28,8 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
   - [L298N Driver](#l298n-driver)
   - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
   - [Ackermann Mechanism](#ackermann-mechanism)
+  - [Ackermann Principle](#ackermann-principle)
+  - [Ackermann in our project](#ackermann-in-our-project)
 - [Power Management](#power-management)
   - [LX-2BUPS UPS](#lx-2bups-ups)
   - [Ultrafire TR 18650 Batteries](#ultrafire-tr-18650-batteries)
@@ -226,7 +228,7 @@ When a vehicle takes a turn, the front wheels follow paths with different radii.
 
 <hr>
 
-- #### The Ackermann principle
+- #### Ackermann principle
 
 The Ackermann principle is based on a geometric condition known as the "Ackermann condition":
 
