@@ -5,8 +5,11 @@
 <!-- toc -->
 
 - [1. General Description](#1-general-description)
-- [Preview of the Car Performance](#preview-of-the-car-performance)
-- [Components Used and Estimated Budget](#components-used-and-estimated-budget)
+- [2. System Objective](#2-system-objective)
+- [3. Robot Architecture](#3-robot-architecture)
+  - [3.1 Functional Distribution](#31-functional-distribution)
+  - [3.2 Robot Architecture](#3-robot-architecture)
+  - [3.3 Robot Architecture](#3-robot-architecture)
 - [Vision Management](#vision-management)
   - [Logitech C922 Web Camera](#logitech-c922-web-camera)
   - [Raspberry Pi 4](#raspberry-pi-4)
