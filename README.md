@@ -1,25 +1,25 @@
-# WRO2026 Future Engineers – Ingenieros Paralelos
+# WRO2026 Futuros Ingenieros – Ingenieros Paralelos
 
 ## About us
 
->Team members
+>Integrantes del equipo
 - Samuel Guaimacuto
 - Andrés Villareal
 - David Xu
 
-_We are a Venezuelan team conformed by Informatic Engineering students of Universidad Gran Mariscal de Ayacucho (UGMA), núcleo Barcelona, being our first time participating in a WRO competition, competing in the Future Engineers category. Our inspiration to be part of this tournament was the desire to learn about robotics' world, wanting to face this challenge in order to achieve it. We are grateful with all our family, professors and classmates, without their support it would not have been possible to achieve what we set out to do._
+_Somos un equipo venezolano conformado por estudiantes de ingeniería informática de la Universidad Gran de Ayacucho (UGMA), núcleo Barcelona, siendo esta nuestra primera vez participando en una competición WRO, compitiendo en la categoría Futuros Ingenieros. Nuestra inspiración de formar parte de este torneo fue el deseo de aprender acerca del mundo de la robótica, queriendo enfrentarnos a desafíos para lograrlo. Estamos agradecidos con toda nuestra familia, profesores y compañeros, ya que sin el apoyo de ellos no hubiésemos logrado lo que nos propusimos_.
 
-<img src="./t-photos/igshiix0ajvkbmse051z.jpeg" alt="Photo of Us" width="500">
+<img src="./t-photos/igshiix0ajvkbmse051z.jpeg" alt="Foto de Nosotros" width="500">
 
 <hr>
 
-## Table of Contents
+## Tabla de Contenido
 
 <!-- toc -->
 
-- [Preview of the Car](#preview-of-the-car)
-- [Preview of the Car Performance](#preview-of-the-car-performance)
-- [Components Used and Estimated Budget](#components-used-and-estimated-budget)
+- [Vista previa del carro](#vista-previa-del-carro)
+- [Clip del carro en acción](#clip-del-carro-en-acción)
+- [Componentes usados y precio estimado](#componentes-usados-y-precio-estimado)
 - [Vision Management](#vision-management)
   - [Logitech C922 Web Camera](#logitech-c922-web-camera)
   - [Raspberry Pi 4](#raspberry-pi-4)
@@ -39,44 +39,44 @@ _We are a Venezuelan team conformed by Informatic Engineering students of Univer
 
 <hr>
 
-## Preview of the Car
+## Vista previa del carro
 
 <table>
   <tr>
-    <td align="center"><b>Top</b><br><img src="./v-photos/IMG_5101.JPG" width="300"></td>
-    <td align="center"><b>Front</b><br><img src="./v-photos/IMG_5102.JPG" width="300"></td>
-    <td align="center"><b>Left</b><br><img src="./v-photos/IMG_5103.JPG" width="300"></td>
+    <td align="center"><b>Superior</b><br><img src="./v-photos/IMG_5101.JPG" width="300"></td>
+    <td align="center"><b>Frontal</b><br><img src="./v-photos/IMG_5102.JPG" width="300"></td>
+    <td align="center"><b>Izquierda</b><br><img src="./v-photos/IMG_5103.JPG" width="300"></td>
   </tr>
   <tr>
-    <td align="center"><b>Bottom</b><br><img src="./v-photos/IMG_5104.JPG" width="300"></td>
-    <td align="center"><b>Back</b><br><img src="./v-photos/IMG_5105.JPG" width="300"></td>
-    <td align="center"><b>Right</b><br><img src="./v-photos/IMG_5100.JPG" width="300"></td>
+    <td align="center"><b>Inferior</b><br><img src="./v-photos/IMG_5104.JPG" width="300"></td>
+    <td align="center"><b>Trasera</b><br><img src="./v-photos/IMG_5105.JPG" width="300"></td>
+    <td align="center"><b>Derecha</b><br><img src="./v-photos/IMG_5100.JPG" width="300"></td>
   </tr>
 </table>
 
 <hr>
 
-## Preview of the Car Performance
+## Clip del carro en acción
 
 <img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
 
-<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Click to See the Complete Performance </a>
+<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Presiona aquí para ver el video completo </a>
 
 <hr>
 
-## Components Used and Estimated Budget
+## Componentes usados y precio estimado
 
-| Component | Quantity | Estimated Unit Price | Estimated Subtotal | Reference |
+| Componente | Cantidad | Precio Estimado por Unidad | Subtotal Estimado | Referencia |
 |---|---:|---:|---:|---|
-| Raspberry Pi 4 Model B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
+| Raspberry Pi 4 Modelo B 4GB Kit | 1 | $200.00 | $200.00 | MercadoLibre Venezuela |
 | Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
-| L298N Motor Driver | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
-| Logitech C922 Camera | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
-| LX-2BUPS UPS Module | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
-| 18650 3.7V Battery | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
+| Driver de Motor L298N | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
+| Cámara Logitech C922 | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
+| Módulo UPS LX-2BUPS | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
+| Batería 18650 3.7V | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
 | Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
-### Estimated Total: $443.10
+### Total Estimado: $443.10
 
 <hr>
 
