@@ -1,6 +1,6 @@
 # WRO2026 Futuros Ingenieros – Ingenieros Paralelos
 
-## About us
+## Acerca de Nosotros
 
 >Integrantes del equipo
 - Samuel Guaimacuto
