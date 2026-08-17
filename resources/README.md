@@ -1,5 +1,5 @@
-# Images 🖼️
+# Imágenes 🖼️
 
 <h3>
-  This folder contains pictures of the hardware and software we employed.
+  Esta carpeta contiene fotos representativas acerca del hardware y el software empleados.
 </h3>
