@@ -80,9 +80,9 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 
 <hr>
 
-## Vision Management
+## Manejo de la visión
 
-- #### Logitech C922 Web Camera
+- #### Cámara Web Logitech C922
 
 <table>
   <tr>
@@ -90,20 +90,20 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
       <img src="./resources/Logitech C922.png" alt="Logitech C922 Webcam" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
-        <li>Max resolution: 1080p at 30fps (Full HD) or 720p at 60fps (HD) </li>
-        <li>Field of View (FoV): 78° diagonal </li>
-        <li>Focus Type: Autofocus </li>
-        <li>Lens Technology: Full HD glass lens with automatic light correction</li>
-        <li>Audio: Dual omnidirectional stereo microphones </li>
-        <li>Connectivity: Wired USB 2.0 (includes a 5-foot / 1.5m cable)</li>
+        <li>Resolución máxima: 1080p a 30 fps (Full HD) o 720p a 60 fps (HD)</li>
+        <li>Campo de visión (FoV): 78° en diagonal</li>
+        <li>Tipo de enfoque: Enfoque automático</li>
+        <li>Tecnología de la lente: Lente de cristal Full HD con corrección automática de la luz</li>
+        <li>Audio: Micrófonos estéreo omnidireccionales duales</li>
+        <li>Conectividad: USB 2.0 con cable (incluye un cable de 1,5 m)</li>
       </ul>
     </td>
   </tr>
 </table>
 
-The Logitech C922 Pro Stream is a popular, high-definition webcam designed specifically for content creators, streamers, and professionals. It offers sharp video resolution, smooth frame rates for fluid motion, and a convenient low-light correction feature. In our project, we used it as the eye of the car, catching the view of the environment.
+La Logitech C922 es una cámara web de gran popularidad con alta definición diseñada especialmente para creadores de contenido, streamers y profesionales. Ofrece una resolución de video nítida, una velocidad de fotogramas fluida para un movimiento sin interrupciones y la capacidad de corrección en baja iluminación. <b>En nuestro proyecto, la utilizamos como el ojo del carro, capturando la vista del entorno para que se pudiesen realizar acciones como la identificación de esquinas y detección de objetos, de tal manera que las fotos tomadas por la cámara pudiesen ser procesadas posteriormente por el software presente en la Raspberry. Se decidió optar por esta como el ojo del vehículo debido a las buenas reseñas que encontramos investigando acerca de posibles cámaras que se podían emplear.</b>
 
 <hr>
 
@@ -115,26 +115,26 @@ The Logitech C922 Pro Stream is a popular, high-definition webcam designed speci
       <img src="./resources/Raspberry Pi 4.png " alt="Raspberry Pi 4" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
-        <li>Processor: Quad-Core Cortex-A72 (ARM v8) 64-bit SoC @ 1.5–1.8 GHz </li>
-        <li>Memory: 4GB LPDDR4-3200 SDRAM </li>
-        <li>Video: Dual micro-HDMI ports supporting 4K @ 60fps </li>
-        <li>Connectivity: Gigabit Ethernet, 2.4/5.0 GHz Wi-Fi, and Bluetooth 5.0 </li>
-        <li>USB: 2x USB 3.0, 2x USB 2.0 ports </li>
-        <li>Power: USB-C (5V/3A) or Power over Ethernet (PoE) supported </li>
+        <li>Procesador: SoC Cortex-A72 de cuatro núcleos (ARM v8) de 64 bits a 1,5–1,8 GHz</li>
+        <li>Memoria: 4 GB de SDRAM LPDDR4-3200</li>
+        <li>Vídeo: Dos puertos micro-HDMI compatibles con 4K a 60 fps</li>
+        <li>Conectividad: Gigabit Ethernet, Wi-Fi de 2,4/5,0 GHz y Bluetooth 5.0</li>
+        <li>USB: 2 puertos USB 3.0 y 2 puertos USB 2.0</li>
+        <li>Alimentación: Compatible con USB-C (5 V/3 A) o alimentación a través de Ethernet (PoE)</li>
       </ul>
     </td>
   </tr>
 </table>
 
-The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It functions as a fully operational, low-cost computer capable of desktop computing, media streaming, home automation, and robotics, while using only a fraction of the power of a standard desktop. <b>This piece of hardware acts as the brain of the car, with software capable to process the view of the web camera, deciding which is the most appropriate action to execute, according the scenery, to later let our microcontroller perform it</b>.
+La Raspberry Pi 4 Modelo B es una computadora de placa única del tamaño de una tarjeta de crédito. Funciona como una computadora de bajo costo totalmente operativa, capaz de realizar tareas de computación de escritorio, transmisión de contenido multimedia, automatización del hogar y de robótica, utilizando solo una fracción de la potencia de una computadora de escritorio estándar. <b>Este componente actúa como el cerebro del vehículo, con el software implementado tiene la capacidad de procesar las imágenes de la cámara web, decidiendo cual es la acción más apropiada a ejecutar dependiendo del entorno en el que se encuentre el carro, para que luego nuestro microcontrolador, el Arduino Uno, la ejecute</b>.
 
-<a href="src"> See the implemented code in the Raspberry </a>
+<a href="src"> Ver el código implementado en la Raspberry </a>
 
 <hr>
 
-## Mobility Management
+## Manejo de la movilidad
 
 - #### Arduino Uno
 
@@ -144,31 +144,31 @@ The Raspberry Pi 4 Model B is a credit card-sized, single-board computer. It fun
       <img src="./resources/Arduino_Uno.png " alt="Arduino Uno" width="300" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
-        <li> Microcontroller: ATmega328P </li>
-        <li> Operating Voltage: 5V </li>
-        <li> Input Voltage (Recommended): 7V to 12V </li>
-        <li> Input Voltage (Limit): 6V to 20V </li>
-        <li> Digital I/O Pins: 14 (6 provide PWM output) </li>
-        <li> Analog Input Pins: 6 </li>
-        <li> DC Current per I/O Pin: 20mA </li>
-        <li> Clock Speed: 16MHz </li>
-        <li> Flash Memory: 32KB (of which 0.5KB is used by the bootloader) </li>
-        <li> SRAM: 2KB </li>
-        <li> EEPROM: 1KB </li>
+        <li> Microcontrolador: ATmega328P </li>
+        <li> Voltaje de funcionamiento: 5 V </li>
+        <li> Voltaje de entrada (recomendado): 7 V a 12 V </li>
+        <li> Voltaje de entrada (límite): 6 V a 20 V </li>
+        <li> Pines de E/S digitales: 14 (6 proporcionan salida PWM) </li>
+        <li> Pines de entrada analógica: 6 </li>
+        <li> Corriente continua por pin de Entrada/Salida: 20 mA </li>
+        <li> Velocidad de reloj: 16 MHz </li>
+        <li> Memoria flash: 32 KB (de los cuales 0,5 KB son utilizados por el gestor de arranque) </li>
+        <li> SRAM: 2 KB </li>
+        <li> EEPROM: 1 KB </li>
       </ul>
     </td>
   </tr>
 </table>
 
-The Arduino Uno is a beginner-friendly, open-source microcontroller board used for building digital devices and interactive projects. It acts as the brain of our project, it allows to read inputs such as a sensor, button, or temperature reading and turn them into outputs, like moving a motor or turning on an LED. <b>This hardware acts as the nervous system of our car, sending small electric pulses to the driver. Since it is our first time participating in this kind of tournaments, we decided to begin trying this model of Arduino</b>. 
+El Arduino Uno es una placa microcontroladora de código abierto, ideal para principiantes, que se utiliza para construir dispositivos digitales y proyectos interactivos. Permite leer entradas como las de un sensor, un botón o la lectura de temperatura, y convertirlas en salidas, como mover un motor o encender un LED. <b>Este hardware actúa como el sistema nervioso de nuestro coche debido a que este es el componente que recibe todas las decisiones tomadas por el cerebro, la Raspberry, enviando pequeños impulsos eléctricos al driver para indicarle cuándo y de qué manera debe mover los motores. Dado que es nuestra primera vez participando en este tipo de torneos, decidimos empezar probando este modelo de Arduino</b>.
 
-<a href="src"> See the implemented code in the Arduino </a>
+<a href="src"> Ver el código implementado en el Arduino </a>
 
 <hr>
 
-- #### L298N Driver
+- #### Driver L298N
 
 <table>
   <tr>
@@ -176,20 +176,20 @@ The Arduino Uno is a beginner-friendly, open-source microcontroller board used f
       <img src="./resources/Driver_L298N.png " alt="Driver L298N" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
         <li> Driver IC: STMicroelectronics L298N </li>
-        <li> Motor Supply Voltage (Vs): 5V to 35V </li>
-        <li> Peak Output Current: 2A per channel (4A total max) </li>
-        <li> Logic Supply Voltage (Vss): 5V to 7V </li>
-        <li> Maximum Power Dissipation: 20W at 75°C </li>
-        <li> Control Signal Level: Low (-0.3V to 1.5V), High (2.3V to Vss) </li>
+        <li> Tensión de alimentación del motor (Vs): 5 V a 35 V </li>
+        <li> Corriente de salida máxima: 2 A por canal (4 A máx. total) </li>
+        <li> Tensión de alimentación lógica (Vss): 5 V a 7 V </li>
+        <li> Disipación de potencia máxima: 20 W a 75 °C </li>
+        <li> Nivel de señal de control: Bajo (-0,3 V a 1,5 V), Alto (2,3 V a Vss) </li>
       </ul>
     </td>
   </tr>
 </table>
 
-The L298N is a dual H-Bridge motor driver module used to control the direction and speed of DC or stepper motors. It acts as a bridge between the microcontroller, the Arduino Uno, and high-power motors (in our case the servo motor and the encoder motor), supplying the necessary current and voltage. <b>This component acts as the muscles of the car, suplying the necessary energy to the motors, but since the Arduino and Raspberry manage a low voltage (not enough to supply the driver), it is necessary the implementation of an additional power source to this component</b>.
+El L298N es un módulo controlador de motor de doble Puente H, que se utilizan para manejar la dirección del flujo de corriente elétrica, permitiendo que nuestro vehículo de desplace izquierda-derecha o de reversa y no solo hacia adelante. Sirve como puente entre el microcontrolador, el Arduino Uno, y los motores de alta potencia (en nuestro caso, el servomotor y el motor del codificador), suministrando la corriente y el voltaje necesarios. <b>Este componente actúa como los músculos del coche, proporcionando el voltaje necesario a los motores, pero dado que el Arduino y la Raspberry Pi manejan un voltaje bajo (insuficiente para alimentar el controlador), es necesaria la implementación de una fuente de alimentación adicional para este componente</b>.
 
 <hr>
 
