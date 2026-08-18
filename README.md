@@ -197,9 +197,9 @@ El L298N es un módulo controlador de motor de doble Puente H, que se utilizan p
 
 <img src="./resources/Fischertechnik_Maker_Kit_Car.png " alt="Fischertechnik Maker Kit Car" width="300px" >
 
-The Fischertechnik Maker Kit Car is an advanced construction kit designed for makers, hobbyists, and robotic enthusiasts to build a highly customizable, mobile robotic vehicle chassis. Includes pieces for building sturdy structural superstructures and custom mounts, so we took advantage of this by using the blocks as the base or skeleton of our car to later assembly the other components around it.
+El Fischertechnik Maker Kit Car es un kit de construcción avanzado diseñado para aficionados de la robótica, que da la libertad de construir un chasis de vehículo robótico móvil personalizable. Incluye piezas para construir estructuras robustas y soportes personalizados, por lo que aprovechamos esto utilizando los bloques del kit como base o esqueleto de nuestro coche para luego ensamblar el resto de los componentes alrededor de ellos.
 
-<h3> Other components the kit contains </h3>
+<h3> Otros componentes que el kit contiene </h3>
 
 > Servomotor
 
@@ -207,7 +207,7 @@ The Fischertechnik Maker Kit Car is an advanced construction kit designed for ma
 
 Is a specialized motor designed to turn to a specific angle (in this case between 60° and 120°) and hold that position. It connects directly to the front steering knuckles of the chassis and it controls the steering mechanism. Unlike the drive motor, it is not programmed to spin continuously. Instead, it is commanded to change degrees, giving the car precise navigation capabilities.
 
-> Encoder Motor or C Motor
+> Motor Codificador o Motor C
 
 <a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Check specifications</a>
 
