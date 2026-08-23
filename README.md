@@ -221,57 +221,49 @@ Consiste en una caja de cambios mecánica ubicada entre las dos ruedas motrices,
 
 - #### Mecanismo Ackermann
 
-<img src="./resources/Ackermann_Turning.png " alt="Fischertechnik Maker Kit Car" width="300px" >
+<img src="./resources/Ackermann_Turning.png " alt="Imagen del mecanismo Ackermann" width="300px" >
 
-When a vehicle takes a turn, the front wheels follow paths with different radii. The inner wheel follows a tighter circle (smaller radius) while the outer wheel describes a wider arc (larger radius). If both wheels point in exactly the same direction (parallel to each other), the inner wheel tends to drag or slip sideways because it is geometrically forced to follow a path that does not correspond to it. This generates: Premature tire wear, Greater steering effort, Loss of stability and grip, Larger turning radius of the vehicle. The Ackermann mechanism solves this problem by making the wheels adopt different angles automatically when the steering wheel is turned.
+Cuando un carro gira, las ruedas delanteras siguen trayectorias con radios diferentes. La rueda interior describe un círculo más cerrado (radio menor), mientras que la exterior describe un arco más amplio (radio mayor). Si ambas ruedas apuntan exactamente en la misma dirección (paralelas entre sí), la rueda interior tiende a arrastrarse o deslizarse lateralmente, ya que se ve forzada a seguir una trayectoria que no le corresponde. Esto genera desgaste prematuro de los neumáticos, mayor esfuerzo de dirección, pérdida de estabilidad y agarre, y mayor radio de giro del vehículo. El mecanismo de Ackermann resuelve este inconveniente haciendo que las ruedas adopten ángulos diferentes automáticamente en el momento cuando las ruedas direccionales giran hacia la izquierda o derecha.
 
 <hr>
 
-- #### Ackermann principle
+- #### Principio Ackermann
 
-The Ackermann principle is based on a geometric condition known as the "Ackermann condition":
+El principio de Ackermann se basa en una condición geométrica conocida como la condición de Ackermann. En un giro perfecto, los ejes de todas las ruedas deben intersectarse en un único punto común situado en la prolongación del eje trasero. Este punto es el centro instantáneo de rotación del vehículo. Esto implica que la rueda delantera interior debe girar con un ángulo mayor (αᵢ), mientras que la rueda delantera exterior debe girar con un ángulo menor (αₑ).
 
-In a perfect turn, the axes of all wheels must intersect at a single common point located on the extension of the rear axle. That point is the instantaneous center of rotation of the vehicle.
-
-This implies that:
-
-Inner front wheel → must turn at a larger angle (αᵢ)
-
-Outer front wheel → must turn at a smaller angle (αₑ)
-
-The relationship between both angles is given by the formula:
+La relación entre ambos ángulos viene dada por la fórmula:
 
 ```text
 cot(αₑ) - cot(αᵢ) = d / L
 ```
 
-Where:
+Donde:
 
-d = distance between the wheel pivot points (track width)
+d = distancia entre los puntos de pivote de las ruedas (ancho de vía)
 
-L = distance between axles (wheelbase)
+L = distancia entre ejes (distancia entre ejes)
 
-This relationship ensures that, for any steering angle, the center of curvature remains on the line of the rear axle, preventing lateral dragging of the wheels.
-
-<hr>
-
-- #### Ackermann in our project
-
-In our car there is not presence of this mechanism, or it is called a 0% Ackermann, this does not affect a lot the performance since is a small vehicle, but if there was presence of this in the project it would help us improve the times. There are some reasons the kit does not includes it:
-
-1. It is a basic or "entry-level" kit – The Maker Kit Car is designed for the maker market as a base chassis, robust and easy to expand, not as a high-performance scale model.
-
-2. Priority on educational functionality – Its main objective is to serve as a platform for integrating development boards (Arduino, Raspberry Pi) and learning about robotics and programming. A simpler steering system, such as a steering knuckle with a servo motor, is easier to build and program for a beginner user.
-
-3. Product differentiation – fischertechnik reserves the Ackermann mechanism for its more advanced kits focused on competition, such as the STEM Coding Competition, which have a much higher price and complexity. The Maker Kit Car, with its 119 pieces, is a more affordable and versatile option for creative projects.
-
-4. Cost and manufacturing simplicity – A complete Ackermann mechanism requires more parts (angled steering arms, additional track rods, precise geometry) than a simple steering knuckle with a servo, which increases production cost and assembly complexity.
-
-5. Target audience – The kit is aimed at makers and hobbyists who want to experiment with electronics and programming, not necessarily at automotive engineering students who require an exact reproduction of vehicle dynamics.
+Esta relación garantiza que, para cualquier ángulo de giro, el centro de curvatura permanezca sobre la línea del eje trasero, evitando el arrastre lateral de las ruedas.
 
 <hr>
 
-## Power Management
+- #### Ackermann en nuestro proyecto
+
+Nuestro coche no cuenta con la presencia de este mecanismo, o también puede ser denominado 0% Ackermann. Esto no afecta mucho al rendimiento, ya que se trata de un vehículo pequeño, pero si lo incluyéramos en el proyecto, nos ayudaría a mejorar los tiempos, por otra parte también se podrían evitar problemas con el desgaste de las llantas. En base a lo investigado, son varias las razones por las que el kit no trae este mecanismo incluido:
+
+1. Es un kit básico de iniciación, pues el Maker Kit Car está diseñado con el propósito de cumplir la función de un chasis base, robusto y fácil de ampliar, no como un modelo a escala de alto rendimiento.
+
+2. Prioridad de funcionalidad educativa: su objetivo principal es servir como plataforma para integrar placas de desarrollo, como Arduino y Raspberry Pi, y aprender sobre robótica y programación, por el hecho de que un sistema de dirección más sencillo, como una mangueta con un servomotor, es más fácil de construir y programar para un individuo no muy conocedor acerca del área.
+
+3. Diferenciación del producto: Fischertechnik reserva el mecanismo Ackermann para sus kits más avanzados, orientados a la competición, como el STEM Coding Competition, que tienen un precio y una complejidad mucho mayores. El Maker Kit Car, con sus 119 piezas, es una opción más accesible y rentable para proyectos creativos.
+
+4. Costo y simplicidad de fabricación: Un mecanismo Ackermann completo requiere más piezas (brazos de dirección angulados, barras de acoplamiento adicionales, geometría precisa) que una simple mangueta con servomotor, lo que aumenta el costo de producción y la complejidad del montaje.
+
+5. Público objetivo: El kit está dirigido a aficionados y creadores que desean experimentar con la electrónica y la programación, no necesariamente a estudiantes de ingeniería que requieran una reproducción exacta de la dinámica de un vehículo.
+
+<hr>
+
+## Manejo de las Fuentes de Energia
 
 - #### LX-2BUPS UPS
 
@@ -323,4 +315,10 @@ In the project we used four of these batteries, two for each UPS. They are recha
 
 <hr>
 
-### End of the main section, <a href="src"> click here to see implemented software details </a>.
+## Puntos a mejorar en nuestro proyecto
+
+Después de esta primera experiencia en una competición WRO y a lo largo de nuestro camino de preparación para estos torneos, nos pudimos dar cuenta de puntos muy clave que se pueden optimizar del carro desarrollado...
+
+<hr>
+
+### Fin de la sección principal, <a href="src"> haz click aqui para ver detalles acerca del software implementado</a>.
