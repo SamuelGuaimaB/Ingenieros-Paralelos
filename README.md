@@ -20,20 +20,20 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 - [Vista previa del carro](#vista-previa-del-carro)
 - [Clip del carro en acción](#clip-del-carro-en-acción)
 - [Componentes usados y precio estimado](#componentes-usados-y-precio-estimado)
-- [Vision Management](#vision-management)
-  - [Logitech C922 Web Camera](#logitech-c922-web-camera)
+- [Manejo de la visión](#manejo-de-la-visión)
+  - [Cámara Web Logitech C922](#cámara-web-logitech-c922)
   - [Raspberry Pi 4](#raspberry-pi-4)
-- [Mobility Management](#mobility-management)
+- [Manejo de la movilidad](#manejo-de-la-movilidad)
   - [Arduino Uno](#arduino-uno)
-  - [L298N Driver](#l298n-driver)
+  - [Driver L298N](#driver-l298n)
   - [Fischertechnik Maker Kit Car](#fischertechnik-maker-kit-car)
-  - [Ackermann Mechanism](#ackermann-mechanism)
-  - [Ackermann Principle](#ackermann-principle)
-  - [Ackermann in our project](#ackermann-in-our-project)
-- [Power Management](#power-management)
-  - [LX-2BUPS UPS](#lx-2bups-ups)
-  - [Ultrafire TR 18650 Batteries](#ultrafire-tr-18650-batteries)
-- <a href="src"> Obstacle Management </a>
+  - [Mecanismo Ackermann](#mecanismo-ackermann)
+  - [Principio Ackermann](#principio-ackermann)
+  - [Ackermann en nuestro proyecto](#ackermann-en-nuestro-proyecto)
+- [Manejo de las Fuentes de Energia](#manejo-de-las-fuentes-de-energia)
+  - [UPS LX-2BUPS](#ups-lx-2bups)
+  - [Baterías Ultrafire TR 18650](#baterías-ultrafire-tr-18650)
+- <a href="src"> Manejo de obstáculos </a>
 
 <!-- tocstop -->
 
@@ -259,13 +259,13 @@ Nuestro coche no cuenta con la presencia de este mecanismo, o también puede ser
 
 4. Costo y simplicidad de fabricación: Un mecanismo Ackermann completo requiere más piezas (brazos de dirección angulados, barras de acoplamiento adicionales, geometría precisa) que una simple mangueta con servomotor, lo que aumenta el costo de producción y la complejidad del montaje.
 
-5. Público objetivo: El kit está dirigido a aficionados y creadores que desean experimentar con la electrónica y la programación, no necesariamente a estudiantes de ingeniería que requieran una reproducción exacta de la dinámica de un vehículo.
+5. Público objetivo: El kit está dirigido a aficionados y creadores que desean experimentar con la electrónica y la programación, no necesariamente a estudiantes de ingeniería que busquen una reproducción exacta de la dinámica de un vehículo.
 
 <hr>
 
 ## Manejo de las Fuentes de Energia
 
-- #### LX-2BUPS UPS
+- #### UPS LX-2BUPS
 
 <table>
   <tr>
@@ -273,13 +273,13 @@ Nuestro coche no cuenta con la presencia de este mecanismo, o también puede ser
       <img src="./resources/LX-2BUPS.png " alt="LX-2BUPS" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
-        <li> Battery Type: Two parallel 18650 lithium-ion batteries (3.7V) </li>
-        <li> Output Voltage: Typically available in 5V, 9V, or 12V versions </li>
-        <li> Max Output Current: Up to 3A </li>
-        <li> Max Output Power: 15W to 24W </li>
-        <li> Input Voltage: Standard DC 5V (via Micro USB or USB Type-C depending on the board variant) </li>
+        <li> Tipo de batería: Dos baterías de iones de litio 18650 en paralelo (3,7V) </li>
+        <li> Voltaje de salida: Generalmente disponible en versiones de 5V, 9V o 12V </li>
+        <li> Corriente máxima de salida: 3A </li>
+        <li> Potencia máxima de salida: De 15W a 24W </li>
+        <li> Voltaje de entrada: CC estándar de 5 V (a través de Micro USB o USB Tipo-C, según la variante de la placa) </li>
       </ul>
     </td>
   </tr>
@@ -289,7 +289,7 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
 
 <hr>
 
-- #### Ultrafire TR 18650 Batteries
+- #### Baterías Ultrafire TR 18650
 
 <table>
   <tr>
@@ -297,7 +297,7 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
       <img src="./resources/Ultrafire_TR18650_9800mAh_3.7V.png " alt="Ultrafire TR 18650 9800mAh 3.7V" >
     </td>
     <td>
-      <h3>Specifications:</h3>
+      <h3>Especificaciones:</h3>
       <ul>
         <li> Form Factor: Standard 18650 cylindrical cell. </li>
         <li> Diameter: 18 mm. </li>
@@ -317,7 +317,13 @@ In the project we used four of these batteries, two for each UPS. They are recha
 
 ## Puntos a mejorar en nuestro proyecto
 
-Después de esta primera experiencia en una competición WRO y a lo largo de nuestro camino de preparación para estos torneos, nos pudimos dar cuenta de puntos muy clave que se pueden optimizar del carro desarrollado...
+Después de esta primera experiencia en una competición WRO y a lo largo de nuestro camino de preparación para estos torneos, nos pudimos dar cuenta de puntos muy clave que se pueden optimizar del carro desarrollado:
+
+1. Chasis del carro: El chasis de nuestro carro nos trajo una serie de dificultades como la limitación del espacio para ubicar los componentes necesarios, desgaste en los dientes del eje diferencial, en las llantas, entre otros aspectos. Para una futura competición, nos gustaría personalizar más nuestro chasis, diseñando e imprimiendo las piezas en 3D que creamos que sean necesarias para el ensamblaje del vehículo. Nos parece de agrado esta idea debido a que consideramos que planificando el diseño y el uso de cada parte del chasis nos evitaríamos una cantidad considerable de inconvenientes que se nos presentaron en esta jornada.
+
+2. Motor codificador más eficiente: Implementando un motor capaz de girar a mayores revoluciones por minuto para alimentar las ruedas con tracción, conseguiríamos mejorar los tiempos para los desafíos, pues el motor codificador usado en esta temporada nos limitó el logro de mejores tiempos. Consideramos que empleando un motor de este tipo pero que acepte mayor voltaje podría solucionar dicho problema.
+
+3. Posible implementación de un Mecanismo Ackermann: En caso de usar un motor codificador capaz de entregarle una mayor cantidad de revoluciones por minuto a las ruedas de nuestro carro, probablemente diseñemos este mecanismo en 3D como parte de nuestro chasis personalizado, esto con el fin de evitar tanto desgaste en las llantas y hacer más estable el vehículo, de tal manera que no resbale o patine, pudiendo influir en su rendimiento sobre la pista.
 
 <hr>
 
