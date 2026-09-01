@@ -285,7 +285,7 @@ Nuestro coche no cuenta con la presencia de este mecanismo, o también puede ser
   </tr>
 </table>
 
-The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS) module. It runs on two parallel-connected 18650 lithium-ion batteries and provides seamless, zero-delay switching between mains power and battery backup, making it ideal for keeping low-power devices like internet routers and modems running during outages. We employed two pieces of this component, one of 5V to the Raspberry and another of 12V for the driver.
+El LX-2BUPS es un popular módulo de alimentación ininterrumpida. Funciona con dos baterías de iones de litio 18650 conectadas en paralelo y proporciona un intercambio instantáneo y sin retardo entre la alimentación de red y la batería de respaldo, lo que lo hace ideal para mantener en funcionamiento dispositivos de bajo consumo en el hogar como routers y módems de internet durante cortes de luz. Utilizamos dos piezas de este componente, uno de 5 V para la Raspberry Pi y otro de 12 V para el driver.
 
 <hr>
 
@@ -299,19 +299,19 @@ The LX-2BUPS is a popular DIY-style universal uninterruptible power supply (UPS)
     <td>
       <h3>Especificaciones:</h3>
       <ul>
-        <li> Form Factor: Standard 18650 cylindrical cell. </li>
-        <li> Diameter: 18 mm. </li>
-        <li> Length: 65 mm (can reach up to 68mm if it includes a button-top or an unlisted protection circuit). </li>
-        <li> Chemistry: Lithium-ion (Li-ion). </li>
-        <li> Terminal Type: Flat top or Button top (varies by distributor). </li>
-        <li> Nominal Voltage: 3.7V advertised (Standard Li-ion curve: 4.2V fully charged, ~2.75V cut-off). </li>
-        <li> Stated Capacity: 9800 mAh. </li>
+        <li> Factor de forma: Celda cilíndrica estándar 18650. </li>
+        <li> Diámetro: 18 mm. </li>
+        <li> Longitud: 65 mm (puede alcanzar hasta 68 mm si incluye un polo positivo tipo botón o un circuito de protección no especificado). </li>
+        <li> Química: Iones de litio (Li-ion). </li>
+        <li> Tipo de terminal: Polo positivo plano o tipo botón (varía según el distribuidor). </li>
+        <li> Voltaje nominal: 3,7 V (Curva estándar de iones de litio: 4,2 V con carga completa, ~2,75 V de corte). </li>
+        <li> Capacidad declarada: 9800 mAh. </li>
       </ul>
     </td>
   </tr>
 </table>
 
-In the project we used four of these batteries, two for each UPS. They are rechargeable, we recharge them by plugging in the UPS with a USB-C charger of 20W (admitting 9V / 2.22A).
+En el proyecto utilizamos cuatro de estas baterías, dos para cada UPS. Son baterías recargables, las recargamos conectándolas al UPS con un cargador USB-C de 20 W (que admite 9 V / 2,22 A).
 
 <hr>
 
