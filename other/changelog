@@ -1,11 +1,11 @@
-A change log to document all changes made to the principal code
+Registro de cambios para documentar todas las modificaciones realizadas en el código principal
 
 1.1:
-  -#- Separation of modes into separate, dedicated files for each one.
-  -#- Elimination of the PID system and all functions derived from it.
-  -#- Code simplification and transition to a bang-bang control method for the first method.
-  -#- upgrade to a Dead Reckoning method for the implementation of the second mode.
+  -#- Separación de los modos en archivos independientes y dedicados para cada uno.
+  -#- Eliminación del sistema PID y de todas las funciones derivadas del mismo.
+  -#- Simplificación del código y transición a un método de control *bang-bang* para el primer modo.
+  -#- Actualización a un método de navegación a estima (*dead reckoning*) para la implementación del segundo modo.
 
 1.1.1:
-  -#- New instructions for the second mode 
-  -#- Minor adjustments for improved performance in the second mode
+  -#- Nuevas instrucciones para el segundo modo.
+  -#- Ajustes menores para mejorar el rendimiento en el segundo modo.
