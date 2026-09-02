@@ -18,7 +18,6 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 <!-- toc -->
 
 - [Vista previa del carro](#vista-previa-del-carro)
-- [Clip del carro en acción](#clip-del-carro-en-acción)
 - [Componentes usados y precio estimado](#componentes-usados-y-precio-estimado)
 - [Manejo de la visión](#manejo-de-la-visión)
   - [Cámara Web Logitech C922](#cámara-web-logitech-c922)
@@ -53,14 +52,6 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
     <td align="center"><b>Derecha</b><br><img src="./v-photos/IMG_5100.JPG" width="300"></td>
   </tr>
 </table>
-
-<hr>
-
-## Clip del carro en acción
-
-<img src="/resources/Car Preview.gif" alt="Car Preview" width="80%">
-
-<a href="https://www.youtube.com/watch?v=6vZ5giluS2M"> Presiona aquí para ver el video completo </a>
 
 <hr>
 
