@@ -1,22 +1,24 @@
-log
+Bitácora de registro para documentar todo el proceso realizado día a día en este proyecto
 
-this a logbook to document all the process realized day by day in this proyect
+--pos 1ra competencia--
 
---pos 1st competition--
-#day 1#
-  After observing flaws in the competition and experiencing the dynamics firsthand, it was decided to implement corrections and modularize the code to achieve a more reliable and secure strategy. 
-  One of the initial issues identified was a "blind spot" when starting too close to the front wall; because the robot was positioned so close to the inner wall, 
-  its field of view and the logic used to determine direction caused it to consistently choose the wrong path—specifically, the opposite of the correct one. 
-  To correct this the original code was first split into two separate files—separating Mode 1 from Mode 2—resulting in better performance and a more manageable workflow. 
-  To fix errors identified in Mode 1, the structure was overhauled to minimize complexity, streamlining the code as much as possible while ensuring reliability. 
-  The PID controller and its associated components were removed in favor of a Bang-Bang (or on/off) control methodology, which had proven most effective for our robot during the previous competition; 
-  this approach allowed us to complete the first challenge more consistently and with a more easily adjustable configuration. For Mode 2, we are implementing Dead Reckoning navigation, 
-  which offers far greater consistency than what we achieved during the last competition; however, given that this method is susceptible to drift or timing offsets, 
-  its final implementation is being evaluated ahead of the upcoming competition.
+#día 1# 
+  Tras observar fallas en la competencia y experimentar las dinámicas de primera mano, 
+  se decidió implementar correcciones y modularizar el código para lograr una estrategia más confiable y segura. 
+  Uno de los problemas iniciales identificados fue un "punto ciego" al arrancar demasiado cerca de la pared frontal; 
+  debido a que el robot estaba posicionado muy cerca de la pared interior, su campo de visión y la lógica utilizada para determinar la dirección causaban que eligiera consistentemente el camino equivocado, 
+  específicamente el opuesto al correcto. 
+  Para corregir esto, primero se dividió el código original en dos archivos separados —separando el Modo 1 del Modo 2— lo que resultó en un mejor rendimiento y un flujo de trabajo más manejable. 
+  Para solucionar los errores identificados en el Modo 1, se reestructuró el diseño para minimizar la complejidad, simplificando el código lo más posible y asegurando al mismo tiempo la confiabilidad. 
+  Se eliminó el controlador PID y sus componentes asociados en favor de una metodología de control Bang-Bang (o encendido/apagado), 
+  la cual había demostrado ser más efectiva para nuestro robot durante la competencia anterior; este enfoque nos permitió completar el primer desafío de manera más consistente y con una configuración más fácil de ajustar. 
+  Para el Modo 2, estamos implementando navegación por estima (Dead Reckoning), la cual ofrece una consistencia mucho mayor que la alcanzada en la última competencia; sin embargo, 
+  dado que este método es susceptible a desviaciones o desfases de tiempo, su implementación final se está evaluando antes de la próxima competencia.
 
-#day 2#
-  We didn't find any major flaws in the code used so far. New commands were added to the code for the second mode to create a code base that can then be modified as needed on the day of the competition, 
-  The car has responded correctly in most of the tests.
+#día 2#
+  No encontramos fallas importantes en el código utilizado hasta ahora. 
+Se agregaron nuevos comandos al código para el segundo modo con el fin de crear una base de código que luego pueda ser modificada según sea necesario el día de la competencia. 
+El auto ha respondido correctamente en la mayoría de las pruebas.
 
-#day 3#
+#día 3#
   
