@@ -97,7 +97,7 @@ El software actual se conecta con los componentes físicos de la siguiente maner
 ### 4.1 Script del Modo 1
 ### Archivo: `src/1st_mode.py`
 
-<img src="../resources/diagrama_modo_1_primitivo_blindado.png" alt="Diagrama de Flujo del Modo 1">
+<img src="../resources/diagrama_modo_1.png" alt="Diagrama de Flujo del Modo 1">
 
 El modo 1 es el modo de navegación autónoma. Utiliza la cámara para analizar la pista en tiempo real, detectar los muros, estimar la dirección de la ruta, controlar el ángulo de dirección y contar las vueltas.
 
@@ -182,7 +182,7 @@ self.VER_PANTALLAS = True
 ### 4.2 Script del Modo 2
 ### Archivo: `src/2nd_mode.py`
 
-<img src="../resources/diagrama_modo_2_coreografia_manual.png" alt="Diagrama de Flujo del Modo 2">
+<img src="../resources/diagrama_modo_2.png" alt="Diagrama de Flujo del Modo 2">
 
 El modo 2 es una secuencia manual basada en coreografía. No utiliza la retroalimentación de la cámara durante la ejecución; en cambio, sigue una lista predefinida de comandos de movimiento donde cada paso contiene velocidad, ángulo de dirección, duración y descripción.
 
@@ -288,7 +288,7 @@ Esto mueve las ruedas hacia un lado, luego hacia el otro y finalmente las centra
 ### 4.3 Script de Arduino
 ### Archivo: `src/Ino Code/Arduino_Code.ino`
 
-<img src="../resources/diagrama_arduino_controlador.png" alt="Diagrama de Flujo del Arduino: motor y servo">
+<img src="../resources/diagrama_arduino.png" alt="Diagrama de Flujo del Arduino: motor y servo">
 
 El código de Arduino es la capa de ejecución física del robot. Recibe comandos de la Raspberry Pi, analiza los valores de velocidad y ángulo, aplica el ángulo de dirección al servomotor y controla el motor de tracción.
 
@@ -396,7 +396,7 @@ La función `ejecutarMovimiento()`:
 ### 4.4 Script de Calibración
 ### Archivo: `src/Calibration.py`
 
-<img src="../resources/diagrama_calibration_calibrador_vision.png" alt="Diagrama de Flujo de Calibration.py">
+<img src="../resources/diagrama_calibrador.png" alt="Diagrama de Flujo de Calibration.py">
 
 `Calibration.py` es un script de soporte que se utiliza para calibrar los umbrales de la cámara antes de usar el robot en la pista. Ayuda a ajustar los valores utilizados para detectar el suelo.
 
