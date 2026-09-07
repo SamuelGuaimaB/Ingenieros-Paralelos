@@ -121,14 +121,28 @@ La Logitech C922 es una cámara web de gran popularidad con alta definición dis
 
 La Raspberry Pi 4 Modelo B es una computadora de placa única del tamaño de una tarjeta de crédito. Funciona como una computadora de bajo costo totalmente operativa, capaz de realizar tareas de computación de escritorio, transmisión de contenido multimedia, automatización del hogar y de robótica, utilizando solo una fracción de la potencia de una computadora de escritorio estándar. <b>Este componente actúa como el cerebro del vehículo, con el software implementado tiene la capacidad de procesar las imágenes de la cámara web, decidiendo cual es la acción más apropiada a ejecutar dependiendo del entorno en el que se encuentre el carro, para que luego nuestro microcontrolador, el Arduino Uno, la ejecute</b>.
 
-<a href="https://www.youtube.com/watch?v=o2TZHPnM0VQ"> Tutorial para configurar una Raspberry Pi 4 </a>
+<a href="https://www.youtube.com/watch?v=o2TZHPnM0VQ"> Tutorial para configurar una Raspberry Pi 4 </a> (Si el link no funciona se puede buscar otro tutorial)
 
 > [!NOTE]
 >- En las imágenes de nuestro carro se puede apreciar que nuestra Raspberry se encuentra en una carcasa con un mini ventilador.
 >- La universidad nos brindó este componente en este estado y tampoco se pudo verificar el origen de esta envoltura.
 
+Se nos hizo más cómodo trabajar desde la terminal de la Raspberry ya que se hacía más lento moverse dentro de la interfaz. Dentro de los comandos que usamos se encuentran los siguientes:
 
+`sudo find / -name "nombre_del_archivo"`: para buscar dónde se encuentra un archivo.
 
+`cd nombre_directorio`: para moverse a una carpeta específica.
+
+`cat archivo`: para ver el contenido de un archivo.
+
+`nano archivo`: para editar archivo desde la terminal.
+
+`sudo systemctl start robot.service`: para inciar la ejecución del programa.
+
+`sudo systemctl stop robot.service`: para parar la ejecución del programa.
+
+> [!IMPORTANT]
+>- El archivo robot.service se encuentra en la carpeta src de nuestro repositorio, en ese archivo se puede editar el archivo de Python que se va a ejecutar al presionar el botón, el cual definimos en base al modo que nos estemos enfrentando.
 
 <a href="src"> Ver el código implementado en la Raspberry </a>
 
@@ -163,6 +177,9 @@ La Raspberry Pi 4 Modelo B es una computadora de placa única del tamaño de una
 </table>
 
 El Arduino Uno es una placa microcontroladora de código abierto, ideal para principiantes, que se utiliza para construir dispositivos digitales y proyectos interactivos. Permite leer entradas como las de un sensor, un botón o la lectura de temperatura, y convertirlas en salidas, como mover un motor o encender un LED. <b>Este hardware actúa como el sistema nervioso de nuestro coche debido a que este es el componente que recibe todas las decisiones tomadas por el cerebro, la Raspberry, enviando pequeños impulsos eléctricos al driver para indicarle cuándo y de qué manera debe mover los motores. Dado que es nuestra primera vez participando en este tipo de torneos, decidimos empezar probando este modelo de Arduino</b>.
+
+> [!NOTE]
+>- Nosotros tuvimos que usar una extensión del navegador Google Chrome para poder acceder a la página "arduino.cc" para descargar el software para configurar las instrucciones a ejecutar en el Arduino Uno debido a que no se puede acceder de manera local, este se llama "CyberGhost VPN - Proxy For Chrome. 
 
 <a href="src"> Ver el código implementado en el Arduino </a>
 
