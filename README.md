@@ -32,7 +32,7 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 - [Manejo de las Fuentes de Energia](#manejo-de-las-fuentes-de-energia)
   - [UPS LX-2BUPS](#ups-lx-2bups)
   - [Baterías Ultrafire TR 18650](#baterías-ultrafire-tr-18650)
-- <a href="src"> Manejo de obstáculos </a>
+- <a href="src"> Manejo de los desafíos </a>
 
 <!-- tocstop -->
 
