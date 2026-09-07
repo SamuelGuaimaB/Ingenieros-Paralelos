@@ -234,6 +234,11 @@ Es el motor principal del vehículo. Proporciona la potencia motriz (tracción) 
 
 Consiste en una caja de cambios mecánica ubicada entre las dos ruedas motrices, en nuestro caso las ruedas traseras. Permite que las ruedas izquierda y derecha giren a velocidades diferentes mientras reciben potencia del motor. Al girar el coche, la rueda exterior recorre una mayor distancia que la interior. Sin un diferencial, las ruedas se bloquearían, patinarían o derraparían durante las curvas. Este componente garantiza un paso por curva suave y realista, y evita que el coche pierda tracción.
 
+> [!NOTE]
+>- Al ser nuestra primera vez participando en una competición WRO, usamos los componentes predeterminados del kit.
+>- La tracción trasera se conservó debido a que la mayoría de los carros cotidianos la presentan.
+>- En cuanto al engranaje diferencial se pudo observar que ayudó a forzar menos las curvas.
+
 <hr>
 
 - #### Mecanismo Ackermann
