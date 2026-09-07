@@ -63,11 +63,11 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 | Arduino Uno R3 | 1 | $9.99 | $9.99 | MercadoLibre Venezuela |
 | Driver de Motor L298N | 1 | $6.99 | $6.99 | MercadoLibre Venezuela |
 | Cámara Logitech C922 | 1 | $70.00 | $70.00 | MercadoLibre Venezuela |
-| Módulo UPS LX-2BUPS | 1 | $17.80 | $17.80 | MercadoLibre Venezuela |
+| Módulo UPS LX-2BUPS | 2 | $17.80 | $35.60 | MercadoLibre Venezuela |
 | Batería 18650 3.7V | 4 | $5.00 | $20.00 | MercadoLibre Venezuela |
 | Fischertechnik Maker Kit Car | 1 | $115.33 | $115.33 | eBay |
 
-### Total Estimado: $443.10
+### Total Estimado: $457.88
 
 <hr>
 
