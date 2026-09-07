@@ -121,6 +121,15 @@ La Logitech C922 es una cámara web de gran popularidad con alta definición dis
 
 La Raspberry Pi 4 Modelo B es una computadora de placa única del tamaño de una tarjeta de crédito. Funciona como una computadora de bajo costo totalmente operativa, capaz de realizar tareas de computación de escritorio, transmisión de contenido multimedia, automatización del hogar y de robótica, utilizando solo una fracción de la potencia de una computadora de escritorio estándar. <b>Este componente actúa como el cerebro del vehículo, con el software implementado tiene la capacidad de procesar las imágenes de la cámara web, decidiendo cual es la acción más apropiada a ejecutar dependiendo del entorno en el que se encuentre el carro, para que luego nuestro microcontrolador, el Arduino Uno, la ejecute</b>.
 
+<a href="https://www.youtube.com/watch?v=o2TZHPnM0VQ"> Tutorial para configurar una Raspberry Pi 4 </a>
+
+> [!NOTE]
+>- En las imágenes de nuestro carro se puede apreciar que nuestra Raspberry se encuentra en una carcasa con un mini ventilador.
+>- La universidad nos brindó este componente en este estado y tampoco se pudo verificar el origen de esta envoltura.
+
+
+
+
 <a href="src"> Ver el código implementado en la Raspberry </a>
 
 <hr>
