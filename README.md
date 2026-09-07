@@ -271,6 +271,8 @@ Esta relación garantiza que, para cualquier ángulo de giro, el centro de curva
 
 - #### Ackermann en nuestro proyecto
 
+<img src="resources/nuestro_ackermann.jpg" alt="Imagen de nuestro mecanismo Ackermann" width="300px" >
+
 Nuestro coche no cuenta con la presencia de este mecanismo, o también puede ser denominado 0% Ackermann. Esto no afecta mucho al rendimiento, ya que se trata de un vehículo pequeño, pero si lo incluyéramos en el proyecto, nos ayudaría a mejorar los tiempos, por otra parte también se podrían evitar problemas con el desgaste de las llantas. En base a lo investigado, son varias las razones por las que el kit no trae este mecanismo incluido:
 
 1. Es un kit básico de iniciación, pues el Maker Kit Car está diseñado con el propósito de cumplir la función de un chasis base, robusto y fácil de ampliar, no como un modelo a escala de alto rendimiento.
