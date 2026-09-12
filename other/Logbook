@@ -19,3 +19,10 @@ Bitácora de registro para documentar lo realizado en este proyecto
 - Se recurrió a trabajar desde la terminal de Powershell de Windows una vez conectado al Hotspot de la Raspberry para compensarlo.
 - Debido a que la Raspberry se sobresaturó de muchos códigos prueba que no se usaron en la competición, el carro redujo considerablemente su rendimiento.
 - Para solucionar el problema de lentitud y rendimiento en carrera, se decidió formatear la Raspberry, no sin antes hacer un respaldo de todos los archivos.
+
+--Tercera Regional (Hotel Paradise - Anzoátegui, Puerto la Cruz)--
+
+- Se encontro que el auto presentaba muchas dificultades para determinar cual era el sentido correcto de la pista.
+- Corrigiendose añadiendo un algoritmo el cual usaba las lineas de colores presentes en las esquinas de la pista dando mejores resultados.
+- Se logro visualizar que por el angulo y el escaso grado de visual que presenta la camara el sistema no lograba detectar correctamente en ocaciones las lineas en el suelo.
+- Se corrigió la posición de la cámara y se ajusto el roi y el umbral de láz en la calibracián para compensar este ajuste.
