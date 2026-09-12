@@ -4,9 +4,11 @@ After=multi-user.target
 
 [Service]
 Type=idle
-User=samuelg
-WorkingDirectory=/home/samuelg/Desktop
-ExecStart=/usr/bin/python3 /home/samuelg/Desktop/1st_mode.py
+User=root
+WorkingDirectory=/root/Desktop
+ExecStart=/usr/bin/python3 /root/Desktop/2do.py
+Restart=on-failure
+RestartSec=2
 
 [Install]
 WantedBy=multi-user.target
