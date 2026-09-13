@@ -109,6 +109,9 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 
 La Logitech C922 es una cámara web de gran popularidad con alta definición diseñada especialmente para creadores de contenido, streamers y profesionales. Ofrece una resolución de video nítida, una velocidad de fotogramas fluida para un movimiento sin interrupciones y la capacidad de corrección en baja iluminación. <b>En nuestro proyecto, la utilizamos como el ojo del carro, capturando la vista del entorno para que se pudiesen realizar acciones como la identificación de esquinas y detección de objetos, de tal manera que las fotos tomadas por la cámara pudiesen ser procesadas posteriormente por el software presente en la Raspberry. Se decidió optar por esta como el ojo del vehículo debido a las buenas reseñas que encontramos investigando acerca de posibles cámaras que se podían emplear.</b>
 
+> [!NOTE]
+>- La cámara fue calibrada en el script del modo 1 (en el modo 2 no se le da uso a la cámara) basándose en los valores de los colores obtenidos en el script de calibración.
+
 <hr>
 
 - #### Raspberry Pi 4
@@ -152,8 +155,6 @@ Se nos hizo más cómodo trabajar desde la terminal de la Raspberry ya que se ha
 > [!IMPORTANT]
 >- El archivo robot.service se encuentra en la carpeta src de nuestro repositorio, en ese archivo se puede editar el archivo de Python que se va a ejecutar al presionar el botón, el cual definimos en base al modo que nos estemos enfrentando.
 
-<a href="src"> Ver el código implementado en la Raspberry </a>
-
 <hr>
 
 ## Manejo de la movilidad
@@ -188,8 +189,6 @@ El Arduino Uno es una placa microcontroladora de código abierto, ideal para pri
 
 > [!NOTE]
 >- Nosotros tuvimos que usar una extensión del navegador Google Chrome para poder acceder a la página "arduino.cc" para descargar el software para configurar las instrucciones a ejecutar en el Arduino Uno debido a que no se puede acceder de manera local, este se llama "CyberGhost VPN - Proxy For Chrome". 
-
-<a href="src"> Ver el código implementado en el Arduino </a>
 
 <hr>
 
