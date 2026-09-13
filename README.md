@@ -441,7 +441,7 @@ El software actual se conecta con los componentes físicos de la siguiente maner
 ## Acerca del Software Implementado
 
 ### Script del Modo 1
-### Archivo: `src/1st_mode.py`
+### Archivo: `src/1er_modo.py`
 
 <img src="resources/diagrama_modo_1.png" alt="Diagrama de Flujo del Modo 1">
 
@@ -526,7 +526,7 @@ self.VER_PANTALLAS = True
 ---
 
 ### Script del Modo 2
-### Archivo: `src/2nd_mode.py`
+### Archivo: `src/2do_modo.py`
 
 <img src="resources/diagrama_modo_2.png" alt="Diagrama de Flujo del Modo 2">
 
@@ -632,7 +632,7 @@ Esto mueve las ruedas hacia un lado, luego hacia el otro y finalmente las centra
 ---
 
 ### Script de Arduino
-### Archivo: `src/Ino Code/Arduino_Code.ino`
+### Archivo: `src/Ino Code/Arduino_code.ino`
 
 <img src="resources/diagrama_arduino.png" alt="Diagrama de Flujo del Arduino: motor y servo">
 
@@ -724,7 +724,7 @@ La función `moverMotor()`:
 ---
 
 ### Script de Calibración
-### Archivo: `src/Calibration.py`
+### Archivo: `src/calibracion.py`
 
 <img src="resources/diagrama_calibrador.png" alt="Diagrama de Flujo de Calibration.py">
 
