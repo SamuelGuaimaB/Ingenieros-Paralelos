@@ -179,7 +179,7 @@ Se nos hizo más cómodo trabajar desde la terminal de la Raspberry ya que se ha
 El Arduino Uno es una placa microcontroladora de código abierto, ideal para principiantes, que se utiliza para construir dispositivos digitales y proyectos interactivos. Permite leer entradas como las de un sensor, un botón o la lectura de temperatura, y convertirlas en salidas, como mover un motor o encender un LED. <b>Este hardware actúa como el sistema nervioso de nuestro coche debido a que este es el componente que recibe todas las decisiones tomadas por el cerebro, la Raspberry, enviando pequeños impulsos eléctricos al driver para indicarle cuándo y de qué manera debe mover los motores. Dado que es nuestra primera vez participando en este tipo de torneos, decidimos empezar probando este modelo de Arduino</b>.
 
 > [!NOTE]
->- Nosotros tuvimos que usar una extensión del navegador Google Chrome para poder acceder a la página "arduino.cc" para descargar el software para configurar las instrucciones a ejecutar en el Arduino Uno debido a que no se puede acceder de manera local, este se llama "CyberGhost VPN - Proxy For Chrome. 
+>- Nosotros tuvimos que usar una extensión del navegador Google Chrome para poder acceder a la página "arduino.cc" para descargar el software para configurar las instrucciones a ejecutar en el Arduino Uno debido a que no se puede acceder de manera local, este se llama "CyberGhost VPN - Proxy For Chrome". 
 
 <a href="src"> Ver el código implementado en el Arduino </a>
 
@@ -348,6 +348,22 @@ Después de esta primera experiencia en una competición WRO y a lo largo de nue
 2. Motor codificador más eficiente: Implementando un motor capaz de girar a mayores revoluciones por minuto para alimentar las ruedas con tracción, conseguiríamos mejorar los tiempos para los desafíos, pues el motor codificador usado en esta temporada nos limitó el logro de mejores tiempos. Consideramos que empleando un motor de este tipo pero que acepte mayor voltaje podría solucionar dicho problema.
 
 3. Posible implementación de un Mecanismo Ackermann: En caso de usar un motor codificador capaz de entregarle una mayor cantidad de revoluciones por minuto a las ruedas de nuestro carro, probablemente diseñemos este mecanismo en 3D como parte de nuestro chasis personalizado, esto con el fin de evitar tanto desgaste en las llantas y hacer más estable el vehículo, de tal manera que no resbale o patine, pudiendo influir en su rendimiento sobre la pista.
+
+4. Posición de la cámara: Después de esta primera experiencia en estas competiciones, también en base a lo aprendido analizando el rendimiento de otros equipos, se llegó a la conclusión que una cámara ubicada a mayor altura puede tener la capacidad de un mayor rango de visión del entorno, punto que puede ser aprovechado como una ventaja para el software implementado.
+
+## Nuestras experiencias en las regionales
+
+1. Primera Regional (Hotel Maremares - Anzoátegui, Lechería)
+
+Tras observar fallas en la competencia y experimentar las dinámicas de primera mano, se decidió implementar correcciones y modularizar el código para lograr una estrategia más confiable y segura. Uno de los problemas iniciales identificados fue un "punto ciego" al arrancar demasiado cerca de la pared frontal. Debido a que el robot estaba posicionado muy cerca de la pared interior, su campo de visión y la lógica utilizada para determinar la dirección causaban que eligiera consistentemente el camino equivocado, específicamente el opuesto al correcto. Para corregir esto, primero se dividió el código original en dos archivos separados, separando el Modo 1 del Modo 2, lo que resultó en un mejor rendimiento y un flujo de trabajo más manejable. Para solucionar los errores identificados en el Modo 1, se reestructuró el diseño para minimizar la complejidad, simplificando el código lo más posible y asegurando al mismo tiempo la confiabilidad. Se eliminó el controlador PID y sus componentes asociados en favor de una metodología de control Bang-Bang (o encendido/apagado). Esta había demostrado ser más efectiva para nuestro robot durante la competencia; este enfoque nos permitió completar el primer desafío de manera más consistente y con una configuración más fácil de ajustar. Para el Modo 2, se implementó navegación por estima (Dead Reckoning), la cual ofrece una consistencia mucho mayor que la alcanzada en la última competencia. Sin embargo, dado que este método es susceptible a desviaciones o desfases de tiempo, su implementación final se está evaluando antes de la próxima competencia. Se agregaron nuevos comandos al código para el segundo modo con el fin de crear una base de código que luego pueda ser modificada según sea necesario el día de la competencia. 
+
+2. Segunda Regional (Colegio Guayamurí - Nueva Esparta, Porlamar)
+
+Se presentaron problemas de lentitud a la hora de trabajar con la interfaz gráfica de la Raspberry. Se recurrió a trabajar desde la terminal de Powershell de Windows una vez conectado al Hotspot de la Raspberry para compensarlo. Debido a que la Raspberry se sobresaturó de muchos códigos prueba que no se usaron en la competición, el carro redujo considerablemente su rendimiento. Para solucionar el problema de lentitud y rendimiento en carrera, se decidió formatear la Raspberry, no sin antes hacer un respaldo de todos los archivos.
+
+3. Tercera Regional (Hotel Paradise - Anzoátegui, Puerto la Cruz)
+
+Se encontró que el auto presentaba muchas dificultades para determinar cual era el sentido correcto de la pista. Se corrigió añadiendo un algoritmo el cual usaba las líneas de colores presentes en las esquinas de la pista, dando mejores resultados. Se logró visualizar que por el ángulo y el escaso grado de visibilidad que presenta la cámara el sistema no lograba detectar correctamente en ocasiones las líneas en el suelo. Se corrigió la posición de la cámara y se ajusto el ROI y el umbral de láz en la calibración para compensar este ajuste.
 
 <hr>
 
