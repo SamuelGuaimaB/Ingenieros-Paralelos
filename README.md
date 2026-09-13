@@ -228,15 +228,36 @@ El Fischertechnik Maker Kit Car es un kit de construcción avanzado diseñado pa
 
 > Servomotor
 
-<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Ver especificaciones</a>
-
 Se trata de un motor especializado diseñado para girar a un ángulo específico, en este caso entre 60° y 120° y mantener dicha posición. Se conecta directamente a las manguetas delanteras de nuestro chasis, y estas a ambas ruedas delanteras, controlando también el mecanismo de dirección. A diferencia del motor de tracción, no está diseñado para girar de manera contínua, en cambio este gira cuando se le ordena cambiar de ángulo, proporcionando al vehículo la capacidad de cambiar de dirección (izquierda-derecha).
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./resources/servo1.jpeg" alt="Especificaciones del Servo 1" >
+    </td>
+    <td>
+      <img src="./resources/servo2.jpeg" alt="Especificaciones del Servo 2" >
+    </td>
+  </tr>
+</table>
 
 > Motor Codificador o Motor C
 
-<a href="schemes/Fistchertechnik Maker Kit Car/BA_DATENBLATT_MAKER_KIT_CAR_ENCODERMOTOR.pdf">Ver especificaciones</a>
-
 Es el motor principal del vehículo. Proporciona la potencia motriz (tracción) para que el coche avance y retroceda. Este motor alimenta las llantas traseras de nuestro vehículo, significando que estas son las que poseen tracción.
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./resources/encoder1.jpeg" alt="Especificaciones del Motor Codificador 1" >
+    </td>
+    <td>
+      <img src="./resources/encoder2.jpeg" alt="Especificaciones del Motor Codificador 2" >
+    </td>
+    <td>
+      <img src="./resources/torqueEncoder.jpeg" alt="Torque del Motor Codificador" >
+    </td>
+  </tr>
+</table>
 
 > Engranaje Diferencial
 
@@ -418,7 +439,7 @@ El software actual se conecta con los componentes físicos de la siguiente maner
 
 ---
 
-## 4. Acerca del Software Implementado
+## Acerca del Software Implementado
 
 ### Script del Modo 1
 ### Archivo: `src/1st_mode.py`
