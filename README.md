@@ -443,7 +443,7 @@ El software actual se conecta con los componentes físicos de la siguiente maner
 ### Script del Modo 1
 ### Archivo: `src/1er_modo.py`
 
-<img src="resources/diagrama_modo_1.png" alt="Diagrama de Flujo del Modo 1">
+<img src="resources/diagrama-modo-1.png" alt="Diagrama de Flujo del Modo 1">
 
 El modo 1 es el modo de navegación autónoma. Utiliza la cámara para analizar la pista en tiempo real, detectar los muros, estimar la dirección de la ruta, controlar el ángulo de dirección y contar las vueltas.
 
@@ -528,7 +528,7 @@ self.VER_PANTALLAS = True
 ### Script del Modo 2
 ### Archivo: `src/2do_modo.py`
 
-<img src="resources/diagrama_modo_2.png" alt="Diagrama de Flujo del Modo 2">
+<img src="resources/diagrama-modo-2.png" alt="Diagrama de Flujo del Modo 2">
 
 El modo 2 es una secuencia manual basada en coreografía. No utiliza la retroalimentación de la cámara durante la ejecución; en cambio, sigue una lista predefinida de comandos de movimiento donde cada paso contiene velocidad, ángulo de dirección, duración y descripción.
 
@@ -634,7 +634,7 @@ Esto mueve las ruedas hacia un lado, luego hacia el otro y finalmente las centra
 ### Script de Arduino
 ### Archivo: `src/Ino Code/Arduino_code.ino`
 
-<img src="resources/diagrama_arduino.png" alt="Diagrama de Flujo del Arduino: motor y servo">
+<img src="resources/diagrama-arduino.png" alt="Diagrama de Flujo del Arduino: motor y servo">
 
 El código de Arduino es la capa de ejecución física del robot. Recibe comandos de la Raspberry Pi, analiza los valores de velocidad y ángulo, aplica el ángulo de dirección al servomotor y controla el motor de tracción.
 
@@ -726,7 +726,7 @@ La función `moverMotor()`:
 ### Script de Calibración
 ### Archivo: `src/calibracion.py`
 
-<img src="resources/diagrama_calibrador.png" alt="Diagrama de Flujo de Calibration.py">
+<img src="resources/diagrama-calibrador.png" alt="Diagrama de Flujo de Calibration.py">
 
 `Calibration.py` es un script de soporte que se utiliza para calibrar los umbrales de la cámara antes de usar el robot en la pista. Ayuda a ajustar los valores utilizados para detectar el suelo.
 
@@ -847,5 +847,3 @@ Se presentaron problemas de lentitud a la hora de trabajar con la interfaz gráf
 Se encontró que el auto presentaba muchas dificultades para determinar cual era el sentido correcto de la pista. Se corrigió añadiendo un algoritmo el cual usaba las líneas de colores presentes en las esquinas de la pista, dando mejores resultados. Se logró visualizar que por el ángulo y el escaso grado de visibilidad que presenta la cámara el sistema no lograba detectar correctamente en ocasiones las líneas en el suelo. Se corrigió la posición de la cámara y se ajusto el ROI y el umbral de láz en la calibración para compensar este ajuste.
 
 <hr>
-
-### Fin de la sección principal, <a href="src"> haz click aqui para ver detalles acerca del software implementado</a>.
