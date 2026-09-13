@@ -42,14 +42,14 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 
 <table>
   <tr>
-    <td align="center"><b>Superior</b><br><img src="v-photos/xyswya1wkbrecfrbtq0u.jpeg" width="300"></td>
-    <td align="center"><b>Frontal</b><br><img src="v-photos/ciiekmqkjx3hwlddqcki.jpeg" width="300"></td>
-    <td align="center"><b>Izquierda</b><br><img src="v-photos/vrrmtfivjys3mdzsd0sw.jpeg" width="300"></td>
+    <td align="center"><b>Superior</b><br><img src="v-photos/vistaSuperior.jpeg" width="300"></td>
+    <td align="center"><b>Frontal</b><br><img src="v-photos/vistaDelantera.jpeg" width="300"></td>
+    <td align="center"><b>Izquierda</b><br><img src="v-photos/vistaIzquierda.jpeg" width="300"></td>
   </tr>
   <tr>
-    <td align="center"><b>Inferior</b><br><img src="v-photos/xkqqy6pgcww430t3mgrj.jpeg" width="300"></td>
-    <td align="center"><b>Trasera</b><br><img src="v-photos/l29mzuarm14swjtqn0ep.jpeg" width="300"></td>
-    <td align="center"><b>Derecha</b><br><img src="v-photos/r9jlfa10kajuso8bgvz7.jpeg" width="300"></td>
+    <td align="center"><b>Inferior</b><br><img src="v-photos/vistaInferior.jpeg" width="300"></td>
+    <td align="center"><b>Trasera</b><br><img src="v-photos/vistaTrasera.jpeg" width="300"></td>
+    <td align="center"><b>Derecha</b><br><img src="v-photos/vistaDerecha.jpeg" width="300"></td>
   </tr>
 </table>
 
