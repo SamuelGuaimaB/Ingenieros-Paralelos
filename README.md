@@ -658,39 +658,28 @@ El Arduino recibe el comando como texto, por ejemplo `<250,86>`. Antes de aplica
 #### Conexiones principales del hardware
 
 ```cpp
-const int pinServo = 8;
-const int pinMotorPWM = 7;
-const int pinMotorDir1 = 9;
-const int pinMotorDir2 = 10;
+const int PIN_SERVO = 6;
+const int PIN_ENA   = 3;
+const int PIN_IN1   = 5;
+const int PIN_IN2   = 4;
+const int PIN_BTN   = 2;
 ```
 
 | Pin | Componente | Función |
 | ---- | ----------------- | ----------------------- |
-| `8` | Servo de dirección | Salida de ángulo de dirección |
-| `7` | Controlador de motor PWM | Control de velocidad del motor |
-| `9` | Controlador de motor IN1 | Línea de dirección del motor 1 |
-| `10` | Controlador de motor IN2 | Línea de dirección del motor 2 |
+| `6` | Servo de dirección | Salida de ángulo de dirección |
+| `3` | Controlador de motor PWM | Control de velocidad del motor |
+| `5` | Controlador de motor IN1 | Línea de dirección del motor 1 |
+| `4` | Controlador de motor IN2 | Línea de dirección del motor 2 |
+| `2` | Controlador del botón | Pulsador físico de inicio |
 
 #### Responsabilidades principales
 
 - Inicializar la comunicación serial a `115200`.
-- Recibir paquetes `<velocidad, ángulo>` de la Raspberry Pi.
+- Recibir paquetes `<velocidad, ángulo>` de la Raspberry Pi una vez el botón físico se haya pulsado.
 - Analizar y validar los valores recibidos.
 - Aplicar el ángulo al servomotor de dirección.
 - Aplicar la velocidad al motor de tracción.
-
-#### Variables Principales
-
-```cpp
-int velocidadAuto = 0;
-int anguloServo = 86;
-unsigned long previousMillisSensor = 0;
-```
-
-Estas variables almacenan:
-
-- La velocidad actual del motor,
-- El ángulo de dirección actual,
 
 #### Secuencia de configuración
 
@@ -715,28 +704,23 @@ Ejemplo:
 <250,86>
 ```
 
-La función `recvWithStartEndMarkers()` lee el paquete entre `<` y `>`. La función `parseData()` separa los valores con comas y los convierte en:
-
-- `velocidadAuto`
-- `ánguloServo`
-
 #### Límites aplicados
 
 Arduino restringe los valores analizados de la siguiente manera:
 
 - La velocidad está limitada a `0..255`.
-- El ángulo solo se acepta en el rango `60..120`.
+- El ángulo solo se acepta en el rango `50..122`.
 
 > [!NOTE]
 > En la implementación actual de Arduino, los valores de velocidad negativos enviados desde Python están restringidos a `0`. Esto significa que los comandos de reversa requieren soporte de Arduino si se desea un movimiento inverso.
 
 #### Ejecución del movimiento
 
-La función `ejecutarMovimiento()`:
+La función `moverMotor()`:
 
-- Escribe `ánguloServo` en el servo de dirección,
-- Impulsa el motor hacia adelante cuando `velocidadAuto > 0`,
-- Detiene el motor cuando `velocidadAuto == 0`.
+- Impulsa el motor hacia adelante cuando `vel > 0`,
+- Impulsa el motor hacia atrás cuando `vel < 0`,
+- Detiene el motor cuando `vel == 0`.
 
 ---
 
