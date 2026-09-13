@@ -32,6 +32,8 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 - [Manejo de las Fuentes de Energia](#manejo-de-las-fuentes-de-energia)
   - [UPS LX-2BUPS](#ups-lx-2bups)
   - [Baterías Ultrafire TR 18650](#baterías-ultrafire-tr-18650)
+- [Puntos a mejorar en nuestro proyecto](#puntos-a-mejorar-en-nuestro-proyecto)
+- [Nuestras experiencias en las regionales](#nuestras-experiencias-en-las-regionales)
 - <a href="src"> Manejo de los desafíos </a>
 
 <!-- tocstop -->
@@ -345,6 +347,8 @@ Después de esta primera experiencia en una competición WRO y a lo largo de nue
 3. Posible implementación de un Mecanismo Ackermann: En caso de usar un motor codificador capaz de entregarle una mayor cantidad de revoluciones por minuto a las ruedas de nuestro carro, probablemente diseñemos este mecanismo en 3D como parte de nuestro chasis personalizado, esto con el fin de evitar tanto desgaste en las llantas y hacer más estable el vehículo, de tal manera que no resbale o patine, pudiendo influir en su rendimiento sobre la pista.
 
 4. Posición de la cámara: Después de esta primera experiencia en estas competiciones, también en base a lo aprendido analizando el rendimiento de otros equipos, se llegó a la conclusión que una cámara ubicada a mayor altura puede tener la capacidad de un mayor rango de visión del entorno, punto que puede ser aprovechado como una ventaja para el software implementado.
+
+<hr>
 
 ## Nuestras experiencias en las regionales
 
