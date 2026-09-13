@@ -129,17 +129,12 @@ La Raspberry Pi 4 Modelo B es una computadora de placa única del tamaño de una
 
 Se nos hizo más cómodo trabajar desde la terminal de la Raspberry ya que se hacía más lento moverse dentro de la interfaz. Dentro de los comandos que usamos se encuentran los siguientes:
 
-`sudo find / -name "nombre_del_archivo"`: para buscar dónde se encuentra un archivo.
-
-`cd nombre_directorio`: para moverse a una carpeta específica.
-
-`cat archivo`: para ver el contenido de un archivo.
-
-`nano archivo`: para editar archivo desde la terminal.
-
-`sudo systemctl start robot.service`: para inciar la ejecución del programa.
-
-`sudo systemctl stop robot.service`: para parar la ejecución del programa.
+- `sudo find / -name "nombre_del_archivo"`: para buscar dónde se encuentra un archivo.
+- `cd nombre_directorio`: para moverse a una carpeta específica.
+- `cat archivo`: para ver el contenido de un archivo.
+- `nano archivo`: para editar archivo desde la terminal.
+- `sudo systemctl start robot.service`: para inciar la ejecución del programa.
+- `sudo systemctl stop robot.service`: para parar la ejecución del programa.
 
 > [!IMPORTANT]
 >- El archivo robot.service se encuentra en la carpeta src de nuestro repositorio, en ese archivo se puede editar el archivo de Python que se va a ejecutar al presionar el botón, el cual definimos en base al modo que nos estemos enfrentando.
