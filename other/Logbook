@@ -1,6 +1,6 @@
 Bitácora de registro para documentar lo realizado en este proyecto
 
---Primera Regional (Hotel Maremares - Anzoátegui, Lecheria)--
+--Primera Regional (Hotel Maremares - Anzoátegui, Lechería)--
 
 - Tras observar fallas en la competencia y experimentar las dinámicas de primera mano, se decidió implementar correcciones y modularizar el código para lograr una estrategia más confiable y segura. 
 - Uno de los problemas iniciales identificados fue un "punto ciego" al arrancar demasiado cerca de la pared frontal.
@@ -22,7 +22,7 @@ Bitácora de registro para documentar lo realizado en este proyecto
 
 --Tercera Regional (Hotel Paradise - Anzoátegui, Puerto la Cruz)--
 
-- Se encontro que el auto presentaba muchas dificultades para determinar cual era el sentido correcto de la pista.
-- Corrigiendose añadiendo un algoritmo el cual usaba las lineas de colores presentes en las esquinas de la pista dando mejores resultados.
-- Se logro visualizar que por el angulo y el escaso grado de visual que presenta la camara el sistema no lograba detectar correctamente en ocaciones las lineas en el suelo.
-- Se corrigió la posición de la cámara y se ajusto el roi y el umbral de láz en la calibracián para compensar este ajuste.
+- Se encontró que el auto presentaba muchas dificultades para determinar cual era el sentido correcto de la pista.
+- Se corrigió añadiendo un algoritmo el cual usaba las líneas de colores presentes en las esquinas de la pista, dando mejores resultados.
+- Se logró visualizar que por el ángulo y el escaso grado de visibilidad que presenta la cámara el sistema no lograba detectar correctamente en ocasiones las líneas en el suelo.
+- Se corrigió la posición de la cámara y se ajusto el ROI y el umbral de láz en la calibración para compensar este ajuste.
