@@ -76,6 +76,8 @@ _Somos un equipo venezolano conformado por estudiantes de ingeniería informáti
 
 ### Total Estimado: $457.88
 
+<a href="schemes/PlanoComponentes.pdf">Nuestro diagrama de cableado de los componentes</a>
+
 <hr>
 
 ## Manejo de la visión
@@ -214,6 +216,8 @@ El L298N es un módulo controlador de motor de doble Puente H, que se utilizan p
 - #### Fischertechnik Maker Kit Car
 
 <img src="./resources/Fischertechnik_Maker_Kit_Car.png " alt="Fischertechnik Maker Kit Car" width="300px" >
+
+<a href="schemes/Fistchertechnik Maker Kit Car">Detalles completos del kit</a>
 
 El Fischertechnik Maker Kit Car es un kit de construcción avanzado diseñado para aficionados de la robótica, que da la libertad de construir un chasis de vehículo robótico móvil personalizable. Incluye piezas para construir estructuras robustas y soportes personalizados, por lo que aprovechamos esto utilizando los bloques del kit como base o esqueleto de nuestro coche para luego ensamblar el resto de los componentes alrededor de ellos.
 
